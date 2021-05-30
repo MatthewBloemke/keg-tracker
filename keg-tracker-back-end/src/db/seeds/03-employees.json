@@ -1,0 +1,8 @@
+[
+    {
+        "employee_name": "Jane Doe",
+        "employee_email": "example@email.com",
+        "password": "password",
+        "admin": true
+    }
+]

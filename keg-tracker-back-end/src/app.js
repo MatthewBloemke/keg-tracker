@@ -9,12 +9,14 @@ const errorHandler = require("./errors/errorHandler");
 
 const kegsRouter = require("./kegs/kegs.router");
 const distributorsRouter = require("./distributors/distributors.router");
+const authRouter = require("./auth/auth.router")
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+app.use("/employees", authRouter)
 app.use("/kegs", kegsRouter);
 app.use("/distributors", distributorsRouter);
 

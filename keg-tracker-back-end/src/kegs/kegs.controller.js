@@ -4,7 +4,8 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const validFields = [
     "keg_name",
     "keg_size",
-    "keg_status"
+    "keg_status",
+    "date_shipped"
 ]
 
 async function kegExists (req, res, next) {
@@ -53,8 +54,11 @@ async function create (req, res) {
     const newKeg =({
         keg_name,
         keg_size,
-        keg_status
-    } = req.body)
+        keg_status,
+        date_shipped
+    } = req.body.data)
+    console.log("creating")
+    console.log(newKeg)
     const createdKeg = await service.create(newKeg)
     res.json({data: createdKeg})
 }
