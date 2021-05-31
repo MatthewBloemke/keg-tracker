@@ -11,7 +11,14 @@ const list = () => {
         .select("*")
 }
 
+const readByEmail = (employee_email) => {
+    return knex("employees")
+        .select("*")
+        .where({employee_email})
+}
+
 module.exports = {
     create,
-    list
+    list,
+    readByEmail
 }

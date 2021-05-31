@@ -57,8 +57,6 @@ async function create (req, res) {
         keg_status,
         date_shipped
     } = req.body.data)
-    console.log("creating")
-    console.log(newKeg)
     const createdKeg = await service.create(newKeg)
     res.json({data: createdKeg})
 }
