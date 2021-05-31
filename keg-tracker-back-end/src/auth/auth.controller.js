@@ -53,7 +53,8 @@ const list = async (req, res) => {
 
 const userExists = async (req, res, next) => {
     const employee = await service.readByEmail(req.body.data.employee_email)
-    if (employee) {
+    if (employee.length) {
+        console.log(employee)
         res.locals.employee = employee[0];
         return next()
     }
@@ -79,7 +80,7 @@ const passwordCheck = async (req, res, next) => {
 const login = async (req, res) => {
     const token = jwt.sign({user: res.locals.employee.employee_name}, process.env.SECRET);
     res.cookie('token', token, { httpOnly: true });
-    res.json({ token });
+    res.json({ "data": "working" });
 }
 
 module.exports = {
