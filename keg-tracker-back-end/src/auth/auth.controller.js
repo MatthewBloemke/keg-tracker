@@ -63,7 +63,6 @@ const userExists = async (req, res, next) => {
     })
 }
 const passwordCheck = async (req, res, next) => {
-    console.log(req.body.data.password, res.locals.employee)
     await bcrypt.compare(req.body.data.password, res.locals.employee.password, (err, result) => {
         console.log(result)
         if (result) {
@@ -78,7 +77,7 @@ const passwordCheck = async (req, res, next) => {
 }
 
 const login = async (req, res) => {
-    const token = jwt.sign({user: res.locals.employee.employee_name}, process.env.SECRET);    
+    const token = jwt.sign({user: res.locals.employee.employee_name}, process.env.SECRET);
     res.cookie('token', token, { httpOnly: true });
     res.json({ token });
 }
