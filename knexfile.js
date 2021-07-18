@@ -20,7 +20,7 @@
      pool: { min: 1, max: 5 },
      connection: DATABASE_URL_DEVELOPMENT,
      migrations: {
-       directory: path.join(__dirname, "db", "migrations"),
+       directory: path.join(__dirname, "src", "server", "db", "migrations"),
      },
      seeds: {
        directory: path.join(__dirname, "db", "seeds"),
