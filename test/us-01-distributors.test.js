@@ -1,7 +1,7 @@
 const request = require("supertest");
 
-const app = require("../src/app");
-const knex = require("../src/db/connections");
+const app = require("../src/server/app");
+const knex = require("../src/server/db/connections");
 
 
 describe("Distributors Route", () => {
