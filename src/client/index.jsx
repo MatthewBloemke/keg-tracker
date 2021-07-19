@@ -2,7 +2,11 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import * as React from "react";
 import {render} from "react-dom";
-import Login from "./login";
+import App from "./App";
+import {BrowserRouter as Router} from 'react-router-dom'
 
-
-render(<Login/>, document.getElementById("app"))
+render(<Router>
+        <App/>
+    </Router>, 
+    document.getElementById("app")
+)
