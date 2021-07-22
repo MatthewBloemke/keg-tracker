@@ -4,12 +4,14 @@ const headers = new Headers();
 headers.append("Content-Type", "application/json");
 
 const fetchJson = async (url, options, onCancel) => {
+    const history = useHistory()
     try {
         const response = await fetch(url, options);
 
         if (response.status=== 204) {
             return null
         } else if (response.status === 401) {
+            history.push("/login")
             return undefined
         }
         const payload = await response.json()
@@ -28,13 +30,12 @@ const fetchJson = async (url, options, onCancel) => {
 
 
 export async function isLoggedIn () {
-    const history = useHistory()
     const abortController = new AbortController
     const signal = abortController.signal
-    await fetchJson('http://localhost:5000/api/kegs', {headers, signal} )
+    await fetchJson('http://localhost:5000/api/employees', {headers, signal} )
         .then(response => {
-            console.log(response)
-            if (response.status===401) {
+            console.error(error.stack)
+            if (response===401) {
                 history.push('/login')
             }
         })
