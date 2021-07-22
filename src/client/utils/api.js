@@ -34,7 +34,7 @@ export async function isLoggedIn () {
     await fetchJson('http://localhost:5000/api/kegs', {headers, signal} )
         .then(response => {
             console.log(response)
-            if (!response) {
+            if (response.status===401) {
                 history.push('/login')
             }
         })
