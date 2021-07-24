@@ -19,6 +19,7 @@ const fetchJson = async (url, options, onCancel) => {
         if (payload.error) {
             return Promise.reject({message: payload.error})
         }
+        return payload.data;
     } catch (error) {
         if (error.name !== "AbortError") {
             console.error(error.stack)
@@ -29,14 +30,15 @@ const fetchJson = async (url, options, onCancel) => {
 }
 
 
-export async function isLoggedIn () {
-    const abortController = new AbortController
-    const signal = abortController.signal
+export async function isLoggedIn (signal) {
     await fetchJson('http://localhost:5000/api/employees', {headers, signal} )
         .then(response => {
-            console.error(error.stack)
             if (response===401) {
                 history.push('/login')
             }
         })
+}
+
+export async function getKegs(signal) {
+    return await fetchJson('http://localhost:5000/api/kegs', {headers, signal}, [])
 }
