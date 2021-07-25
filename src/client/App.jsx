@@ -9,9 +9,9 @@ const App = () => {
             <Route path='/login'>
                 <Login/>
             </Route>
-            {/* <Route path="/" exact={true}>
+            <Route path="/" exact={true}>
                 <Redirect to="/dashboard"/>
-            </Route> */}
+            </Route>
             <Route path="/dashboard" exact={true}>
                 <Dashboard/>
             </Route>
