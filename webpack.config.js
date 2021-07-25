@@ -1,4 +1,5 @@
-const path = require("path")
+const path = require("path");
+const webpack = require('webpack')
 
 module.exports = {
     entry: "./src/client/index.jsx",
@@ -16,6 +17,14 @@ module.exports = {
         ]
     },
     resolve: {
+        alias: {
+            react: path.resolve(__dirname, 'node_modules', 'react')
+        },
         extensions: [".js", ".jsx", "*"]
-    }
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            process: 'process/browser'
+        }),
+    ]
 }
