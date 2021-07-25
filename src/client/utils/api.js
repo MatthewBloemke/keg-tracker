@@ -17,21 +17,22 @@ const fetchJson = async (url, options, onCancel) => {
         const payload = await response.json()
 
         if (payload.error) {
-            return Promise.reject({message: payload.error})
+            throw payload.error
         }
+        //console.log(payload.data)
         return payload.data;
     } catch (error) {
         if (error.name !== "AbortError") {
             console.error(error.stack)
             throw error;
         }
-        return Promise.resolve(onCancel)
+        return onCancel
     }
 }
 
 
-export async function isLoggedIn (signal) {
-    await fetchJson('http://localhost:5000/api/employees', {headers, signal} )
+export async function isLoggedIn () {
+    await fetchJson('http://localhost:5000/api/employees', {headers} )
         .then(response => {
             if (response===401) {
                 history.push('/login')
@@ -39,6 +40,6 @@ export async function isLoggedIn (signal) {
         })
 }
 
-export async function getKegs(signal) {
-    return await fetchJson('http://localhost:5000/api/kegs', {headers, signal}, [])
+export async function getKegs(baseUrl) {
+    return await fetchJson(`${baseUrl}/api/kegs`, {headers}, []) 
 }
