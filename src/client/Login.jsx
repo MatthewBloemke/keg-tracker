@@ -1,5 +1,6 @@
 import React, {useState} from "react"
 import {useHistory} from 'react-router-dom'
+import store from 'store'
 
 const Login = () => {
   const history = useHistory()
@@ -26,6 +27,7 @@ const Login = () => {
     await fetch(`http://localhost:5000/api/login`, requestOptions)
       .then(response => {
         if (response.status === 200) {
+          store.set('loggedIn', true)
           history.push("/dashboard")
         } else {
           setErrorMessage({message: "Incorrect username or password"})
