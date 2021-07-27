@@ -2,96 +2,115 @@
     {
         "keg_name": "0001",
         "keg_size": "large",
-        "keg_status": "returned"
+        "keg_status": "returned",
+        "date_shipped": "2021-05-12"
     },
     {
         "keg_name": "0002",
         "keg_size": "large",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-06-22"
     },
     {
         "keg_name": "0011",
         "keg_size": "small",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-07-12"
     },
     {
         "keg_name": "0401",
         "keg_size": "large",
-        "keg_status": "returned"
+        "keg_status": "returned",
+        "date_shipped": "2021-04-02"
     },
     {
         "keg_name": "0501",
         "keg_size": "small",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-03-15"
     },
     {
         "keg_name": "0061",
         "keg_size": "large",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-07-12"
     },
     {
         "keg_name": "4001",
         "keg_size": "large",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-06-30"
     },
     {
         "keg_name": "0801",
         "keg_size": "small",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-05-25"
     },
     {
         "keg_name": "0091",
         "keg_size": "large",
-        "keg_status": "returned"
+        "keg_status": "returned",
+        "date_shipped": "2021-05-05"
     },
     {
         "keg_name": "0651",
         "keg_size": "small",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-05-18"
     },
     {
         "keg_name": "0050",
         "keg_size": "large",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-05-30"
     },
     {
         "keg_name": "0009",
         "keg_size": "small",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-06-12"
     },
     {
         "keg_name": "1111",
         "keg_size": "large",
-        "keg_status": "returned"
+        "keg_status": "returned",
+        "date_shipped": "2021-04-22"
     },
     {
         "keg_name": "2221",
         "keg_size": "small",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-05-23"
     },
     {
         "keg_name": "1231",
         "keg_size": "large",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-05-12"
     },
     {
         "keg_name": "1451",
         "keg_size": "small",
-        "keg_status": "returned"
+        "keg_status": "returned",
+        "date_shipped": "2021-04-25"
     },
     {
         "keg_name": "1401",
         "keg_size": "large",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-05-20"
     },
     {
         "keg_name": "0331",
         "keg_size": "large",
-        "keg_status": "shipped"
+        "keg_status": "shipped",
+        "date_shipped": "2021-06-08"
     },
     {
         "keg_name": "7777",
         "keg_size": "small",
-        "keg_status": "returned"
+        "keg_status": "returned",
+        "date_shipped": "2021-05-19"
     }
 ]
