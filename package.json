@@ -28,7 +28,8 @@
     "react-dom": "^16.14.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "regenerator": "^0.14.7"
+    "regenerator": "^0.14.7",
+    "store": "^2.0.12"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.14.8",
