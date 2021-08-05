@@ -7,6 +7,7 @@ import store from 'store'
 const Dashboard = () => {   
     const history = useHistory()
     if (!store.get("loggedIn")) {
+        console.log("not logged in!")
         history.push('/login')
     }
 
