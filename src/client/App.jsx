@@ -1,19 +1,17 @@
 import React from 'react'
+import {Route, Switch} from 'react-router-dom'
+import Layout from './layout/Layout'
 import Login from './Login'
-import {Route, Switch, Redirect} from 'react-router-dom'
-import Dashboard from './Dashboard'
 
 const App = () => {
+    console.log("App")
     return (
         <Switch>
             <Route path='/login'>
                 <Login/>
             </Route>
-            <Route path="/" exact={true}>
-                <Redirect to="/dashboard"/>
-            </Route>
-            <Route path="/dashboard" exact={true}>
-                <Dashboard/>
+            <Route path="/">
+                <Layout/>
             </Route>
         </Switch>
     )
