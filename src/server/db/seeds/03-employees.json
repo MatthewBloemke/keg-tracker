@@ -1,8 +1,8 @@
 [
     {
-        "employee_name": "Jane Doe",
-        "employee_email": "example@email.com",
-        "password": "password",
+        "employee_name": "Admin",
+        "employee_email": "admin",
+        "password": "$2b$10$VjEtHIQvcFtLhMGqPWjF4uThSlAPGtlbXI3bYxRUNpZvIvWMwMVWW",
         "admin": true
     }
 ]
