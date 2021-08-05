@@ -28,7 +28,7 @@ const Login = () => {
       .then(response => {
         if (response.status === 200) {
           store.set('loggedIn', true)
-          history.push("/dashboard")
+          history.push("/")
         } else {
           setErrorMessage({message: "Incorrect username or password"})
         }
