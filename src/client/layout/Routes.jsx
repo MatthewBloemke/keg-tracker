@@ -5,7 +5,7 @@ import Dashboard from '../Dashboard';
 const Routes = () => {
     return (
         <Switch>
-            <Route path='/login'>
+            <Route path='/login' exact={true}>
                 <Login/>
             </Route>
             <Route path="/" exact={true}>
