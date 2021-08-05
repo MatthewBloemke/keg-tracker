@@ -25,6 +25,7 @@ const Login = () => {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({data: formData})
     }
+    console.log(API_BASE_URL)
     await fetch(`${API_BASE_URL}/api/login`, requestOptions)
       .then(response => {
         if (response.status === 200) {
