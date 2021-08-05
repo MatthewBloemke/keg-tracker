@@ -65,7 +65,6 @@ const userExists = async (req, res, next) => {
 }
 const passwordCheck = async (req, res, next) => {
     await bcrypt.compare(req.body.data.password, res.locals.employee.password, (err, result) => {
-        console.log(result)
         if (result) {
             return next()
         } else {
