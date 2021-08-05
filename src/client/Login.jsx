@@ -3,6 +3,7 @@ import {useHistory} from 'react-router-dom'
 import store from 'store'
 
 const Login = () => {
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
   const history = useHistory()
   const initialFormData = {
     employee_email: "",
@@ -24,7 +25,7 @@ const Login = () => {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({data: formData})
     }
-    await fetch(`http://localhost:5000/api/login`, requestOptions)
+    await fetch(`${API_BASE_URL}/api/login`, requestOptions)
       .then(response => {
         if (response.status === 200) {
           store.set('loggedIn', true)
