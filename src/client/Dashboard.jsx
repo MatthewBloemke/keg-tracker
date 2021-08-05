@@ -48,6 +48,7 @@ const Dashboard = () => {
                     setSixtyDayKegs(sixtyDayKegArr)
                     setOnetwentyDayKegs(onetwentyDayKegArr)
                     setOverdueKegs(overdueKegArr)
+                    console.log(response)
                 })
         }
 
