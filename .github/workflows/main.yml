@@ -1,0 +1,12 @@
+name: Prod CI/CD
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -uses:
