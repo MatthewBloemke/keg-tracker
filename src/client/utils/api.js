@@ -28,3 +28,7 @@ const fetchJson = async (url, options, onCancel) => {
 export async function getKegs(baseUrl) {
     return await fetchJson(`${baseUrl}/api/kegs`, {headers}, []);
 };
+
+export async function loginCheck(baseUrl) {
+    return await fetchJson(`${baseUrl}/api/distributors`, {headers}, [])
+}

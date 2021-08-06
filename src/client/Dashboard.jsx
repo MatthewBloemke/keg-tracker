@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import {getKegs} from './utils/api'
+import {getKegs, loginCheck} from './utils/api'
 import {useHistory} from 'react-router-dom'
 import store from 'store'
 
 
 const Dashboard = () => {   
     const history = useHistory()
-    if (!store.get("loggedIn")) {
-        console.log("not logged in!")
-        history.push('/login')
-    }
-
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+    
     const [kegs, setKegs] = useState([]) 
     const [returnedKegs, setReturnedKegs] = useState([])
     const [sixtyDayKegs, setSixtyDayKegs] = useState([])
@@ -51,7 +47,12 @@ const Dashboard = () => {
                     setOverdueKegs(overdueKegArr)
                 })
         }
-
+        loginCheck(API_BASE_URL)
+            .then(response => {
+                if (!response) {
+                    history.push("/login")
+                }
+            })
         loadDashboard()
     }, [])
     return (
