@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {getKegs, loginCheck} from './utils/api'
 import {useHistory} from 'react-router-dom'
-import store from 'store'
-
 
 const Dashboard = () => {   
     const history = useHistory()
