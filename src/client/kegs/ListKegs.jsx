@@ -1,0 +1,40 @@
+import React, { useEffect, useState } from 'react'
+import { getKegs } from '../utils/api'
+import FormatKegs from './FormatKegs'
+
+//todo: add more comprehensive filter options
+
+const ListKegs = () => {
+    const [filter, setFilter] = useState("status") //date, size, status
+    const [kegs, setKegs] = useState([])
+    useEffect(() => {
+        if (filter === "size") {
+            console.log("sorting")
+            kegs.sort((a, b) => a.keg_size - b.keg_size)
+        } else if (filter === "date") {
+            console.log("sorting")
+            kegs.sort((a, b) => a.date_shipped > b.date_shipped)
+        } else if (filter === "status") {
+            kegs.sort((a, b) => a.keg_status > b.keg_status)
+        }
+        getKegs(window.location.origin)
+            .then(response => {
+                if (filter === "size") {
+                    console.log("sorting")
+                    response.sort((a, b) => a.keg_size.localeCompare(b.keg_size))
+                } else if (filter === "date") {
+                    console.log("sorting")
+                    response.sort((a, b) => new Date(b.date_shipped) - new Date(a.date_shipped))
+                } else if (filter === "status") {
+                    response.sort((a, b) => a.keg_status.localeCompare(b.keg_status))
+                }
+                setKegs(response)
+            })
+    }, [])
+
+    return (
+        <FormatKegs kegs={kegs}/>
+    )
+}
+
+export default ListKegs
