@@ -19,7 +19,7 @@ const Menu = () => {
             <div className="container-fluid d-flex flex-column p-0">
                 <li>
                     <Link to="/">
-                        <button style={buttonStyle}>Home</button>
+                        <button style={buttonStyle} onClick={onClick}>Home</button>
                     </Link>
                 </li>
                 <li>
