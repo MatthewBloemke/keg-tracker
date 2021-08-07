@@ -1,5 +1,8 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom'
+import DistSubMenu from '../distributors/DistSubMenu'
+import EmployeeSubMenu from '../employees/EmployeesSubMenu'
+import KegSubMenu from '../kegs/KegSubMenu'
 
 const Menu = () => {
     const onClick = ({target}) => {
@@ -23,19 +26,19 @@ const Menu = () => {
                     <Link to="/kegs">
                         <button style={buttonStyle} onClick={onClick}>Kegs</button>
                     </Link>
-                    {path ==="kegs" ? <p>Sub menu</p> : null}
+                    {path.includes("kegs") ? <KegSubMenu/> : null}
                 </li>
                 <li>
                     <Link to="/distributors">
                         <button style={buttonStyle} onClick={onClick}>Distributors</button>
                     </Link>
-                    {path ==="distributors" ? <p>Sub menu</p> : null}
+                    {path.includes("distributors") ? <DistSubMenu/> : null}
                 </li>
                 <li>
-                    <Link to="employees">
+                    <Link to="/employees">
                         <button style={buttonStyle} onClick={onClick}>Employees</button>
                     </Link>
-                    {path ==="employees" ? <p>Sub menu</p> : null}
+                    {path.includes("employees") ? <EmployeeSubMenu/> : null}
                 </li>                
             </div>
 
