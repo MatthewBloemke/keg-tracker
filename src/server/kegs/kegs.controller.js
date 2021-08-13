@@ -1,6 +1,6 @@
 const service = require("./kegs.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-
+const {userExists} = require("../auth/auth.controller")
 const validFields = [
     "keg_name",
     "keg_size",
@@ -55,7 +55,8 @@ async function create (req, res) {
         keg_name,
         keg_size,
         keg_status,
-        date_shipped
+        date_shipped,
+        shipped_to
     } = req.body.data)
     const createdKeg = await service.create(newKeg)
     res.json({data: createdKeg})
@@ -69,6 +70,7 @@ async function update (req, res) {
         keg_size: data.keg_size,
         keg_status: data.keg_status
     }
+
     await service.update(updatedKeg)
     res.status(200).json({data: updatedKeg})
 }
@@ -81,7 +83,7 @@ async function destroy(req, res) {
 module.exports = {
     list: asyncErrorBoundary(list),
     read: [asyncErrorBoundary(kegExists), read],
-    create: [asyncErrorBoundary(hasValidFields), create],
+    create: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(userExists), create],
     update: [asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), update],
     destroy: [asyncErrorBoundary(kegExists), destroy]
 }
