@@ -16,5 +16,18 @@ const readByDistributor = (distibutor_id) => {
     return knex("shippinghistory")
         .select("*")
         .where({distibutor_id})
-        
+}
+
+const create = (history_entry) => {
+    return knex("shippinghistory")
+        .insert(history_entry)
+        .returning("*")    
+}
+
+
+module.exports = {
+    list,
+    readByDate,
+    readByDistributor,
+    create
 }
