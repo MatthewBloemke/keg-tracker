@@ -10,6 +10,7 @@ const FormatKegs = ({kegs, filter}) => {
                 <td>{keg.keg_size}</td>
                 <td>{keg.keg_status}</td>
                 <td>{keg.date_shipped}</td>
+                <td>{keg.shipped_to}</td>
             </tr>
         )
     })
@@ -20,7 +21,8 @@ const FormatKegs = ({kegs, filter}) => {
                     <th>Keg Number</th>
                     <th>Keg Size</th>
                     <th>Keg Status</th>
-                    <th>Date Shipped</th>                    
+                    <th>Date Shipped</th>
+                    <th>Shipped_to</th>                 
                 </tr>
             </thead>
             <tbody>
