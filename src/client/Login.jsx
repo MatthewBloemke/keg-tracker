@@ -2,7 +2,6 @@ import React, {useState} from "react"
 import {useHistory} from 'react-router-dom'
 
 const Login = () => {
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
   const history = useHistory()
   const initialFormData = {
     employee_email: "",
@@ -18,16 +17,15 @@ const Login = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log(formData)
     const requestOptions = {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({data: formData})
     }
-    console.log(API_BASE_URL)
-    await fetch(`${API_BASE_URL}/api/login`, requestOptions)
+    await fetch(`${window.location.origin}/api/login`, requestOptions)
       .then(response => {
         if (response.status === 200) {
+          localStorage.setItem("user", formData.employee_email)
           history.push("/")
         } else {
           setErrorMessage({message: "Incorrect username or password"})
