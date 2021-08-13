@@ -13,7 +13,6 @@ const Menu = () => {
         background: "none"
     }
     const [path, setPath] = useState(window.location.pathname.slice(1))
-    console.log(path)
     return (
         <nav className="navbar navbar-dark align-items-start p-0">
             <div className="container-fluid d-flex flex-column p-0">
