@@ -85,5 +85,6 @@ const login = async (req, res) => {
 module.exports = {
     createAccount: [hasValidFields, asyncErrorBoundary(createAccount)],
     list,
-    login: [asyncErrorBoundary(userExists), passwordCheck, login]
+    login: [asyncErrorBoundary(userExists), passwordCheck, login],
+    userExists
 }
