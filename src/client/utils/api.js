@@ -43,5 +43,5 @@ export async function createKeg(data, signal) {
         headers,
         body: JSON.stringify({data})
     }
-    await fetch(`${window.location.origin}/api/kegs`)
+    await fetch(`${window.location.origin}/api/kegs`, options)
 }
