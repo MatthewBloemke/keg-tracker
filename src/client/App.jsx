@@ -4,7 +4,6 @@ import Layout from './layout/Layout'
 import Login from './Login'
 
 const App = () => {
-    console.log("App")
     return (
         <Switch>
             <Route path='/login'>
