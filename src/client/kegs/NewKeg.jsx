@@ -41,9 +41,9 @@ const NewKeg = () => {
     }
 
     const handleSubmit = async (event) => {
-        event.preventDefault()
+        event.preventDefault();
         const controller = new AbortController();
-        const invalidFields = []
+        const invalidFields = [];
         if (!Number(formData.keg_name) || formData.keg_name.length != 4) {
             invalidFields.push("keg_name")
         }
