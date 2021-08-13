@@ -31,4 +31,8 @@ export async function getKegs(baseUrl) {
 
 export async function loginCheck(baseUrl) {
     return await fetchJson(`${baseUrl}/api/distributors`, {headers}, [])
+};
+
+export async function getDistributors(baseUrl) {
+    return await fetchJson(`${baseUrl}/api/distributors`, {headers}, [])
 }
