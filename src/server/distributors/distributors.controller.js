@@ -2,8 +2,15 @@ const service = require("./distributors.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 
 async function distributorExists (req, res, next) {
-    const distributor = await service.read(req.params.distributorId)
-
+    if (req.body.data.keg_status === "returned") {
+        res.locals.distributor = {
+            distributor_name: null
+        }
+        console.log(res.locals.distributor)
+        return next()
+    }
+    const distributor = await service.read(req.body.data.distributor_id)
+    
     if (distributor) {
         res.locals.distributor = distributor;
         return next()
@@ -67,4 +74,5 @@ module.exports = {
     create: [asyncErrorBoundary(hasValidFields), create],
     update: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(distributorExists), update],
     destroy: [asyncErrorBoundary(distributorExists), destroy],
+    distributorExists,
 }
