@@ -3,7 +3,8 @@
         "keg_name": "0001",
         "keg_size": "large",
         "keg_status": "returned",
-        "date_shipped": "2021-05-12"
+        "date_shipped": "2021-05-12",
+        "shipped_to": "Company A"
     },
     {
         "keg_name": "0002",
