@@ -20,10 +20,8 @@ const ListKegs = () => {
         getKegs(window.location.origin)
             .then(response => {
                 if (filter === "size") {
-                    console.log("sorting")
                     response.sort((a, b) => a.keg_size.localeCompare(b.keg_size))
                 } else if (filter === "date") {
-                    console.log("sorting")
                     response.sort((a, b) => new Date(b.date_shipped) - new Date(a.date_shipped))
                 } else if (filter === "status") {
                     response.sort((a, b) => a.keg_status.localeCompare(b.keg_status))
