@@ -3,13 +3,13 @@ const knex = require("../db/connections")
 const list = () => {
     return knex("shippinghistory")
         .select("*")
-        .orderBy("shipped_date")
+        .orderBy("date_shipped")
 }
 
-const readByDate = (shipped_date) => {
+const readByDate = (date_shipped) => {
     return knex("shippinghistory")
         .select("*")
-        .where({shipped_date})
+        .where({date_shipped})
 }
 
 const readByDistributor = (distibutor_id) => {
