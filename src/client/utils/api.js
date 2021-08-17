@@ -37,6 +37,10 @@ export async function getDistributors(signal) {
     return await fetchJson(`${window.location.origin}/api/distributors`, {headers, signal}, [])
 }
 
+export async function getShippingHistory(signal) {
+    return await fetchJson(`${window.location.origin}/api/shipping`, {headers, signal}, [])
+}
+
 export async function createKeg(data, signal) {
     const options = {
         method: "POST",
