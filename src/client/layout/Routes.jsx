@@ -4,6 +4,7 @@ import Login from '../Login';
 import Dashboard from '../Dashboard';
 import ListKegs from '../kegs/ListKegs';
 import NewKeg from '../kegs/NewKeg';
+import Shipping from '../shippingHistory/Shipping';
 
 const Routes = () => {
     return (
@@ -22,6 +23,12 @@ const Routes = () => {
             </Route>
             <Route path="/kegs/new">
                 <NewKeg/>
+            </Route>
+            <Route path="/shipping" exact={true}>
+                <Shipping monthlyOnly={false}/>
+            </Route>
+            <Route path="/shipping/monthly">
+                <Shipping monthlyOnly={true}/>
             </Route>
         </Switch>
     )
