@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import DistSubMenu from '../distributors/DistSubMenu'
 import EmployeeSubMenu from '../employees/EmployeesSubMenu'
 import KegSubMenu from '../kegs/KegSubMenu'
+import ShippingSubMenu from '../shippingHistory/ShippingSubMenu'
 
 const Menu = () => {
     const onClick = ({target}) => {
@@ -38,7 +39,13 @@ const Menu = () => {
                         <button style={buttonStyle} onClick={onClick}>Employees</button>
                     </Link>
                     {path.includes("employees") ? <EmployeeSubMenu/> : null}
-                </li>                
+                </li>
+                <li>
+                    <Link to="/shipping">
+                        <button style={buttonStyle} onClick={onClick}>Shipping</button>
+                    </Link>
+                    {path.includes("shipping") ? <ShippingSubMenu/> : null}
+                </li>
             </div>
 
         </nav>
