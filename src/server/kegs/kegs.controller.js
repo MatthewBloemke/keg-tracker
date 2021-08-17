@@ -1,4 +1,5 @@
 const service = require("./kegs.service");
+const shippingService = require("../shippingHistory/shippingHistory.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const {userExists} = require("../auth/auth.controller");
 const { distributorExists } = require("../distributors/distributors.controller");
@@ -69,7 +70,7 @@ function read (req, res) {
 }
 
 async function create (req, res) {
-    const {keg_name, keg_size, keg_status, date_shipped,} = req.body.data;
+    const {keg_name, keg_size, keg_status, date_shipped, employee_email} = req.body.data;
     const newKeg = {
         keg_name,
         keg_size,
@@ -77,8 +78,16 @@ async function create (req, res) {
         date_shipped,
         "shipped_to": res.locals.distributor.distributor_name
     }
-    console.log(newKeg)
-    console.log("created")
+    const newHistory = {
+        date_shipped,
+        keg_name,
+        employee_email,
+        distributor_name: res.locals.distributor.distributor_name
+    }
+    if (keg_status === "shipped") {
+        await shippingService.create(newHistory)
+    }
+    
     const createdKeg = await service.create(newKeg)
     res.json({data: createdKeg})
 }
