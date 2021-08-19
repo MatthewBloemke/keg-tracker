@@ -14,7 +14,7 @@ const FormatShipping = ({date, monthlyOnly, shippingList}) => {
             if (tempMonth.getMonth() === month) {
                 filteredShippingList.push(
                     <tr key={entry.shipping_id}>
-                        <td>{entry.date_shipped}</td>
+                        <td>{entry.date_shipped.slice(0,10)}</td>
                         <td>{entry.keg_name}</td>
                         <td>{entry.distributor_name}</td>
                         <td>{entry.employee_email}</td>
@@ -25,7 +25,7 @@ const FormatShipping = ({date, monthlyOnly, shippingList}) => {
             if (tempMonth.getMonth() === month && tempMonth.getDay() === day) {
                 filteredShippingList.push(
                     <tr key={entry.shipping_id}>
-                        <td>{entry.date_shipped}</td>
+                        <td>{entry.date_shipped.slice(0,10)}</td>
                         <td>{entry.keg_name}</td>
                         <td>{entry.distributor_name}</td>
                         <td>{entry.employee_email}</td>
