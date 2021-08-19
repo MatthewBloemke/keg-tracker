@@ -5,10 +5,10 @@ const list = () => {
         .select("*")
 }
 
-const read = (keg_id) => {
+const read = (keg_name) => {
     return knex("kegs")
         .select("*")
-        .where({keg_id})
+        .where({keg_name})
 }
 
 const create = (newKeg) => {
