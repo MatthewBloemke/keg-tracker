@@ -49,3 +49,12 @@ export async function createKeg(data, signal) {
     }
     await fetch(`${window.location.origin}/api/kegs`, options)
 }
+
+export async function createHistory(data, signal) {
+    const options = {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({data})
+    }
+    await fetch(`${window.location.origin}/api/shipping`, options)
+}
