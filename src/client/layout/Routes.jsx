@@ -5,6 +5,7 @@ import Dashboard from '../Dashboard';
 import ListKegs from '../kegs/ListKegs';
 import NewKeg from '../kegs/NewKeg';
 import Shipping from '../shippingHistory/Shipping';
+import TrackKeg from '../kegs/TrackKeg';
 
 const Routes = () => {
     return (
@@ -23,6 +24,9 @@ const Routes = () => {
             </Route>
             <Route path="/kegs/new">
                 <NewKeg/>
+            </Route>
+            <Route path="/kegs/track">
+                <TrackKeg/>
             </Route>
             <Route path="/shipping" exact={true}>
                 <Shipping monthlyOnly={false}/>
