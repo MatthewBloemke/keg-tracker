@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Redirect, Route } from 'react-router';
-import Login from '../Login';
+import Login from '../login/Login';
 import Dashboard from '../Dashboard';
 import ListKegs from '../kegs/ListKegs';
 import NewKeg from '../kegs/NewKeg';
