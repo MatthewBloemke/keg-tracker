@@ -43,8 +43,8 @@ const Login = () => {
       </div>
       <div className="form">
         <form onSubmit={handleSubmit}>
-          <CustomInput label="Email" name="employee_email" color="blue" handleChange={handleChange} />
-          <CustomInput label="Password" name="password" color="blue" handleChange={handleChange} />
+          <CustomInput label="Email" name="employee_email" color="blue" handleChange={handleChange} type="text" value={formData.employee_email}/>
+          <CustomInput label="Password" name="password" color="blue" handleChange={handleChange} type="text" value={formData.password}/>
           <button className="btn btn-primary" type="submit">Login</button> <br/>
         </form>
       </div>
