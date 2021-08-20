@@ -1,5 +1,7 @@
 import React, {useState} from "react"
 import {useHistory} from 'react-router-dom'
+import CustomInput from "../utils/CustomInput"
+import "./login.css"
 
 const Login = () => {
   const history = useHistory()
@@ -17,6 +19,7 @@ const Login = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault()
+    console.log(formData)
     const requestOptions = {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -34,15 +37,19 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="employee_email">Email</label>
-        <input name="employee_email" id="employee_email" value={formData.employee_email} onChange={handleChange} /><br/>
-        <label htmlFor="password">Password</label>
-        <input name="password" id="password" value={formData.password} onChange={handleChange} /><br/>
-        <button type="submit">Login</button>      
-      </form>
-    </div>
+    <main>
+      <div className="header">
+        <h1>Keg Tracker</h1>
+      </div>
+      <div className="form">
+        <form onSubmit={handleSubmit}>
+          <CustomInput label="Email" name="employee_email" color="blue" handleChange={handleChange} />
+          <CustomInput label="Password" name="password" color="blue" handleChange={handleChange} />
+          <button className="btn btn-primary" type="submit">Login</button> <br/>
+        </form>
+      </div>
+
+    </main>
   );
 }
 
