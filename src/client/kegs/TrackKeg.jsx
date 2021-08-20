@@ -59,7 +59,6 @@ const TrackKeg = () => {
                 </div>
 
             </form>
-            <mwc-textfield></mwc-textfield>
         </div>
     )
 }
