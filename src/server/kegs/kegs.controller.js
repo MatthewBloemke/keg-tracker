@@ -18,12 +18,15 @@ const requiredFields = [
 
 async function kegExists (req, res, next) {
     const keg = await service.read(req.body.data.keg_name)
-
-    if (keg) {
+    if (keg.length) {
         res.locals.keg = keg;
         return next()
     }
     next({status: 404, message: `Keg ${req.body.data.keg_name}`})
+}
+
+function verifyKeg (req, res, next) {
+    res.json({data: res.locals.keg})
 }
 
 function hasValidFields (req, res, next) {
@@ -116,5 +119,6 @@ module.exports = {
     create: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(userExists), asyncErrorBoundary(distributorExists), create],
     update: [asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), update],
     destroy: [asyncErrorBoundary(kegExists), destroy],
+    verifyKeg: [asyncErrorBoundary(kegExists), verifyKeg],
     kegExists
 }
