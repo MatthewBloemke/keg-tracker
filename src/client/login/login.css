@@ -1,0 +1,26 @@
+input:focus {
+    outline: none !important;
+    border-color: blue;
+}
+
+input {
+    margin-bottom: 20px;
+    font-size: 18px;
+    padding: 14px;
+}
+
+label {
+    padding: 2px 2px 0px 2px;
+}
+
+main {
+    margin: auto;
+    width: 50%;
+}
+.form, .header {
+    text-align: center;
+}
+h1 {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
