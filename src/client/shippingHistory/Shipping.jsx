@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { getShippingHistory } from '../utils/api'
 import FormatShipping from './FormatShipping'
+//add component for checking how many kegs shipped during timeframe
+
 
 const Shipping = ({monthlyOnly}) => {
     const [shipping, setShipping] = useState([])
