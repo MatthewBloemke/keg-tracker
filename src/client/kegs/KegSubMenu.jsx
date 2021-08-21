@@ -13,9 +13,6 @@ const KegSubMenu = () => {
             <li>
                 <Link to="/kegs/new">New Keg</Link>
             </li>
-            <li>
-                <Link to="/kegs/edit">Edit Keg</Link>
-            </li>
         </ul>
     )
 }
