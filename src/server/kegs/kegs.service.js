@@ -20,7 +20,7 @@ const create = (newKeg) => {
 const update = (updatedKeg) => {
     return knex("kegs")
         .select("*")
-        .where({keg_id: updatedKeg.keg_id})
+        .where({keg_name: updatedKeg.keg_name})
         .update(updatedKeg, "*")
         .returning("*")
 }
