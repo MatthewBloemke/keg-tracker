@@ -66,3 +66,16 @@ export async function verifyKeg(data) {
     }
     return await fetch(`${window.location.origin}/api/kegs/verify`, options)
 }
+
+export async function editKeg(data) {
+    const options = {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({data})
+    }
+    return await fetch(`${window.location.origin}/api/kegs`, options)
+}
+
+export async function readKeg(kegName) {
+    return await fetchJson(`${window.location.origin}/api/kegs/${kegName}`)
+}
