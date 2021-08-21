@@ -76,7 +76,7 @@ const NewKeg = () => {
                     </div>
                     <div className="col-md-3 inputs">
                         <input type="text" id="keg_name" name="keg_name" value={formData.keg_name} onChange={handleChange}/> <br/>
-                        <select id="keg_size" onChange={handleChange}> 
+                        <select id="keg_size" name="keg_size" onChange={handleChange}> 
                             <option value="large">Large</option>
                             <option value="small">Small</option>
                         </select> <br/>
