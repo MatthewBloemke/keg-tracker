@@ -16,8 +16,22 @@ const requiredFields = [
     "keg_status"
 ]
 
+function kegIsReturned (req, res, next) {
+    if (res.locals.keg.keg_status==="returned") {
+        return next()
+    }
+    next({status: 400, message: `Keg ${req.body.data.keg_name} is already shipped`})
+}
+
 async function kegExists (req, res, next) {
-    const keg = await service.read(req.body.data.keg_name)
+    let keg = "";
+    console.log(req.params.kegName)
+    if (req.params.kegName) {
+        keg = await service.read(req.params.kegName)
+    } else {
+        keg = await service.read(req.body.data.keg_name)        
+    }
+
     if (keg.length) {
         res.locals.keg = keg;
         return next()
@@ -30,7 +44,7 @@ function verifyKeg (req, res, next) {
 }
 
 function hasValidFields (req, res, next) {
-    console.log(req.body.data)
+    console.log("validity check")
     if (!req.body.data) {
         return next({
             status: 404,
@@ -53,7 +67,7 @@ function hasValidFields (req, res, next) {
             }
         });        
     }
-
+    console.log(invalidFields)
     if (invalidFields.length) {
         return next({
             status: 400,
@@ -101,7 +115,7 @@ async function update (req, res) {
         keg_id: req.params.kegId,
         keg_name: data.keg_name,
         keg_size: data.keg_size,
-        keg_status: data.keg_status
+        keg_status: res.locals.keg.keg_status
     }
 
     await service.update(updatedKeg)
