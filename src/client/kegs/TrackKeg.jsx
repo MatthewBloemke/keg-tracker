@@ -33,7 +33,6 @@ const TrackKeg = () => {
         setKegName(target.value)
         if (target.value.length===4) {
             if (formData.keg_name.includes(target.value)) {
-                console.log("already entered")
                 setKegName("")
             } else {
                 await verifyKeg({keg_name: target.value})
@@ -57,8 +56,8 @@ const TrackKeg = () => {
     const handleSubmit = (event) => {
         event.preventDefault()
         console.log(formData)
-        // const abortController = new AbortController()
-        // createHistory(formData, abortController.signal)
+        const abortController = new AbortController()
+        createHistory(formData, abortController.signal)
     }
 
     useEffect(() => {
@@ -72,13 +71,10 @@ const TrackKeg = () => {
     return (
         <div>
             <h1>Track Kegs</h1>
-            
                 <div className="row">
                     <div className="col-md-8">
-                        
-                        
-                            <form onSubmit={handleSubmit}>
-                                <div className="row">
+                        <form onSubmit={handleSubmit}>
+                            <div className="row">
                                 <div className="col-md-6">
                                     <label htmlFor="distributor_id">Distributor</label> <br/>
                                     <select id="distributor_id" name="distributor_id" onChange={handleChange}><DistAsSelect dist={dist}/></select> <br/>       
@@ -87,10 +83,9 @@ const TrackKeg = () => {
                                     <CustomInput label="Keg Id" color="blue" name="keg_name"  type="text" handleChange={handleKegChange} value={kegName}/> <br/>
                                     <CustomInput label="date" color="blue" type="date" name="date_shipped" handleChange={handleChange} value={formData.date_shipped}/>
                                 </div>
-                                <button type="submit">Submit</button>
-                                </div>
-                            </form>
-                        
+                            </div>
+                            <button type="submit">Submit</button>
+                        </form>
                     </div>
                     <div className="col-md-4">
                         <FormatKegIdList kegIds={formData.keg_name}/>
