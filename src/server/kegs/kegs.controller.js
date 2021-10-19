@@ -15,6 +15,13 @@ const requiredFields = [
     "keg_size",
     "keg_status"
 ]
+const validReturnFields = [
+    "date_shipped",
+    "keg_name",
+    "keg_status",
+    "employee_email",
+    "shipped_to"
+]
 
 function kegIsReturned (req, res, next) {
     if (res.locals.keg.keg_status==="returned") {
@@ -23,9 +30,15 @@ function kegIsReturned (req, res, next) {
     next({status: 400, message: `Keg ${req.body.data.keg_name} is already shipped`})
 }
 
+function kegIsShipped (req, res, next) {
+    if (res.locals.keg.keg_status === "shipped") {
+        return next()
+    }
+    next({status: 400, message: `Keg ${req.body.data.keg_name} is already returned`})
+}
+
 async function kegExists (req, res, next) {
     let keg = "";
-    console.log(req.params.kegName)
     if (req.params.kegName) {
         keg = await service.read(req.params.kegName)
     } else {
@@ -34,7 +47,11 @@ async function kegExists (req, res, next) {
 
     if (keg.length) {
         res.locals.keg = keg;
-        return next()
+        console.log(req.body.data, keg[0].keg_status)
+        if (req.body.data.keg_status != keg[0].keg_status) {
+            return next()
+        }
+        
     }
     next({status: 404, message: `Keg ${req.body.data.keg_name}`})
 }
@@ -75,6 +92,18 @@ function hasValidFields (req, res, next) {
         })
     }
     next()
+}
+
+function hasValidReturnFields (req, res) {
+    const {data} = req.body;
+    if (!data) {
+        return next({status: 400, message: "Data not found"})
+    }
+    
+}
+
+async function returnKegs (req, res) {
+
 }
 
 async function list (req, res) {
@@ -134,5 +163,5 @@ module.exports = {
     update: [asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), update],
     destroy: [asyncErrorBoundary(kegExists), destroy],
     verifyKeg: [asyncErrorBoundary(kegExists), verifyKeg],
-    kegExists
+    
 }
