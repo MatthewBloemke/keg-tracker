@@ -14,8 +14,8 @@ const TrackKeg = () => {
         date_shipped: `${date.getFullYear()}-${"0"+month.slice(-2)}-${("0"+day).slice(-2)}`,
         keg_name: [],
         distributor_id: "",
-        employee_email: localStorage.getItem('user')
-
+        employee_email: localStorage.getItem('user'),
+        keg_status: "shipped"
     }
 
     const [dist, setDist] = useState([])
@@ -35,7 +35,7 @@ const TrackKeg = () => {
             if (formData.keg_name.includes(target.value)) {
                 setKegName("")
             } else {
-                await verifyKeg({keg_name: target.value})
+                await verifyKeg({keg_name: target.value, keg_status: "shipped"})
                     .then(response => {
                         if (response.status === 200) {
                             setFormData({
