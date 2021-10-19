@@ -9,7 +9,7 @@ const list = async (req, res) => {
 };
 
 const createHistory = (req, res) => {
-    const {date_shipped, employee_email, keg_name} = req.body.data;
+    const {date_shipped, employee_email, keg_name, keg_status} = req.body.data;
     keg_name.forEach(async (keg) => {
         const newHistory = {
             date_shipped,
@@ -20,11 +20,15 @@ const createHistory = (req, res) => {
         const updatedKeg = {
             keg_name: keg,
             date_shipped,
-            keg_status: "shipped",
+            keg_status,
             shipped_to: res.locals.distributor.distributor_name
         };
+
         await kegService.update(updatedKeg);
-        await service.create(newHistory);
+        if (keg_status==="shipped") {
+            await service.create(newHistory);            
+        }
+
     });
     res.json({data: keg_name})
 };
