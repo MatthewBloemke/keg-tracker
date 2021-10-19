@@ -1,7 +1,7 @@
 
 exports.up = function(knex) {
     return knex.schema.table("kegs", (table) => {
-        table.string("date_shipped").defaultTo("N/A")
+        table.string("date_shipped").defaultTo(null)
     })
 };
 
