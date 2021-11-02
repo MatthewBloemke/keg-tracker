@@ -2,13 +2,7 @@ const service = require("./distributors.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 
 async function distributorExists (req, res, next) {
-    if (req.body.data.keg_status === "returned") {
-        res.locals.distributor = {
-            distributor_name: null
-        }
-        return next()
-    }
-    const distributor = await service.read(req.body.data.distributor_id)
+    const distributor = await service.read(req.params.distributorId)
     
     if (distributor) {
         res.locals.distributor = distributor;
@@ -46,7 +40,7 @@ async function list (req, res) {
 async function create(req, res) {
     const {distributor_name} = req.body.data
     const createdDistributor = await service.create(distributor_name)
-    res.json({data: createdDistributor});
+    res.status(201).json({data: createdDistributor[0]});
 }
 
 async function update(req, res) {
