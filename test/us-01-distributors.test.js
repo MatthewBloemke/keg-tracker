@@ -2,6 +2,7 @@ const request = require("supertest");
 
 const app = require("../src/server/app");
 const knex = require("../src/server/db/connections");
+const {generateAuthToken} = require("./helper");
 
 require('dotenv').config()
 
@@ -28,7 +29,7 @@ describe("Distributors Route", () => {
             test("returns 404 for non-existent route", async () => {
                 const response = await request(app)
                     .get("/api/wrongPath")
-                    .set("Cookie", `token=${process.env.TOKEN}`)
+                    .set("Cookie", `token=${generateAuthToken()}`)
                     .set("Accept", "application/json");
 
                 expect(response.status).toBe(404);
@@ -40,7 +41,7 @@ describe("Distributors Route", () => {
         test("returns a list of distributors", async () => {
             const response = await request(app)
                 .get("/api/distributors")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json");
 
             expect(response.status).toBe(200);
@@ -50,7 +51,7 @@ describe("Distributors Route", () => {
         test("successfully creates new Distributor", async () => {
             const response = await request(app)
                 .post("/api/distributors")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {distributor_name: "Company Z"}})
 
@@ -59,7 +60,7 @@ describe("Distributors Route", () => {
         test("returns 400 if data is missing", async () => {
             const response = await request(app)
                 .post("/api/distributors")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({datas : {}})
             
@@ -69,7 +70,7 @@ describe("Distributors Route", () => {
         test("returns 400 if distributor_name is missing", async () => {
             const response = await request(app)
                 .post("/api/distributors")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {}})
             
@@ -88,7 +89,7 @@ describe("Distributors Route", () => {
         test("returns 404 for non-existent distributor_id", async () => {
             const response = await request(app)
                 .put("/api/distributors/5000")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {distributor_name: "Company ABC"}})
             
@@ -100,7 +101,7 @@ describe("Distributors Route", () => {
             expect(distributorOne).not.toBeUndefined()
             const response = await request(app)
                 .put(`/api/distributors/${distributorOne.distributor_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {distributor_name: ""}})
         
@@ -112,7 +113,7 @@ describe("Distributors Route", () => {
 
             const response = await request(app)
                 .put(`/api/distributors/${distributorOne.distributor_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {distributor_name: "Company XYZ"}})
 
@@ -132,7 +133,7 @@ describe("Distributors Route", () => {
 
             const response = await request(app)
                 .delete(`/api/distributors/9900`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
         
             expect(response.body.error).toContain("9900");
@@ -143,7 +144,7 @@ describe("Distributors Route", () => {
 
             const response = await request(app)
                 .delete(`/api/distributors/${distributorOne.distributor_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
         
             expect(response.body.data).toBeUndefined();

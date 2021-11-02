@@ -2,10 +2,10 @@ const request = require("supertest");
 
 const app = require("../src/server/app");
 const knex = require("../src/server/db/connections");
+const {generateAuthToken} = require("./helper");
 
 require("dotenv").config();
 import "regenerator-runtime/runtime";
-
 
 describe("Kegs Route", () => {
     beforeAll(() => {
@@ -28,10 +28,8 @@ describe("Kegs Route", () => {
             const response = await request(app)
                 .post("/api/login")
                 .set("Accept", "application/json")
-                .send({data: {employee_email: "admin", password: "admin"}})
-            console.log(process.env.TOKEN)
-            //token= response.body.data
-            expect(response.body.data).toContain("working")            
+                .send({data: {employee_email: "admin", password: "admin"}});
+            expect(response.body.data).toContain("working");
         })
     })
 
@@ -41,7 +39,7 @@ describe("Kegs Route", () => {
             test("returns 404 for non-existent route", async () => {
                 const response = await request(app)
                     .get("/wrongPath")
-                    .set("Cookie", `token=${process.env.TOKEN}`)
+                    .set("Cookie", `token=${generateAuthToken()}`)
                     .set("Accept", "application/json");
 
                 expect(response.status).toBe(404);
@@ -53,7 +51,7 @@ describe("Kegs Route", () => {
         test("returns a list of kegs", async () => {
             const response = await request(app)
                 .get("/api/kegs")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json");
 
             expect(response.status).toBe(200);
@@ -63,7 +61,7 @@ describe("Kegs Route", () => {
         test("successfully creates new Keg", async () => {
             const response = await request(app)
                 .post("/api/kegs")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_name: "1234",
@@ -77,7 +75,7 @@ describe("Kegs Route", () => {
         test("returns 400 if data is missing", async () => {
             const response = await request(app)
                 .post("/api/kegs")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({datas : {}})
             
@@ -87,7 +85,7 @@ describe("Kegs Route", () => {
         test("returns 400 if keg_name is missing", async () => {
             const response = await request(app)
                 .post("/api/kegs")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_size: "small",
@@ -101,7 +99,7 @@ describe("Kegs Route", () => {
         test("returns 400 if keg_name is not 4 digits", async () => {
             const response = await request(app)
                 .post("/api/kegs")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "123",
@@ -116,7 +114,7 @@ describe("Kegs Route", () => {
         test("returns 400 if keg_size is missing", async () => {
             const response = await request(app)
                 .post("/api/kegs")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "123",
@@ -130,7 +128,7 @@ describe("Kegs Route", () => {
         test("returns 400 if keg_status is missing", async () => {
             const response = await request(app)
                 .post("/api/kegs")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "123",
@@ -153,7 +151,7 @@ describe("Kegs Route", () => {
         test("returns 404 for non-existent keg_id", async () => {
             const response = await request(app)
                 .put("/api/kegs/5000")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {keg_name: "1234"}})
             
@@ -165,7 +163,7 @@ describe("Kegs Route", () => {
             expect(kegOne).not.toBeUndefined()
             const response = await request(app)
                 .put(`/keg/${kegOne.keg_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_name: "",
@@ -180,7 +178,7 @@ describe("Kegs Route", () => {
         test("returns 400 if keg_status is missing", async () => {
             const response = await request(app)
                 .put(`/keg/${kegOne.keg_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "1234",
@@ -194,7 +192,7 @@ describe("Kegs Route", () => {
         test("returns 400 if keg_size is missing", async () => {
             const response = await request(app)
                 .put(`/keg/${kegOne.keg_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "1234",
@@ -208,7 +206,7 @@ describe("Kegs Route", () => {
         test("returns 400 if date_shipped is missing", async () => {
             const response = await request(app)
                 .put(`/keg/${kegOne.keg_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "1234",
@@ -224,7 +222,7 @@ describe("Kegs Route", () => {
 
             const response = await request(app)
                 .put(`/api/kegs/${kegOne.keg_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {keg_name: "Company XYZ"}})
 
@@ -245,7 +243,7 @@ describe("Kegs Route", () => {
 
             const response = await request(app)
                 .delete(`/api/kegs/99`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
         
             expect(response.body.data).toContain("99");
@@ -256,7 +254,7 @@ describe("Kegs Route", () => {
 
             const response = await request(app)
                 .delete(`/api/kegs/${kegOne.keg_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
         
             expect(response.body.data).toBeUndefined();
