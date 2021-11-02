@@ -6,7 +6,6 @@ async function distributorExists (req, res, next) {
         res.locals.distributor = {
             distributor_name: null
         }
-        console.log(res.locals.distributor)
         return next()
     }
     const distributor = await service.read(req.body.data.distributor_id)
@@ -45,11 +44,9 @@ async function list (req, res) {
 }
 
 async function create(req, res) {
-    const newDistributor =({
-        distributor_name
-    } = req.body.data)
-    const createdDistributor = await service.create(newDistributor)
-    res.status(201).json({data: createdDistributor});
+    const {distributor_name} = req.body.data
+    const createdDistributor = await service.create(distributor_name)
+    res.json({data: createdDistributor});
 }
 
 async function update(req, res) {
@@ -58,7 +55,6 @@ async function update(req, res) {
         distributor_id: req.params.distributorId,
         distributor_name: data.distributor_name,
     }
-    console.log(newDistributor)
     await service.update(newDistributor)
     res.status(200).json({data: newDistributor})
 }
