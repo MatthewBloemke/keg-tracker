@@ -3,6 +3,9 @@ const request = require("supertest");
 const app = require("../src/server/app");
 const knex = require("../src/server/db/connections");
 
+require("dotenv").config();
+import "regenerator-runtime/runtime";
+
 
 describe("Kegs Route", () => {
     beforeAll(() => {
@@ -20,11 +23,25 @@ describe("Kegs Route", () => {
         return await knex.migrate.rollback(null, true).then(() => knex.destroy());
     })
 
+    describe("Login", () => {
+        test("returns working for login", async () => {
+            const response = await request(app)
+                .post("/api/login")
+                .set("Accept", "application/json")
+                .send({data: {employee_email: "admin", password: "admin"}})
+            console.log(process.env.TOKEN)
+            //token= response.body.data
+            expect(response.body.data).toContain("working")            
+        })
+    })
+
+
     describe("App", () => {
         describe("not found handler", () => {
             test("returns 404 for non-existent route", async () => {
                 const response = await request(app)
                     .get("/wrongPath")
+                    .set("Cookie", `token=${process.env.TOKEN}`)
                     .set("Accept", "application/json");
 
                 expect(response.status).toBe(404);
@@ -32,19 +49,21 @@ describe("Kegs Route", () => {
             })
         })
     })
-    describe("GET /kegs", () => {
+    describe("GET /api/kegs", () => {
         test("returns a list of kegs", async () => {
             const response = await request(app)
-                .get("/kegs")
+                .get("/api/kegs")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json");
 
             expect(response.status).toBe(200);
         })
     })
-    describe("POST /kegs", () => {
+    describe("POST /api/kegs", () => {
         test("successfully creates new Keg", async () => {
             const response = await request(app)
-                .post("/kegs")
+                .post("/api/kegs")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_name: "1234",
@@ -57,7 +76,8 @@ describe("Kegs Route", () => {
         })
         test("returns 400 if data is missing", async () => {
             const response = await request(app)
-                .post("/kegs")
+                .post("/api/kegs")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({datas : {}})
             
@@ -66,7 +86,8 @@ describe("Kegs Route", () => {
         })
         test("returns 400 if keg_name is missing", async () => {
             const response = await request(app)
-                .post("/kegs")
+                .post("/api/kegs")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_size: "small",
@@ -79,7 +100,8 @@ describe("Kegs Route", () => {
         })
         test("returns 400 if keg_name is not 4 digits", async () => {
             const response = await request(app)
-                .post("/kegs")
+                .post("/api/kegs")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "123",
@@ -93,7 +115,8 @@ describe("Kegs Route", () => {
         })
         test("returns 400 if keg_size is missing", async () => {
             const response = await request(app)
-                .post("/kegs")
+                .post("/api/kegs")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "123",
@@ -106,7 +129,8 @@ describe("Kegs Route", () => {
         })
         test("returns 400 if keg_status is missing", async () => {
             const response = await request(app)
-                .post("/kegs")
+                .post("/api/kegs")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "123",
@@ -118,7 +142,7 @@ describe("Kegs Route", () => {
             expect(response.body.error).toContain("keg_status")                
         })
     })
-    describe("PUT /kegs/:kegId", () => {
+    describe("PUT /api/kegs/:kegId", () => {
         let kegOne;
         let kegTwo;
 
@@ -128,7 +152,8 @@ describe("Kegs Route", () => {
 
         test("returns 404 for non-existent keg_id", async () => {
             const response = await request(app)
-                .put("/kegs/5000")
+                .put("/api/kegs/5000")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {keg_name: "1234"}})
             
@@ -140,6 +165,7 @@ describe("Kegs Route", () => {
             expect(kegOne).not.toBeUndefined()
             const response = await request(app)
                 .put(`/keg/${kegOne.keg_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_name: "",
@@ -154,6 +180,7 @@ describe("Kegs Route", () => {
         test("returns 400 if keg_status is missing", async () => {
             const response = await request(app)
                 .put(`/keg/${kegOne.keg_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "1234",
@@ -167,6 +194,7 @@ describe("Kegs Route", () => {
         test("returns 400 if keg_size is missing", async () => {
             const response = await request(app)
                 .put(`/keg/${kegOne.keg_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "1234",
@@ -180,6 +208,7 @@ describe("Kegs Route", () => {
         test("returns 400 if date_shipped is missing", async () => {
             const response = await request(app)
                 .put(`/keg/${kegOne.keg_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     keg_name: "1234",
@@ -194,7 +223,8 @@ describe("Kegs Route", () => {
             expect(kegOne).not.toBeUndefined()
 
             const response = await request(app)
-                .put(`/kegs/${kegOne.keg_id}`)
+                .put(`/api/kegs/${kegOne.keg_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {keg_name: "Company XYZ"}})
 
@@ -202,7 +232,7 @@ describe("Kegs Route", () => {
             expect(response.status).toBe(200);
         })
     })
-    describe("DELETE /kegs/:kegId", () => {
+    describe("DELETE /api/kegs/:kegId", () => {
         let kegOne;
 
         beforeEach(async () => {
@@ -214,7 +244,8 @@ describe("Kegs Route", () => {
             expect(kegOne).not.toBeUndefined()
 
             const response = await request(app)
-                .delete(`/kegs/99`)
+                .delete(`/api/kegs/99`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
         
             expect(response.body.data).toContain("99");
@@ -224,7 +255,8 @@ describe("Kegs Route", () => {
             expect(kegOne).not.toBeUndefined()
 
             const response = await request(app)
-                .delete(`/kegs/${kegOne.keg_id}`)
+                .delete(`/api/kegs/${kegOne.keg_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
         
             expect(response.body.data).toBeUndefined();

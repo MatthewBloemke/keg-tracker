@@ -3,6 +3,7 @@ const request = require("supertest");
 const app = require("../src/server/app");
 const knex = require("../src/server/db/connections");
 
+import "regenerator-runtime/runtime";
 
 describe("shippinghistory Route", () => {
     beforeAll(() => {
