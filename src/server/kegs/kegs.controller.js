@@ -47,7 +47,6 @@ async function kegExists (req, res, next) {
 
     if (keg.length) {
         res.locals.keg = keg;
-        console.log(req.body.data, keg[0].keg_status)
         if (req.body.data.keg_status != keg[0].keg_status) {
             return next()
         }
@@ -61,7 +60,6 @@ function verifyKeg (req, res, next) {
 }
 
 function hasValidFields (req, res, next) {
-    console.log("validity check")
     if (!req.body.data) {
         return next({
             status: 404,
@@ -84,7 +82,6 @@ function hasValidFields (req, res, next) {
             }
         });        
     }
-    console.log(invalidFields)
     if (invalidFields.length) {
         return next({
             status: 400,
