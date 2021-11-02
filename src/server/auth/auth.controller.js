@@ -54,7 +54,6 @@ const list = async (req, res) => {
 const userExists = async (req, res, next) => {
     const employee = await service.readByEmail(req.body.data.employee_email)
     if (employee.length) {
-        console.log(employee)
         res.locals.employee = employee[0];
         return next()
     }
