@@ -4,9 +4,9 @@ function list() {
     return knex("distributors")
         .select("*")
 }
-function create(newDistributor) {
+function create(distributor_name) {
     return knex("distributors")
-        .insert(newDistributor)
+        .insert({distributor_name})
         .returning("*")
 }
 function read(distributor_id) {
