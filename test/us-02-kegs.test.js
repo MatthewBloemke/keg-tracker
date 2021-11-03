@@ -38,12 +38,12 @@ describe("Kegs Route", () => {
         describe("not found handler", () => {
             test("returns 404 for non-existent route", async () => {
                 const response = await request(app)
-                    .get("/wrongPath")
+                  .get("/api/wrongPath")
                     .set("Cookie", `token=${generateAuthToken()}`)
                     .set("Accept", "application/json");
 
                 expect(response.status).toBe(404);
-                expect(response.body.error).toBe("Path not found: /wrongPath")
+                expect(response.body.error).toBe("Path not found: /api/wrongPath")
             })
         })
     })
@@ -58,7 +58,7 @@ describe("Kegs Route", () => {
         })
     })
     describe("POST /api/kegs", () => {
-        test("successfully creates new Keg", async () => {
+        test("successfully creates new returned Keg", async () => {
             const response = await request(app)
                 .post("/api/kegs")
                 .set("Cookie", `token=${generateAuthToken()}`)
@@ -66,8 +66,7 @@ describe("Kegs Route", () => {
                 .send({data: {
                     keg_name: "1234",
                     keg_size: "small",
-                    keg_status: "shipped",
-                    date_shipped: "2021-05-15"
+                    keg_status: "returned",
                 }})
 
             expect(response.status).toBe(201)
@@ -219,12 +218,12 @@ describe("Kegs Route", () => {
         })
         test("returns 200 for successful edit", async () => {
             expect(kegOne).not.toBeUndefined()
-
+            console.log(kegOne.keg_name)
             const response = await request(app)
-                .put(`/api/kegs/${kegOne.keg_id}`)
+                .put(`/api/kegs/${kegOne.keg_name}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({data: {keg_name: "Company XYZ"}})
+                .send({data: {keg_name: "1234"}})
 
             expect(response.body.data).toHaveProperty("keg_name", "1234")
             expect(response.status).toBe(200);
@@ -246,14 +245,13 @@ describe("Kegs Route", () => {
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
         
-            expect(response.body.data).toContain("99");
+            expect(response.body.error).toContain("99");
             expect(response.status).toBe(404);
         })
         test("returns 200 on successful delete", async () => {
             expect(kegOne).not.toBeUndefined()
-
             const response = await request(app)
-                .delete(`/api/kegs/${kegOne.keg_id}`)
+                .delete(`/api/kegs/${kegOne.keg_name}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
         

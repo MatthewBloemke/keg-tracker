@@ -3,6 +3,7 @@ const request = require("supertest");
 const app = require("../src/server/app");
 const knex = require("../src/server/db/connections");
 
+require("dotenv").config()
 import "regenerator-runtime/runtime";
 
 describe("shippinghistory Route", () => {
@@ -25,27 +26,30 @@ describe("shippinghistory Route", () => {
         describe("not found handler", () => {
             test("returns 404 for non-existent route", async () => {
                 const response = await request(app)
-                    .get("/wrongPath")
+                    .get("/api/wrongPath")
+                    .set("Cookie", `token=${process.env.TOKEN}`)
                     .set("Accept", "application/json");
 
                 expect(response.status).toBe(404);
-                expect(response.body.error).toBe("Path not found: /wrongPath")
+                expect(response.body.error).toBe("Path not found: /api/wrongPath")
             })
         })
     })
-    describe("GET /shippinghistory", () => {
+    describe("GET /api/shipping", () => {
         test("returns a shippinghistory list", async () => {
             const response = await request(app)
-                .get("/shippinghistory")
+                .get("/api/shipping")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json");
 
             expect(response.status).toBe(200);
         })
     })
-    describe("POST /shippinghistory", () => {
+    describe("POST /api/shipping", () => {
         test("successfully creates new shippinghistory entry", async () => {
             const response = await request(app)
-                .post("/shippinghistory")
+                .post("/api/shipping")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     shipped_date: "2021-05-15",
@@ -58,7 +62,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 400 if data is missing", async () => {
             const response = await request(app)
-                .post("/shippinghistory")
+                .post("/api/shipping")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({datas : {}})
             
@@ -67,7 +72,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 400 if shipped_date is missing", async () => {
             const response = await request(app)
-                .post("/shippinghistory")
+                .post("/api/shipping")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_id: "1234",
@@ -80,7 +86,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 400 if shipped_date is not a date", async () => {
             const response = await request(app)
-                .post("/shippinghistory")
+                .post("/api/shipping")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     shipped_date: "21-05-15",
@@ -94,7 +101,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 400 if keg_id is missing", async () => {
             const response = await request(app)
-                .post("/shippinghistory")
+                .post("/api/shipping")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     shipped_date: "2021-05-15",
@@ -107,7 +115,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 400 if distributor_id is missing", async () => {
             const response = await request(app)
-                .post("/shippinghistory")
+                .post("/api/shipping")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     shipped_date: "2021-05-15",
@@ -120,7 +129,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 400 if employee_id is missing", async () => {
             const response = await request(app)
-                .post("/shippinghistory")
+                .post("/api/shipping")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     shipped_date: "2021-05-15",
@@ -132,7 +142,7 @@ describe("shippinghistory Route", () => {
             expect(response.body.error).toContain("employee_id")                
         })
     })
-    describe("PUT /shippinghistory/:shippinghistoryId", () => {
+    describe("PUT /api/shipping/:shippinghistoryId", () => {
         let shippinghistoryOne;
         let shippinghistoryTwo;
 
@@ -142,7 +152,8 @@ describe("shippinghistory Route", () => {
 
         test("returns 404 for non-existent shipping_id", async () => {
             const response = await request(app)
-                .put("/shippinghistory/5000")
+                .put("/api/shipping/5000")
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     shipped_date: "2021-05-15",
@@ -158,7 +169,8 @@ describe("shippinghistory Route", () => {
         test("returns 400 for empty shipped_date", async () => {
             expect(shippinghistoryOne).not.toBeUndefined()
             const response = await request(app)
-                .put(`/shippinghistory/${shippinghistoryOne.shipping_id}`)
+                .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     shipped_date: "",
@@ -172,7 +184,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 400 if keg_id is missing", async () => {
             const response = await request(app)
-                .put(`/shippinghistory/${shippinghistoryOne.shipping_id}`)
+                .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     shipped_date: "2021-05-15",
@@ -186,7 +199,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 400 if distributor_id is missing", async () => {
             const response = await request(app)
-                .put(`/shippinghistory/${shippinghistoryOne.shipping_id}`)
+                .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     shipped_date: "2021-05-15",
@@ -199,7 +213,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 400 if employee_id is missing", async () => {
             const response = await request(app)
-                .put(`/shippinghistory/${shippinghistoryOne.shipping_id}`)
+                .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     shipped_date: "2021-05-15",
@@ -212,7 +227,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 404 if keg_id does not exist", async () => {
             const response = await request(app)
-            .put(`/shippinghistory/${shippinghistoryOne.shipping_id}`)
+                .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     shipped_date: "2021-05-15",
@@ -226,7 +242,8 @@ describe("shippinghistory Route", () => {
         })
         test("returns 404 if distributor_id does not exist", async () => {
             const response = await request(app)
-                .put(`/shippinghistory/${shippinghistoryOne.shipping_id}`)
+                .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({
                     shipped_date: "2021-05-15",
@@ -243,7 +260,8 @@ describe("shippinghistory Route", () => {
             expect(shippinghistoryOne).not.toBeUndefined()
 
             const response = await request(app)
-                .put(`/shippinghistory/${shippinghistoryOne.shipping_id}`)
+                .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     shipped_date: "2021-05-15",
@@ -256,7 +274,7 @@ describe("shippinghistory Route", () => {
             expect(response.status).toBe(200);
         })
     })
-    describe("DELETE /shippinghistory/:shippinghistoryId", () => {
+    describe("DELETE /api/shipping/:shippinghistoryId", () => {
         let shippinghistoryOne;
 
         beforeEach(async () => {
@@ -268,7 +286,8 @@ describe("shippinghistory Route", () => {
             expect(shippinghistoryOne).not.toBeUndefined();
 
             const response = await request(app)
-                .delete(`/shippinghistory/99`)
+                .delete(`/api/shipping/99`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
         
             expect(response.body.data).toContain("99");
@@ -278,7 +297,8 @@ describe("shippinghistory Route", () => {
             expect(shippinghistoryOne).not.toBeUndefined()
 
             const response = await request(app)
-                .delete(`/shippinghistory/${shippinghistoryOne.shipping_id}`)
+                .delete(`/api/shipping/${shippinghistoryOne.shipping_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
                 .set("Accept", "application/json")
         
             expect(response.body.data).toBeUndefined();
