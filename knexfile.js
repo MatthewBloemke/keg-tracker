@@ -8,12 +8,13 @@ require('dotenv').config();
 const path = require("path");
 
 const {
-  DATABASE_HOST_DEVELOPMENT = "localhost",
-  DATABASE_HOST_TEST = "localhost",
-  DATABASE_HOST = "localhost",
-  DEBUG,
-  DATABASE_PASSWORD,
-  DATABASE_NAME
+  POSTGRES_HOST_DEVELOPMENT = "localhost",
+  POSTGRES_HOST_TEST = "localhost",
+  POSTGRES_HOST = "localhost",
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DATABASE,
+  POSTGRES_DEBUG_MODE
 } = process.env;
 
 module.exports = {
@@ -21,10 +22,10 @@ module.exports = {
     client: "postgresql",
     pool: { min: 1, max: 5 },
     connection: {
-      host: DATABASE_HOST_DEVELOPMENT,
-      user: 'postgres',
-      password: DATABASE_PASSWORD,
-      database: DATABASE_NAME
+      host: POSTGRES_HOST_DEVELOPMENT,
+      user: POSTGRES_USER,
+      password: POSTGRES_PASSWORD,
+      database: POSTGRES_DATABASE
      },
     migrations: {
       directory: path.join(__dirname, "src", "server", "db", "migrations"),
@@ -32,16 +33,16 @@ module.exports = {
     seeds: {
       directory: path.join(__dirname, "src", "server", "db", "seeds"),
     },
-    debug: !!DEBUG,
+    debug: !!POSTGRES_DEBUG_MODE,
   },
   test: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
     connection: {
-      host: DATABASE_HOST_TEST,
-      user: 'postgres',
-      password: DATABASE_PASSWORD,
-      database: DATABASE_NAME
+      host: POSTGRES_HOST_TEST,
+      user: POSTGRES_USER,
+      password: POSTGRES_PASSWORD,
+      database: POSTGRES_DATABASE
      },
     migrations: {
       directory: path.join(__dirname, "src", "server", "db", "migrations"),
@@ -49,16 +50,16 @@ module.exports = {
     seeds: {
       directory: path.join(__dirname, "src", "server", "db", "seeds"),
     },
-    debug: !!DEBUG,
+    debug: !!POSTGRES_DEBUG_MODE,
   },
   production: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
     connection: {
-      host: DATABASE_HOST,
-      user: 'postgres',
-      password: DATABASE_PASSWORD,
-      database: DATABASE_NAME
+      host: POSTGRES_HOST,
+      user: POSTGRES_USER,
+      password: POSTGRES_PASSWORD,
+      database: POSTGRES_DATABASE
      },
     migrations: {
       directory: path.join(__dirname, "src", "server", "db", "migrations"),
@@ -66,6 +67,6 @@ module.exports = {
     seeds: {
       directory: path.join(__dirname, "src", "server", "db", "seeds"),
     },
-    debug: !!DEBUG,
+    debug: !!POSTGRES_DEBUG_MODE,
   },
 };

@@ -11,7 +11,11 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres_user
+          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_DB: postgres_db
+        ports:
+          - 5432:5432
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -31,7 +35,11 @@ jobs:
         env:
           NODE_ENV: test
           SECRET: superspecialsecret # This is just a mock secret for JWT signing. Can be set to any value.
-          DATABASE_HOST_TEST: postgres
+          POSTGRES_HOST_TEST: postgres
+          POSTGRES_USER: postgres_user
+          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_DATABASE: postgres_db
+          POSTGRES_DEBUG_MODE: true
         run: |
           npm ci
           npm test
