@@ -18,7 +18,7 @@
    development: {
      client: "postgresql",
      pool: { min: 1, max: 5 },
-     connection: DATABASE_URL_DEVELOPMENT,
+     connection: process.env.POSTGRES_URL || DATABASE_URL_DEVELOPMENT,
      migrations: {
        directory: path.join(__dirname, "src", "server", "db", "migrations"),
      },
@@ -30,7 +30,7 @@
    test: {
      client: "postgresql",
      pool: { min: 1, max: 5 },
-     connection: DATABASE_URL_TEST,
+     connection: process.env.POSTGRES_URL || DATABASE_URL_TEST,
      migrations: {
        directory: path.join(__dirname, "src", "server", "db", "migrations"),
      },
@@ -42,7 +42,7 @@
    production: {
      client: "postgresql",
      pool: { min: 1, max: 5 },
-     connection: DATABASE_URL,
+     connection: process.env.POSTGRES_URL || DATABASE_URL,
      migrations: {
        directory: path.join(__dirname, "src", "server", "db", "migrations"),
      },

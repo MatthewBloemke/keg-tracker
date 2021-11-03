@@ -30,6 +30,7 @@ jobs:
       - name: Build
         env:
           SECRET: superspecialsecret # This is just a mock secret for JWT signing. Can be set to any value.
+          POSTGRES_URL: postgresql://postgres@postgres/postgres
         run: |
           npm ci
           npm test
