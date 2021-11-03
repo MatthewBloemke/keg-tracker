@@ -162,7 +162,7 @@ describe("Distributors Route", () => {
         test('returns 404 on non-existent id', async () => {
             const response = await request(app)
                 .get("/api/distributors/15000")
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set('Accept', "application/json")
 
             expect(response.body.error).toContain('15000')
@@ -173,7 +173,7 @@ describe("Distributors Route", () => {
             
             const response = await request(app)
                 .get(`/api/distributors/${distributorOne.distributor_id}`)
-                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set("Cookie", `token=${generateAuthToken()}`)
                 .set('Accept', "application/json")
 
             expect(response.status).toBe(200)

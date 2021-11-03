@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**' # Matches every branch.
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: node:latest
+    services:
+      # Setup postgres server for tests to connect to.
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres_user
+          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_DB: postgres_db
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started.
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Build
+        env:
+          NODE_ENV: test
+          SECRET: superspecialsecret # This is just a mock secret for JWT signing. Can be set to any value.
+          POSTGRES_HOST_TEST: postgres
+          POSTGRES_USER: postgres_user
+          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_DATABASE: postgres_db
+        run: |
+          npm ci
+          npm test
