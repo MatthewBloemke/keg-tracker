@@ -4,51 +4,68 @@
  * You will not need to make changes to this file.
  */
 
- require('dotenv').config();
- const path = require("path");
+require('dotenv').config();
+const path = require("path");
 
- 
- const {
-   DATABASE_URL = "postgresql://postgres@localhost/postgres",
-   DATABASE_URL_DEVELOPMENT = "postgresql://postgres@localhost/postgres",
-   DATABASE_URL_TEST = "postgresql://postgres@localhost/postgres",
-   DEBUG,
- } = process.env;
- module.exports = {
-   development: {
-     client: "postgresql",
-     pool: { min: 1, max: 5 },
-     connection: process.env.POSTGRES_URL || DATABASE_URL_DEVELOPMENT,
-     migrations: {
-       directory: path.join(__dirname, "src", "server", "db", "migrations"),
+const {
+  DATABASE_HOST_DEVELOPMENT = "localhost",
+  DATABASE_HOST_TEST = "localhost",
+  DATABASE_HOST = "localhost",
+  DEBUG,
+  DATABASE_PASSWORD,
+  DATABASE_NAME
+} = process.env;
+
+module.exports = {
+  development: {
+    client: "postgresql",
+    pool: { min: 1, max: 5 },
+    connection: {
+      host: DATABASE_HOST_DEVELOPMENT,
+      user: 'postgres',
+      password: DATABASE_PASSWORD,
+      database: DATABASE_NAME
      },
-     seeds: {
-       directory: path.join(__dirname, "src", "server", "db", "seeds"),
+    migrations: {
+      directory: path.join(__dirname, "src", "server", "db", "migrations"),
+    },
+    seeds: {
+      directory: path.join(__dirname, "src", "server", "db", "seeds"),
+    },
+    debug: !!DEBUG,
+  },
+  test: {
+    client: "postgresql",
+    pool: { min: 1, max: 5 },
+    connection: {
+      host: DATABASE_HOST_TEST,
+      user: 'postgres',
+      password: DATABASE_PASSWORD,
+      database: DATABASE_NAME
      },
-     debug: !!DEBUG,
-   },
-   test: {
-     client: "postgresql",
-     pool: { min: 1, max: 5 },
-     connection: process.env.POSTGRES_URL || DATABASE_URL_TEST,
-     migrations: {
-       directory: path.join(__dirname, "src", "server", "db", "migrations"),
+    migrations: {
+      directory: path.join(__dirname, "src", "server", "db", "migrations"),
+    },
+    seeds: {
+      directory: path.join(__dirname, "src", "server", "db", "seeds"),
+    },
+    debug: !!DEBUG,
+  },
+  production: {
+    client: "postgresql",
+    pool: { min: 1, max: 5 },
+    connection: {
+      host: DATABASE_HOST,
+      user: 'postgres',
+      password: DATABASE_PASSWORD,
+      database: DATABASE_NAME
      },
-     seeds: {
-       directory: path.join(__dirname, "src", "server", "db", "seeds"),
-     },
-     debug: !!DEBUG,
-   },
-   production: {
-     client: "postgresql",
-     pool: { min: 1, max: 5 },
-     connection: process.env.POSTGRES_URL || DATABASE_URL,
-     migrations: {
-       directory: path.join(__dirname, "src", "server", "db", "migrations"),
-     },
-     seeds: {
-       directory: path.join(__dirname, "src", "server", "db", "seeds"),
-     },
-     debug: !!DEBUG,
-   },
- };
+    migrations: {
+      directory: path.join(__dirname, "src", "server", "db", "migrations"),
+    },
+    seeds: {
+      directory: path.join(__dirname, "src", "server", "db", "seeds"),
+    },
+    debug: !!DEBUG,
+  },
+};
