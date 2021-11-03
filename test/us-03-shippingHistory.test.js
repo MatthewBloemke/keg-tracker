@@ -2,6 +2,7 @@ const request = require("supertest");
 
 const app = require("../src/server/app");
 const knex = require("../src/server/db/connections");
+const {generateAuthToken} = require("./helper");
 
 require("dotenv").config()
 import "regenerator-runtime/runtime";
