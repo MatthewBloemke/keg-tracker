@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: '15.x'
       - name: Build
+        env:
+          SECRET: superspecialsecret # This is just a mock secret for JWT signing. Can be set to any value.
         run: |
           npm ci
           npm test
