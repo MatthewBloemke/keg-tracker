@@ -31,7 +31,7 @@ jobs:
         env:
           NODE_ENV: test
           SECRET: superspecialsecret # This is just a mock secret for JWT signing. Can be set to any value.
-          POSTGRES_URL: postgresql://postgres
+          DATABASE_HOST_TEST: postgres
         run: |
           npm ci
           npm test
