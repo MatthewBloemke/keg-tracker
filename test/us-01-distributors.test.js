@@ -150,4 +150,32 @@ describe("Distributors Route", () => {
             expect(response.status).toBe(200);
         })
     })
+    describe("GET /api/distributors/:distributorId", () => {
+        let distributorOne;
+
+        beforeEach(async () => {
+            distributorOne = await knex("distributors")
+                .orderBy("distributor_id")
+                .first()
+        })
+        test('returns 404 on non-existent id', async () => {
+            const response = await request(app)
+                .get("/api/distributors/15000")
+                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set('Accept', "application/json")
+
+            expect(response.body.error).toContain('15000')
+            expect(response.status).toBe(404)
+        })
+        test("returns 200 on successful GET", async () => {
+            expect(distributorOne).not.toBeUndefined()
+            
+            const response = await request(app)
+                .get(`/api/distributors/${distributorOne.distributor_id}`)
+                .set("Cookie", `token=${process.env.TOKEN}`)
+                .set('Accept', "application/json")
+
+            expect(response.status).toBe(200)
+        })
+    })
 })
