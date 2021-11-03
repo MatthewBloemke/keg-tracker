@@ -7,9 +7,11 @@ on:
 
 jobs:
   test:
+    runs-on: ubuntu-latest
+    container: node:latest
     services:
       postgres:
-        image: postgres
+        image: postgres:latest
         env:
           POSTGRES_USER: postgres_user
           POSTGRES_PASSWORD: postgres_password
@@ -22,7 +24,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
