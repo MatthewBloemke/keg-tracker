@@ -23,17 +23,6 @@ describe("Kegs Route", () => {
         return await knex.migrate.rollback(null, true).then(() => knex.destroy());
     })
 
-    describe("Login", () => {
-        test("returns working for login", async () => {
-            const response = await request(app)
-                .post("/api/login")
-                .set("Accept", "application/json")
-                .send({data: {employee_email: "admin", password: "admin"}});
-            expect(response.body.data).toContain("working");
-        })
-    })
-
-
     describe("App", () => {
         describe("not found handler", () => {
             test("returns 404 for non-existent route", async () => {
@@ -65,7 +54,7 @@ describe("Kegs Route", () => {
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_name: "1234",
-                    keg_size: "small",
+                    keg_size: "1/6 BBL",
                     keg_status: "returned",
                 }})
 
@@ -87,9 +76,10 @@ describe("Kegs Route", () => {
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
-                    keg_size: "small",
+                    keg_size: "1/6 BBL",
                     keg_status: "shipped",
-                    date_shipped: "2021-05-15"
+                    date_shipped: "2021-05-15",
+                    distributor_id: "1"
                 }})
             
             expect(response.status).toBe(400)
@@ -100,12 +90,11 @@ describe("Kegs Route", () => {
                 .post("/api/kegs")
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
+                .send({data: {
                     keg_name: "123",
-                    keg_size: "small",
-                    keg_status: "shipped",
-                    date_shipped: "2021-05-15"
-                })
+                    keg_size: "1/6 BBL",
+                    keg_status: "returned"
+                }})
 
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("keg_name")
@@ -115,11 +104,10 @@ describe("Kegs Route", () => {
                 .post("/api/kegs")
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
+                .send({data: {
                     keg_name: "123",
-                    keg_status: "shipped",
-                    date_shipped: "2021-05-15"
-                })
+                    keg_status: "returned"
+                }})
 
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("keg_size")
@@ -129,11 +117,11 @@ describe("Kegs Route", () => {
                 .post("/api/kegs")
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
+                .send({data: {
                     keg_name: "123",
-                    keg_size: "small",
+                    keg_size: "1/6 BBL",
                     date_shipped: "2021-05-15"
-                })
+                }})
 
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("keg_status")                
@@ -161,14 +149,13 @@ describe("Kegs Route", () => {
         test("returns 400 for empty keg_name", async () => {
             expect(kegOne).not.toBeUndefined()
             const response = await request(app)
-                .put(`/keg/${kegOne.keg_id}`)
+                .put(`/api/kegs/${kegOne.keg_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_name: "",
-                    keg_size: "small",
-                    keg_status: "shipped",
-                    date_shipped: "2021-05-22"
+                    keg_size: "1/6 BBL",
+                    keg_status: "returned",
                 }})
         
             expect(response.status).toBe(400)
@@ -176,54 +163,57 @@ describe("Kegs Route", () => {
         })
         test("returns 400 if keg_status is missing", async () => {
             const response = await request(app)
-                .put(`/keg/${kegOne.keg_id}`)
+                .put(`/api/kegs/${kegOne.keg_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
+                .send({data: {
                     keg_name: "1234",
-                    keg_size: "small",
+                    keg_size: "1/6 BBL",
                     date_shipped: "2021-05-15"
-                })
+                }})
 
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("keg_status")                
         })
         test("returns 400 if keg_size is missing", async () => {
             const response = await request(app)
-                .put(`/keg/${kegOne.keg_id}`)
+                .put(`/api/kegs/${kegOne.keg_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
+                .send({data: {
                     keg_name: "1234",
-                    keg_status: "shipped",
-                    date_shipped: "2021-05-15"
-                })
+                    keg_status: "returned",
+                }})
 
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("keg_size")                
         })
         test("returns 400 if date_shipped is missing", async () => {
             const response = await request(app)
-                .put(`/keg/${kegOne.keg_id}`)
+                .put(`/api/kegs/${kegOne.keg_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
+                .send({data: {
                     keg_name: "1234",
                     keg_status: "shipped",
-                    keg_size: "small",
-                })
+                    keg_size: "1/6 BBL",
+                    distributor_id: "1"
+                }})
 
             expect(response.status).toBe(400)
-            expect(response.body.error).toContain("keg_status")                
+            expect(response.body.error).toContain("date_shipped")                
         })
         test("returns 200 for successful edit", async () => {
             expect(kegOne).not.toBeUndefined()
-            console.log(kegOne.keg_name)
             const response = await request(app)
-                .put(`/api/kegs/${kegOne.keg_name}`)
+                .put(`/api/kegs/${kegOne.keg_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({data: {keg_name: "1234"}})
+                .send({data: {
+                    keg_name: "1234",
+                    keg_status: "returned",
+                    keg_size: "1/6 BBL"
+                }})
 
             expect(response.body.data).toHaveProperty("keg_name", "1234")
             expect(response.status).toBe(200);
