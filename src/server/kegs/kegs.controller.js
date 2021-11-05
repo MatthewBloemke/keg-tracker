@@ -1,27 +1,7 @@
 const service = require("./kegs.service");
 const shippingService = require("../shippingHistory/shippingHistory.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const {userExists} = require("../auth/auth.controller");
-const { distributorExists } = require("../distributors/distributors.controller");
-const validFields = [
-    "keg_name",
-    "keg_size",
-    "keg_status",
-    "date_shipped",
-    "distributor_id"
-]
-const requiredFields = [
-    "keg_name",
-    "keg_size",
-    "keg_status"
-]
-const validReturnFields = [
-    "date_shipped",
-    "keg_name",
-    "keg_status",
-    "employee_email",
-    "shipped_to"
-]
+const distributorService = require("../distributors/distributors.service");
 
 function kegIsReturned (req, res, next) {
     if (res.locals.keg.keg_status==="returned") {
@@ -30,31 +10,15 @@ function kegIsReturned (req, res, next) {
     next({status: 400, message: `Keg ${req.body.data.keg_name} is already shipped`})
 }
 
-function kegIsShipped (req, res, next) {
-    if (res.locals.keg.keg_status === "shipped") {
-        return next()
-    }
-    next({status: 400, message: `Keg ${req.body.data.keg_name} is already returned`})
-}
-
 async function kegExists (req, res, next) {
-    let keg = "";
-    if (req.params.kegName) {
-        keg = await service.read(req.params.kegName)
-    } else {
-        keg = await service.read(req.body.data.keg_name)        
-    }
+    let keg = await service.read(req.params.kegId)
     if (keg.length) {
         res.locals.keg = keg[0];
         return next()
         
     }
-    console.log(req.params.kegName)
-    if (req.params.kegName) {
-        next({status: 404, message: `Keg ${req.params.kegName} not found`})   
-    } else {
-        next({status: 404, message: `Keg ${req.body.data.keg_name} not found`})    
-    }
+
+    next({status: 404, message: `Keg ${req.params.kegId} not found`})   
     
 }
 
@@ -62,7 +26,7 @@ function verifyKeg (req, res, next) {
     res.json({data: res.locals.keg})
 }
 
-function hasValidFields (req, res, next) {
+async function hasValidFields (req, res, next) {
     if (!req.body.data) {
         return next({
             status: 400,
@@ -73,17 +37,20 @@ function hasValidFields (req, res, next) {
     const {data ={}} = req.body;
     if (data.keg_status === 'returned') {
         data.date_shipped = null
-        requiredFields.forEach(field => {
-            if (!data[field]) {
-                invalidFields.push(field)
-            }
-        });    
+        data.distributor_id = null
+    }
+    if (!data.keg_name) {
+        invalidFields.push("keg_name")
     } else {
-        validFields.forEach(field => {
-            if (!data[field]) {
-                invalidFields.push(field)
-            }
-        });        
+        if (!parseInt(data.keg_name) || data.keg_name.length != 4) invalidFields.push("keg_name")
+    };
+    
+    if (data.keg_size != "1/6 BBL" && data.keg_size != "1/2 BBL") invalidFields.push("keg_size")
+    if (data.keg_status != 'returned' && data.keg_status != "shipped") invalidFields.push("keg_status")
+    if (data.keg_status === "shipped") {
+        let distributor = await distributorService.read(req.body.data.distributor_id)
+        if (!distributor) invalidFields.push("distributor_id")
+        if (!data.date_shipped) invalidFields.push("date_shipped")
     }
     if (invalidFields.length) {
         return next({
@@ -103,13 +70,14 @@ function read (req, res) {
     res.json({data: res.locals.keg})
 }
 
-async function createReturnedKeg (req, res) {
-    console.log('creating')
-    const {keg_name, keg_size, keg_status, employee_email} = req.body.data;
+async function createKeg (req, res) {
+    const {keg_name, keg_size, keg_status, date_shipped, distributor_id} = req.body.data;
     const newKeg = {
         keg_name,
         keg_size,
-        keg_status
+        keg_status,
+        date_shipped,
+        shipped_to: distributor_id
     }
 
     const createdKeg = await service.create(newKeg)
@@ -137,7 +105,7 @@ async function destroy(req, res) {
 module.exports = {
     list: asyncErrorBoundary(list),
     read: [asyncErrorBoundary(kegExists), read],
-    create: [asyncErrorBoundary(hasValidFields), createReturnedKeg],
+    create: [asyncErrorBoundary(hasValidFields), createKeg],
     update: [asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), update],
     destroy: [asyncErrorBoundary(kegExists), destroy],
     verifyKeg: [asyncErrorBoundary(kegExists), verifyKeg],
