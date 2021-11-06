@@ -6,16 +6,11 @@ const list = () => {
         .orderBy("date_shipped")
 }
 
-const readByDate = (date_shipped) => {
+const read = (shipping_id) => {
     return knex("shippinghistory")
         .select("*")
-        .where({date_shipped})
-}
-
-const readByDistributor = (distibutor_id) => {
-    return knex("shippinghistory")
-        .select("*")
-        .where({distibutor_id})
+        .where({shipping_id})
+        .first()
 }
 
 const create = (history_entry) => {
@@ -24,10 +19,25 @@ const create = (history_entry) => {
         .returning("*")    
 }
 
+const update = (updatedHistory) => {
+    return knex('shippinghistory')
+        .select("*")
+        .where({shipping_id: updatedHistory.shipping_id})
+        .update(updatedHistory, "*")
+        .returning("*")
+}
+
+const destroy = (shipping_id) => {
+    return knex("shippinghistory")
+        .where({shipping_id})
+        .del()
+}
+
 
 module.exports = {
     list,
-    readByDate,
-    readByDistributor,
-    create
+    read,
+    create,
+    update,
+    destroy
 }
