@@ -1,50 +1,58 @@
 [
     {
         "date_shipped": "2021-05-21",
-        "keg_name": "1235",
-        "distributor_name": "Company C",
-        "employee_email": "admin"
+        "keg_id": "1",
+        "distributor_id": "1",
+        "employee_email": "admin",
+        "keg_status": "returned"
     },
     {
         "date_shipped": "2021-05-21",
-        "keg_name": "1235",
-        "distributor_name": "Company C",
-        "employee_email": "admin"
+        "keg_id": "1",
+        "distributor_id": "1",
+        "employee_email": "admin",
+        "keg_status": "shipped"
     },
     {
         "date_shipped": "2021-05-21",
-        "keg_name": "1235",
-        "distributor_name": "Company C",
-        "employee_email": "admin"
+        "keg_id": "1",
+        "distributor_id": "1",
+        "employee_email": "admin",
+        "keg_status": "returned"
     },
     {
         "date_shipped": "2021-05-21",
-        "keg_name": "1235",
-        "distributor_name": "Company A",
-        "employee_email": "admin"
+        "keg_id": "1",
+        "distributor_id": "2",
+        "employee_email": "admin",
+        "keg_status": "returned"
     },
     {
         "date_shipped": "2021-05-21",
-        "keg_name": "1235",
-        "distributor_name": "Company F",
-        "employee_email": "admin"
+        "keg_id": "1",
+        "distributor_id": "3",
+        "employee_email": "admin",
+        "keg_status": "shipped"
     },
     {
         "date_shipped": "2021-05-21",
-        "keg_name": "1235",
-        "distributor_name": "Company A",
-        "employee_email": "admin"
+        "keg_id": "1",
+        "distributor_id": "2",
+        "employee_email": "admin",
+        "keg_status": "returned"
     },
     {
         "date_shipped": "2021-05-21",
-        "keg_name": "1235",
-        "distributor_name": "Company C",
-        "employee_email": "admin"
+        "keg_id": "1",
+        "distributor_id": "1",
+        "employee_email": "admin",
+        "keg_status": "shipped"
     },
     {
         "date_shipped": "2021-05-21",
-        "keg_name": "1235",
-        "distributor_name": "Company C",
-        "employee_email": "admin"
+        "keg_id": "1",
+        "distributor_id": "1",
+        "employee_email": "admin",
+        "keg_status": "shipped"
     }
 ]
