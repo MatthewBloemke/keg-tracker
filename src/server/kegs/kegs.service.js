@@ -9,6 +9,7 @@ const read = (keg_id) => {
     return knex("kegs")
         .select("*")
         .where({keg_id})
+        .first()
 }
 
 const create = (newKeg) => {
