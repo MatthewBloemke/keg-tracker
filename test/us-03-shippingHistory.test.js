@@ -53,10 +53,11 @@ describe("shippinghistory Route", () => {
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
-                    shipped_date: "2021-05-15",
-                    keg_id: "1234",
-                    distributor_id: "2",
-                    employee_id: "10001" 
+                    date_shipped: "2021-05-15",
+                    keg_id: "1",
+                    distributor_id: "1",
+                    employee_email: "admin",
+                    keg_status: "shipped"
                 }})
 
             expect(response.status).toBe(201)
@@ -71,7 +72,7 @@ describe("shippinghistory Route", () => {
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("data")
         })
-        test("returns 400 if shipped_date is missing", async () => {
+        test("returns 400 if date_shipped is missing", async () => {
             const response = await request(app)
                 .post("/api/shipping")
                 .set("Cookie", `token=${generateAuthToken()}`)
@@ -79,68 +80,83 @@ describe("shippinghistory Route", () => {
                 .send({data: {
                     keg_id: "1234",
                     distributor_id: "2",
-                    employee_id: "10001" 
+                    employee_email: "admin" 
                 }})
             
             expect(response.status).toBe(400)
-            expect(response.body.error).toContain("shippinghistory_name")
+            expect(response.body.error).toContain("date_shipped")
         })
-        test("returns 400 if shipped_date is not a date", async () => {
+        test("returns 400 if date_shipped is not a date", async () => {
             const response = await request(app)
                 .post("/api/shipping")
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
-                    shipped_date: "21-05-15",
+                    date_shipped: "21-05-15",
                     keg_id: "124",
                     distributor_id: "2",
-                    employee_id: "10001" 
+                    employee_email: "admin" 
                 }})
             
             expect(response.status).toBe(400)
-            expect(response.body.error).toContain("shipped_date")
+            expect(response.body.error).toContain("date_shipped")
         })
         test("returns 400 if keg_id is missing", async () => {
             const response = await request(app)
                 .post("/api/shipping")
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
-                    shipped_date: "2021-05-15",
+                .send({data: {
+                    date_shipped: "2021-05-15",
                     distributor_id: "2",
-                    employee_id: "10001" 
-                })
+                    employee_email: "admin" 
+                }})
 
             expect(response.status).toBe(400)
-            expect(response.body.error).toContain("shippinghistory_size")
+            expect(response.body.error).toContain("keg_id")
         })
         test("returns 400 if distributor_id is missing", async () => {
             const response = await request(app)
                 .post("/api/shipping")
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
-                    shipped_date: "2021-05-15",
+                .send({data: {
+                    date_shipped: "2021-05-15",
                     keg_id: "124",
-                    employee_id: "10001" 
-                })
+                    employee_email: "admin" 
+                }})
 
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("distributor_id")                
         })
-        test("returns 400 if employee_id is missing", async () => {
+        test("returns 400 if employee_email is missing", async () => {
             const response = await request(app)
                 .post("/api/shipping")
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
-                    shipped_date: "2021-05-15",
+                .send({data: {
+                    date_shipped: "2021-05-15",
                     keg_id: "124",
                     distributor_id: "2"
-                })
+                }})
 
             expect(response.status).toBe(400)
-            expect(response.body.error).toContain("employee_id")                
+            expect(response.body.error).toContain("employee_email")                
+        })
+        test("should return 400 if keg_status is missing", async () => {
+            const response = await request(app)
+            .post("/api/shipping")
+                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Accept", "application/json")
+                .send({data: {
+                    date_shipped: "2021-05-15",
+                    keg_id: "1",
+                    distributor_id: "2",
+
+            }})
+
+            expect(response.status).toBe(400)
+            expect(response.body.error).toContain("keg_status")  
         })
     })
     describe("PUT /api/shipping/:shippinghistoryId", () => {
@@ -157,43 +173,43 @@ describe("shippinghistory Route", () => {
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
-                    shipped_date: "2021-05-15",
+                    date_shipped: "2021-05-15",
                     keg_id: "1234",
                     distributor_id: "2",
-                    employee_id: "10001" 
+                    employee_email: "admin" 
                 }})
             
             expect(response.body.error).toContain("5000")
             expect(response.status).toBe(404);
         })
         
-        test("returns 400 for empty shipped_date", async () => {
+        test("returns 400 for empty date_shipped", async () => {
             expect(shippinghistoryOne).not.toBeUndefined()
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
-                    shipped_date: "",
+                    date_shipped: "",
                     keg_id: "1234",
                     distributor_id: "2",
-                    employee_id: "10001" 
+                    employee_email: "admin" 
                 }})
         
             expect(response.status).toBe(400)
-            expect(response.body.error).toContain("shipped_date")
+            expect(response.body.error).toContain("date_shipped")
         })
         test("returns 400 if keg_id is missing", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
-                    shipped_date: "2021-05-15",
+                .send({data: {
+                    date_shipped: "2021-05-15",
                     keg_id: "1234",
                     distributor_id: "2",
-                    employee_id: "10001" 
-                })
+                    employee_email: "admin" 
+                }})
 
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("keg_id")                
@@ -203,55 +219,57 @@ describe("shippinghistory Route", () => {
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
-                    shipped_date: "2021-05-15",
+                .send({data: {
+                    date_shipped: "2021-05-15",
                     keg_id: "1234",
-                    employee_id: "10001" 
-                })
+                    employee_email: "admin" 
+                }})
 
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("distributor_id")                
         })
-        test("returns 400 if employee_id is missing", async () => {
+        test("returns 400 if employee_email is missing", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
-                    shipped_date: "2021-05-15",
+                .send({data: {
+                    date_shipped: "2021-05-15",
                     keg_id: "1234",
                     distributor_id: "2",
-                })
+                }})
 
             expect(response.status).toBe(400)
-            expect(response.body.error).toContain("employee_id")                
+            expect(response.body.error).toContain("employee_email")                
         })
-        test("returns 404 if keg_id does not exist", async () => {
+        test("returns 400 if keg_id does not exist", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
-                    shipped_date: "2021-05-15",
+                .send({data: {
+                    keg_status: "returned",
+                    date_shipped: "2021-05-15",
                     keg_id: "ten",
                     distributor_id: "2",
-                    employee_id: "10001" 
-                })
+                    employee_email: "10001" 
+                }})
 
-            expect(response.status).toBe(404)
+            expect(response.status).toBe(400)
             expect(response.body.error).toContain("keg_id")                
         })
-        test("returns 404 if distributor_id does not exist", async () => {
+        test("returns 400 if distributor_id does not exist", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
-                .send({
-                    shipped_date: "2021-05-15",
-                    keg_id: "1234",
-                    distributor_id: "fourty",
-                    employee_id: "10001" 
-                })
+                .send({data: {
+                    keg_status: "returned",
+                    date_shipped: "2021-05-15",
+                    keg_id: "1",
+                    distributor_id: "2000",
+                    employee_email: "admin" 
+                }})
 
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("distributor_id")                
@@ -265,13 +283,14 @@ describe("shippinghistory Route", () => {
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
-                    shipped_date: "2021-05-15",
-                    keg_id: "1234",
+                    keg_status: "returned",
+                    date_shipped: "2021-05-15",
+                    keg_id: "1",
                     distributor_id: "2",
-                    employee_id: "10001" 
+                    employee_email: "admin" 
                 }})
 
-            expect(response.body.data).toHaveProperty("shipped_date", "2021-05-15")
+            expect(response.body.data).toHaveProperty("date_shipped", "2021-05-15")
             expect(response.status).toBe(200);
         })
     })
@@ -291,7 +310,7 @@ describe("shippinghistory Route", () => {
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
         
-            expect(response.body.data).toContain("99");
+            expect(response.body.error).toContain("99");
             expect(response.status).toBe(404);
         })
         test("returns 200 on successful delete", async () => {
