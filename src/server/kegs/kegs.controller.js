@@ -12,8 +12,8 @@ function kegIsReturned (req, res, next) {
 
 async function kegExists (req, res, next) {
     let keg = await service.read(req.params.kegId)
-    if (keg.length) {
-        res.locals.keg = keg[0];
+    if (keg) {
+        res.locals.keg = keg;
         return next()
         
     }
