@@ -6,6 +6,7 @@
     "test:1": "npm run test -- us-01",
     "test:2": "npm run test -- us-02",
     "test:3": "npm run test -- us-03",
+    "test:4": "npm run test -- us-04",
     "build-prod": "webpack --mode production",
     "build-dev": "webpack --watch --mode development"
   },
@@ -23,7 +24,7 @@
     "eslint": "^7.31.0",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
-    "jest": "^27.0.6",
+    "jest": "^27.3.1",
     "jquery": "^3.6.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.7",
