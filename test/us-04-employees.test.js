@@ -22,9 +22,9 @@ describe("employees Route", () => {
         return await knex.migrate.rollback(null, true).then(() => knex.destroy());
     })
 
-    describe("Employee Login", () => {
+    describe("Employee Router", () => {
         describe("POST /api/login", () => {
-            test("Should return working for succesful login", async () => {
+            test("Should return working for successful login", async () => {
                 const response = await request(app)
                     .post("/api/login")
                     .set("Accept", "application/json")
@@ -34,6 +34,19 @@ describe("employees Route", () => {
                     }})
 
                 expect(response.body.data).toContain("working")
+            })
+        })
+        describe("POST /api/employees", () => {
+            test("Should return 201 for created employee", async () => {
+                const response = await request(app)
+                    .post("/api/employees")
+                    .set("Cookie", `token=${generateAuthToken()}`)
+                    .set("Accept", "application/json")
+                    .send({data: {
+                        employee_name: "test",
+                        employee_email: "test",
+                        password: "test"
+                    }})
             })
         })
     })
