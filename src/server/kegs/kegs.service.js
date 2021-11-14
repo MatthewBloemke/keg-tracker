@@ -31,11 +31,18 @@ const destroy = (keg_id) => {
         .where({keg_id})
         .del()
 }
+const readByName = (keg_name) => {
+    return knex('kegs')
+        .select("*")
+        .where({keg_name})
+        .first()
+}
 
 module.exports = {
     list,
     read,
     update,
     destroy,
-    create
+    create,
+    readByName
 }
