@@ -1,14 +1,6 @@
 const service = require("./kegs.service");
-const shippingService = require("../shippingHistory/shippingHistory.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const distributorService = require("../distributors/distributors.service");
-
-function kegIsReturned (req, res, next) {
-    if (res.locals.keg.keg_status==="returned") {
-        return next()
-    }
-    next({status: 400, message: `Keg ${req.body.data.keg_name} is already shipped`})
-}
 
 async function kegExists (req, res, next) {
     let keg = await service.read(req.params.kegId)
@@ -18,8 +10,17 @@ async function kegExists (req, res, next) {
         
     }
 
-    next({status: 404, message: `Keg ${req.params.kegId} not found`})   
-    
+    next({status: 404, message: `Keg ${req.params.kegId} not found`})
+}
+
+async function kegExistsByName (req, res, next) {
+    let keg = await service.readByName(req.body.data.keg_name)
+    if (keg) {
+        res.locals.keg = keg;
+        return next()
+    }
+
+    next({status: 404, message: `Keg ${req.body.data.keg_name} not found`})
 }
 
 function verifyKeg (req, res, next) {
@@ -108,5 +109,5 @@ module.exports = {
     create: [asyncErrorBoundary(hasValidFields), createKeg],
     update: [asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), update],
     destroy: [asyncErrorBoundary(kegExists), destroy],
-    verifyKeg: [asyncErrorBoundary(kegExists), verifyKeg],
+    verifyKeg: [asyncErrorBoundary(kegExistsByName), verifyKeg],
 }
