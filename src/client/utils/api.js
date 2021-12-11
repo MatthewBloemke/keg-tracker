@@ -41,7 +41,7 @@ export async function getShippingHistory(signal) {
     return await fetchJson(`${window.location.origin}/api/shipping`, {headers, signal}, [])
 }
 
-export async function createKeg(data, signal) {
+export async function createKeg(data) {
     const options = {
         method: "POST",
         headers,
@@ -50,7 +50,7 @@ export async function createKeg(data, signal) {
     await fetch(`${window.location.origin}/api/kegs`, options)
 }
 
-export async function createHistory(data, signal) {
+export async function createHistory(data) {
     const options = {
         method: 'POST',
         headers,
@@ -64,16 +64,16 @@ export async function verifyKeg(data) {
         headers,
         body: JSON.stringify({data})
     }
-    return await fetch(`${window.location.origin}/api/kegs/verify`, options)
+    return await fetchJson(`${window.location.origin}/api/kegs/verify`, options)
 }
 
-export async function editKeg(data) {
+export async function editKeg(data, keg_id) {
     const options = {
         method: 'PUT',
         headers,
         body: JSON.stringify({data})
     }
-    return await fetch(`${window.location.origin}/api/kegs`, options)
+    return await fetchJson(`${window.location.origin}/api/kegs${keg_id}`, options)
 }
 
 export async function readKeg(kegName) {
