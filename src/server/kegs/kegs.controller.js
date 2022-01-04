@@ -98,6 +98,45 @@ async function update (req, res) {
     res.status(200).json({data: updatedKeg})
 }
 
+async function hasValidTrackingFields (req, res, next) {
+    if (!req.body.data) {
+        return next({
+            status: 400,
+            message: "data is missing"
+        })
+    }
+    const invalidFields = []
+    const {data ={}} = req.body;
+    if (data.keg_status === 'returned') {
+        data.distributor_id = null
+    }
+    if (data.keg_status != 'returned' && data.keg_status != "shipped") invalidFields.push("keg_status")
+    if (data.keg_status === "shipped") {
+        let distributor = await distributorService.read(req.body.data.distributor_id)
+        if (!distributor) invalidFields.push("distributor_id")
+        if (!data.date_shipped) invalidFields.push("date_shipped")
+    }
+    if (invalidFields.length) {
+        return next({
+            status: 400,
+            message: `${invalidFields.join(", ")} missing data`
+        })
+    }
+    next()
+}
+
+async function track (req, res) {
+    const {data = {}} = req.body;
+    const trackedKeg = {
+        keg_id: req.params.kegId,
+        keg_status: data.keg_status,
+        date_shipped: data.date_shipped,
+        shipped_to: data.distributor_id,
+    }
+    await service.update(trackedKeg)
+    res.status(200).json({data: trackedKeg})
+}
+
 async function destroy(req, res) {
     await service.destroy(res.locals.keg.keg_id)
     res.sendStatus(200)
@@ -110,4 +149,5 @@ module.exports = {
     update: [asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), update],
     destroy: [asyncErrorBoundary(kegExists), destroy],
     verifyKeg: [asyncErrorBoundary(kegExistsByName), verifyKeg],
+    track: [asyncErrorBoundary(hasValidTrackingFields), track]
 }
