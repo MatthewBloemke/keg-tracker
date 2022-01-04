@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createHistory, getDistributors, getKegs, verifyKeg } from '../utils/api';
+import { createHistory, trackKeg, getDistributors, getKegs, verifyKeg } from '../utils/api';
 import DistAsSelect from '../distributors/DistAsSelect';
 import FormatKegIdList from './FormatKegIdList';
 import CustomInput from '../utils/CustomInput';
@@ -38,26 +38,27 @@ const TrackKeg = () => {
             } else {
                 await verifyKeg({keg_name: target.value})
                     .then(response => {
-                        console.log()
-                        if (response) {
-                            setKeg_names([...keg_names, target.value])
-                            setFormData({
-                                ...formData,
-                                keg_id: [...formData.keg_id, response.keg_id]
-                            })
-                        }
+                        console.log(response)
+                        //eventually add if statement for response.keg_status when client is ready for that functionality.
+                        setKeg_names([...keg_names, target.value])
+                        setFormData({
+                            ...formData,
+                            keg_id: [...formData.keg_id, response.keg_id]
+                        })
                     })
-
+                    .catch(err => {
+                        console.log(err)
+                    })
                 setKegName("")                
             }
+            
         }
     }
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        console.log(formData)
-        const abortController = new AbortController()
-        formData.keg_id.forEach(keg_id => {
+        //const abortController = new AbortController()
+        formData.keg_id.forEach( async keg_id => {
             const data = {
                 date_shipped: formData.date_shipped,
                 keg_id,
@@ -65,11 +66,11 @@ const TrackKeg = () => {
                 employee_email: formData.employee_email,
                 keg_status: "shipped"
             }
-            console.log(data)
-            createHistory(data)
-
+            
+            await createHistory(data)
+            await trackKeg(data, keg_id)
+            
         })
-        createHistory(formData, abortController.signal)
     }
 
     useEffect(() => {
@@ -92,7 +93,7 @@ const TrackKeg = () => {
                                 <select id="distributor_id" name="distributor_id" onChange={handleChange}><DistAsSelect dist={dist}/></select> <br/>       
                             </div>
                             <div className="col-md-6">
-                                <CustomInput label="Keg Id" color="blue" name="keg_name"  type="text" handleChange={handleKegChange} value={kegName}/> <br/>
+                                <CustomInput label="Keg Id" color="blue" name="keg_name"  type="text" handleChange={handleKegChange} value={kegName} disabled={formData.distributor_id.length ? null : "disabled"}/> <br/>
                                 <CustomInput label="date" color="blue" type="date" name="date_shipped" handleChange={handleChange} value={formData.date_shipped}/>
                             </div>
                         </div>
