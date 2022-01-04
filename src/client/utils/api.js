@@ -73,7 +73,15 @@ export async function editKeg(data, keg_id) {
         headers,
         body: JSON.stringify({data})
     }
-    return await fetchJson(`${window.location.origin}/api/kegs${keg_id}`, options)
+    return await fetchJson(`${window.location.origin}/api/kegs/${keg_id}`, options)
+}
+export async function trackKeg(data, keg_id) {
+    const options = {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({data})
+    }
+    return await fetchJson(`${window.location.origin}/api/kegs/track/${keg_id}`, options)
 }
 
 export async function readKeg(kegName) {
