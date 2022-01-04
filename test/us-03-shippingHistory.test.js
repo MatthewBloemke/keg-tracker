@@ -257,13 +257,13 @@ describe("shippinghistory Route", () => {
             expect(response.status).toBe(400)
             expect(response.body.error).toContain("keg_id")                
         })
-        test("returns 400 if distributor_id does not exist", async () => {
+        test("returns 400 if distributor does not exist", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
                 .set("Cookie", `token=${generateAuthToken()}`)
                 .set("Accept", "application/json")
                 .send({data: {
-                    keg_status: "returned",
+                    keg_status: "shipped",
                     date_shipped: "2021-05-15",
                     keg_id: "1",
                     distributor_id: "2000",
