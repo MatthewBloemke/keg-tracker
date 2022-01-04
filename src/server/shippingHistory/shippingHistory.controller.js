@@ -29,11 +29,12 @@ const hasValidFields = async (req, res, next) => {
     }
 
     const invalidFields = []
-    const {data = {}} = req.body;   
-    
+    const {data = {}} = req.body;
     if (data.keg_status != 'returned' && data.keg_status != "shipped") invalidFields.push("keg_status")
     if (!Date.parse(data.date_shipped)) invalidFields.push("date_shipped");
-    if (!parseInt(data.distributor_id)) {
+    if (data.keg_status === "returned") {
+        data.distributor_id = null;
+    } else if (!parseInt(data.distributor_id)) {
         invalidFields.push("distributor_id")
     } else {
         const distributor = await distributorService.read(data.distributor_id);
@@ -51,23 +52,24 @@ const hasValidFields = async (req, res, next) => {
         const user = await employeeService.readByEmail(data.employee_email)
         if (!user) invalidFields.push("employee_email")
     }
-    
+    res.locals.data = data;
     if (invalidFields.length) {
         return next({
             status: 400,
             message: `${invalidFields.join(", ")} missing data`
         })
     }
+    
     next()
 }
 
 const createHistory = async (req, res) => {
-    const {date_shipped, employee_email, keg_id, keg_status, distributor_id} = req.body.data;
+    const {date_shipped, employee_email, keg_id, keg_status} = req.body.data;
     const newHistory = {
         date_shipped,
         keg_id,
         employee_email,
-        distributor_id,
+        distributor_id: res.locals.data.distributor_id,
         keg_status
     }
     const createdHistory = await service.create(newHistory);
@@ -79,13 +81,13 @@ const read = (req, res) => {
 }
 
 const update = async (req, res) => {
-    const {date_shipped, keg_id, employee_email, distributor_id, keg_status} = req.body.data;
+    const {date_shipped, keg_id, employee_email, keg_status} = req.body.data;
     const updatedHistory = {
         shipping_id: req.params.shippingId,
         date_shipped,
         keg_id,
         employee_email,
-        distributor_id,
+        distributor_id: res.locals.data.distributor_id,
         keg_status
     }
     await service.update(updatedHistory)
