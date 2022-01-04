@@ -8,7 +8,7 @@ const NewKeg = () => {
     const initialFormState ={
         keg_name: "",
         keg_status: "returned",
-        keg_size: "large",
+        keg_size: "1/2 BBL",
         date_shipped: "",
         distributor_id: "",
         employee_email: user
@@ -43,6 +43,7 @@ const NewKeg = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const controller = new AbortController();
+        console.log(formData)
         const invalidFields = [];
         if (!Number(formData.keg_name) || formData.keg_name.length != 4) {
             invalidFields.push("keg_name")
@@ -77,8 +78,8 @@ const NewKeg = () => {
                     <div className="col-md-3 inputs">
                         <input type="text" id="keg_name" name="keg_name" value={formData.keg_name} onChange={handleChange}/> <br/>
                         <select id="keg_size" name="keg_size" onChange={handleChange}> 
-                            <option value="large">Large</option>
-                            <option value="small">Small</option>
+                            <option value="1/2 BBL">Large</option>
+                            <option value="1/6 BBL">Small</option>
                         </select> <br/>
                         <select id="keg_status" name="keg_status" onChange={handleChange}>
                             <option value="returned">Returned</option> 
