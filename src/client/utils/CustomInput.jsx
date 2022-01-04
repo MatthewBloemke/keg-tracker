@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 
 const CustomInput = (props) => {
-    const {name, color, handleChange, label, type, value} = props;
+    const {name, color, handleChange, label, type, value, disabled} = props;
     const [placeholder, setPlaceholder] = useState(label)
 
     const labelStyle = {
@@ -12,7 +12,7 @@ const CustomInput = (props) => {
         backgroundColor: "#fff",
         fontSize: "14px",
         color: color,
-        display: (placeholder.length ? "none":"inline-block")
+        display: (placeholder.length ? "none":"inline-block"),
     }
 
     const handleFocus = () => {
@@ -26,7 +26,7 @@ const CustomInput = (props) => {
     return (
         <div>
             <label style={labelStyle} htmlFor={name}>{label}</label>
-            <input type={type} onFocus={handleFocus} onBlur={handleBlur} name={name} id={name} onChange={handleChange} placeholder={placeholder} value={value}/>
+            <input type={type} onFocus={handleFocus} onBlur={handleBlur} name={name} id={name} onChange={handleChange} placeholder={placeholder} value={value} disabled={disabled}/>
         </div>
     )
 }
