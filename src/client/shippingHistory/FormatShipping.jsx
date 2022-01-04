@@ -8,6 +8,7 @@ const FormatShipping = ({date, monthlyOnly, shippingList}) => {
     const month = date.getMonth()
     const day = date.getDay()
     const filteredShippingList = []
+    
     shippingList.forEach((entry) => {
         const tempMonth = new Date(entry.date_shipped)
         if (monthlyOnly) {
@@ -15,8 +16,8 @@ const FormatShipping = ({date, monthlyOnly, shippingList}) => {
                 filteredShippingList.push(
                     <tr key={entry.shipping_id}>
                         <td>{entry.date_shipped.slice(0,10)}</td>
-                        <td>{entry.keg_name}</td>
-                        <td>{entry.distributor_name}</td>
+                        <td>{entry.keg_id}</td>
+                        <td>{entry.distributor_id}</td>
                         <td>{entry.employee_email}</td>
                     </tr>   
                 )
@@ -26,8 +27,8 @@ const FormatShipping = ({date, monthlyOnly, shippingList}) => {
                 filteredShippingList.push(
                     <tr key={entry.shipping_id}>
                         <td>{entry.date_shipped.slice(0,10)}</td>
-                        <td>{entry.keg_name}</td>
-                        <td>{entry.distributor_name}</td>
+                        <td>{entry.keg_id}</td>
+                        <td>{entry.distributor_id}</td>
                         <td>{entry.employee_email}</td>
                     </tr>   
                 )
