@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createHistory, getDistributors, verifyKeg } from '../utils/api';
+import { createHistory, getDistributors, trackKeg, verifyKeg } from '../utils/api';
 import DistAsSelect from '../distributors/DistAsSelect';
 import FormatKegIdList from './FormatKegIdList';
 import CustomInput from '../utils/CustomInput';
@@ -10,29 +10,34 @@ const ReturnKeg = () => {
     const day = String(date.getDate())
     const initialFormState = {
         date_shipped: `${date.getFullYear()}-${"0"+month.slice(-2)}-${("0"+day).slice(-2)}`,
-        keg_name: [],
+        keg_id: [],
         keg_status: "returned",
         shipped_to: null,
         employee_email: localStorage.getItem('user')
     }
 
+
+    const [keg_names, setKeg_names] = useState([])
     const [formData, setFormData] = useState(initialFormState);
     const [kegName, setKegName] = useState("")
 
     const handleKegChange = async ({target}) => {
         setKegName(target.value)
         if (target.value.length===4) {
-            if (formData.keg_name.includes(target.value)) {
+            if (keg_names.includes(target.value)) {//add error message here
                 setKegName("")
             } else {
-                await verifyKeg({keg_name: target.value, keg_status: "returned"})
+                await verifyKeg({keg_name: target.value})
                     .then(response => {
-                        if (response.status === 200) {
-                            setFormData({
-                                ...formData,
-                                keg_name: [...formData.keg_name, target.value]
-                            })
-                        }
+                        //add functionality to only allow shipped kegs to pass
+                        setKeg_names([...keg_names, target.value])
+                        setFormData({
+                            ...formData,
+                            keg_id: [...formData.keg_id, response.keg_id]
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err)
                     })
                 setKegName("")     
             }
@@ -43,7 +48,19 @@ const ReturnKeg = () => {
         event.preventDefault()
         console.log(formData)
         const abortController = new AbortController()
-        //createHistory(formData, abortController.signal)
+        formData.keg_id.forEach( async keg_id => {
+            const data = {
+                date_shipped: formData.date_shipped,
+                keg_id,
+                distributor_id: null,
+                employee_email: formData.employee_email,
+                keg_status: "returned"
+            }
+
+            await createHistory(data)
+            await trackKeg(data, keg_id)
+        })
+
     }
 
     return (
@@ -59,12 +76,9 @@ const ReturnKeg = () => {
                         </form>
                     </div>
                     <div className="col-md-4">
-                        <FormatKegIdList kegIds={formData.keg_name}/>
+                        <FormatKegIdList kegIds={keg_names}/>
                     </div>
-                    
                 </div>
-            
-            
         </div>
     )
 }
