@@ -8,6 +8,7 @@ import Shipping from '../shippingHistory/Shipping';
 import TrackKeg from '../kegs/TrackKeg';
 import EditKeg from '../kegs/EditKeg';
 import ReturnKeg from '../kegs/ReturnKeg';
+import ListDistributors from '../distributors/ListDistributors';
 
 const Routes = () => {
     return (
@@ -35,6 +36,9 @@ const Routes = () => {
             </Route>
             <Route path="/kegs/edit/:kegName">
                 <EditKeg/>
+            </Route>
+            <Route path="/distributors" exact={true}>
+                <ListDistributors/>
             </Route>
             <Route path="/shipping" exact={true}>
                 <Shipping monthlyOnly={false}/>
