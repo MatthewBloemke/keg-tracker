@@ -5,7 +5,7 @@ const FormatKegs = ({kegs, filter}) => {
     const [filteredKegs, setFilteredKegs] = useState(kegs);
     const kegTable = []
     kegs.forEach(keg => {
-        const path=`/kegs/edit/${keg.keg_name}`
+        const path=`/kegs/edit/${keg.keg_id}`
         kegTable.push(
             <tr key ={keg.keg_id}>
                 <td>{keg.keg_name}</td>
@@ -13,7 +13,7 @@ const FormatKegs = ({kegs, filter}) => {
                 <td>{keg.keg_status}</td>
                 <td>{keg.date_shipped}</td>
                 <td>{keg.shipped_to}</td>
-                <td><Link to={path}><button id={keg.keg_name}>Edit</button></Link></td>
+                <td><Link to={path}><button id={keg.keg_id}>Edit</button></Link></td>
             </tr>
         )
     })
