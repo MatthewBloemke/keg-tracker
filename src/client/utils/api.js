@@ -33,9 +33,7 @@ export async function loginCheck(baseUrl) {
     return await fetchJson(`${baseUrl}/api/distributors`, {headers}, [])
 };
 
-export async function getDistributors(signal) {
-    return await fetchJson(`${window.location.origin}/api/distributors`, {headers, signal}, [])
-}
+
 
 export async function getShippingHistory(signal) {
     return await fetchJson(`${window.location.origin}/api/shipping`, {headers, signal}, [])
@@ -86,4 +84,10 @@ export async function trackKeg(data, keg_id) {
 
 export async function readKeg(kegName) {
     return await fetchJson(`${window.location.origin}/api/kegs/${kegName}`)
+}
+
+//Distributor Functions
+
+export async function getDistributors(signal) {
+    return await fetchJson(`${window.location.origin}/api/distributors`, {headers, signal}, [])
 }
