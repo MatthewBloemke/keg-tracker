@@ -1,4 +1,4 @@
-let kegs = require("./00-kegs.json")
+let kegs = require("./01-kegs.json")
 
 exports.seed = function(knex) {
   return knex.raw("TRUNCATE TABLE kegs RESTART IDENTITY CASCADE")

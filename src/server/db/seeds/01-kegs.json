@@ -3,8 +3,7 @@
         "keg_name": "0001",
         "keg_size": "1/2 BBL",
         "keg_status": "returned",
-        "date_shipped": "2021-05-12",
-        "shipped_to": "Company A"
+        "date_shipped": "2021-05-12"
     },
     {
         "keg_name": "0002",
