@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getKegs } from '../utils/api'
+import { getDistributors, getKegs } from '../utils/api'
 import FormatKegs from './FormatKegs'
 
 //todo: add more comprehensive filter options
@@ -7,7 +7,9 @@ import FormatKegs from './FormatKegs'
 const ListKegs = () => {
     const [filter, setFilter] = useState("status") //date, size, status
     const [kegs, setKegs] = useState([])
+    const [distributors, setDistributors] = useState([])
     useEffect(() => {
+        const abortController = new AbortController()
         if (filter === "size") {
             console.log("sorting")
             kegs.sort((a, b) => a.keg_size - b.keg_size)
@@ -17,6 +19,8 @@ const ListKegs = () => {
         } else if (filter === "status") {
             kegs.sort((a, b) => a.keg_status > b.keg_status)
         }
+        getDistributors(abortController.signal)
+            .then(setDistributors)
         getKegs(window.location.origin)
             .then(response => {
                 if (filter === "size") {
@@ -31,7 +35,7 @@ const ListKegs = () => {
     }, [])
 
     return (
-        <FormatKegs kegs={kegs}/>
+        <FormatKegs kegs={kegs} distributors={distributors}/>
     )
 }
 
