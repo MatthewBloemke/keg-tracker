@@ -54,7 +54,7 @@ export async function createHistory(data) {
         headers,
         body: JSON.stringify({data})
     }
-    await fetch(`${window.location.origin}/api/shipping`, options)
+    return await fetch(`${window.location.origin}/api/shipping`, options)
 }
 export async function verifyKeg(data) {
     const options = {
@@ -90,4 +90,26 @@ export async function readKeg(kegName) {
 
 export async function getDistributors(signal) {
     return await fetchJson(`${window.location.origin}/api/distributors`, {headers, signal}, [])
+}
+
+export async function createDistributor(data) {
+    const options = {
+        method: "POST",
+        headers,
+        body: JSON.stringify({data})
+    }
+    return await fetch(`${window.location.origin}/api/distributors`, options)
+}
+
+export async function editDistributor(data, distributor_id) {
+    const options = {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({data})
+    }
+    return await fetch(`${window.location.origin}/api/distributors/${distributor_id}`, options)
+}
+
+export async function readDistributor(distributor_id) {
+    return await fetchJson(`${window.location.origin}/api/distributors/${distributor_id}`)
 }
