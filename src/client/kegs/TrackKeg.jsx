@@ -38,7 +38,6 @@ const TrackKeg = () => {
             } else {
                 await verifyKeg({keg_name: target.value})
                     .then(response => {
-                        console.log(response)
                         //eventually add if statement for response.keg_status when client is ready for that functionality.
                         setKeg_names([...keg_names, target.value])
                         setFormData({
@@ -69,7 +68,8 @@ const TrackKeg = () => {
             
             await createHistory(data)
             await trackKeg(data, keg_id)
-            
+            setFormData(initialFormState)
+            setKeg_names([])
         })
     }
 
