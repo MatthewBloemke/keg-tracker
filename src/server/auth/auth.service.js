@@ -1,5 +1,12 @@
 const knex = require("../db/connections")
 
+const read = (employeeId) => {
+    return knex("employees")
+        .select("*")
+        .where({employee_id: employeeId})
+        .first()
+}
+
 const create = (newAccount) => {
     return knex("employees")
         .insert(newAccount)
@@ -17,8 +24,25 @@ const readByEmail = (employee_email) => {
         .where({employee_email})
 }
 
+const update = (updatedAccount) => {
+    return knex("employees")
+        .select("*")
+        .where({employee_id: updatedAccount.employee_id})
+        .update(updatedAccount, "*")
+        .returning("*")
+}
+
+const destroy = (employee_id) => {
+    return knex("employees")
+        .where({employee_id})
+        .del()
+}
+
 module.exports = {
     create,
     list,
-    readByEmail
+    readByEmail,
+    update,
+    destroy,
+    read
 }
