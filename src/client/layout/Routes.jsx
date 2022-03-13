@@ -11,6 +11,9 @@ import ReturnKeg from '../kegs/ReturnKeg';
 import ListDistributors from '../distributors/ListDistributors';
 import NewDistributor from '../distributors/NewDistributor';
 import EditDistributor from '../distributors/EditDistributor';
+import ListEmployees from '../employees/ListEmployees';
+import NewEmployee from '../employees/NewEmployee'
+import EditEmployee from '../employees/EditEmployee';
 
 const Routes = () => {
     return (
@@ -53,6 +56,15 @@ const Routes = () => {
             </Route>
             <Route path="/shipping/monthly">
                 <Shipping monthlyOnly={true}/>
+            </Route>
+            <Route path='/employees' exact={true}>
+                <ListEmployees/>
+            </Route>
+            <Route path='/employees/new'>
+                <NewEmployee/>
+            </Route>
+            <Route path='/employees/edit/:employeeId'>
+                <EditEmployee/>
             </Route>
         </Switch>
     )
