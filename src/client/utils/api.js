@@ -113,3 +113,39 @@ export async function editDistributor(data, distributor_id) {
 export async function readDistributor(distributor_id) {
     return await fetchJson(`${window.location.origin}/api/distributors/${distributor_id}`)
 }
+
+//Employees functions
+
+export async function getEmployees() {
+    return await fetchJson(`${window.location.origin}/api/employees`)
+}
+
+export async function createEmployee(data) {
+    const options = {
+        method: "POST",
+        headers,
+        body: JSON.stringify({data})
+    }
+    return await fetch(`${window.location.origin}/api/employees`, options)
+}
+
+export async function updateEmployee(data, employee_id) {
+    const options = {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({data})
+    }
+    return await fetch(`${window.location.origin}/api/employees/${employee_id}`, options)
+}
+
+export async function readEmployee(employee_id) {
+    return await fetchJson(`${window.location.origin}/api/employees/${employee_id}`, {headers})
+}
+
+export async function deleteEmployee(employee_id) {
+    const options = {
+        method: "DELETE",
+        headers
+    }
+    return await fetch(`${window.location.origin}/api/employees/${employee_id}`, options);
+}
