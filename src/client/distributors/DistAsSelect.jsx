@@ -1,5 +1,4 @@
 import React from 'react'
-import { getDistributors } from '../utils/api'
 
 const DistAsSelect = ({dist}) => {
     let distOptions = [<option key="default">Select distributor</option>]
