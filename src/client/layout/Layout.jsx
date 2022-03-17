@@ -19,9 +19,11 @@ const Layout = () => {
         loginCheck()
         .then(response => {
             if (!response) {
+                console.log("no auth token")
+                history.push("/login")  
                 return () => {
                     abortController.abort()
-                    history.push("/login")  
+                    
                 } 
             }
         })
