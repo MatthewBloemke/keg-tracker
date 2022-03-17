@@ -56,7 +56,7 @@ const TrackKeg = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        //const abortController = new AbortController()
+        const abortController = new AbortController()
         formData.keg_id.forEach( async keg_id => {
             const data = {
                 date_shipped: formData.date_shipped,
@@ -70,6 +70,19 @@ const TrackKeg = () => {
             await trackKeg(data, keg_id)
             setFormData(initialFormState)
             setKeg_names([])
+        })
+    }
+
+    const onDelete = (e) => {
+        const index = keg_names.indexOf(e.currentTarget.name)
+        let tempNameArr = keg_names;
+        let tempIdArr = formData.keg_id;
+        tempNameArr.splice(index, 1);
+        tempIdArr.splice(index, 1)
+        setKeg_names([...tempNameArr])
+        setFormData({
+            ...formData,
+            keg_id: [...tempIdArr]
         })
     }
 
@@ -101,7 +114,7 @@ const TrackKeg = () => {
                     </form>
                 </div>
                 <div className="col-md-4">
-                    <FormatKegIdList kegIds={keg_names}/>
+                    <FormatKegIdList kegIds={keg_names} onDelete={onDelete}/>
                 </div>
             </div>
         </div>

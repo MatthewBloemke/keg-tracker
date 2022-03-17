@@ -59,8 +59,23 @@ const ReturnKeg = () => {
 
             await createHistory(data)
             await trackKeg(data, keg_id)
+            setFormData(initialFormState)
+            setKeg_names([])
         })
 
+    }
+
+    const onDelete = (e) => {
+        const index = keg_names.indexOf(e.currentTarget.name)
+        let tempNameArr = keg_names;
+        let tempIdArr = formData.keg_id;
+        tempNameArr.splice(index, 1);
+        tempIdArr.splice(index, 1)
+        setKeg_names([...tempNameArr])
+        setFormData({
+            ...formData,
+            keg_id: [...tempIdArr]
+        })
     }
 
     return (
@@ -76,7 +91,7 @@ const ReturnKeg = () => {
                         </form>
                     </div>
                     <div className="col-md-4">
-                        <FormatKegIdList kegIds={keg_names}/>
+                        <FormatKegIdList kegIds={keg_names} onDelete={onDelete}/>
                     </div>
                 </div>
         </div>
