@@ -92,54 +92,67 @@ export async function getDistributors(signal) {
     return await fetchJson(`${window.location.origin}/api/distributors`, {headers, signal}, [])
 }
 
-export async function createDistributor(data) {
+export async function createDistributor(data, signal) {
     const options = {
         method: "POST",
         headers,
+        signal,
         body: JSON.stringify({data})
     }
     return await fetch(`${window.location.origin}/api/distributors`, options)
 }
 
-export async function editDistributor(data, distributor_id) {
+export async function editDistributor(data, distributor_id, signal) {
     const options = {
         method: "PUT",
-        headers,
+        headers, 
+        signal,
         body: JSON.stringify({data})
     }
-    return await fetch(`${window.location.origin}/api/distributors/${distributor_id}`, options)
+    return await fetchJson(`${window.location.origin}/api/distributors/${distributor_id}`, options)
 }
 
-export async function readDistributor(distributor_id) {
-    return await fetchJson(`${window.location.origin}/api/distributors/${distributor_id}`)
+export async function readDistributor(distributor_id, signal) {
+    return await fetchJson(`${window.location.origin}/api/distributors/${distributor_id}`, {headers, signal}, [])
 }
 
 //Employees functions
 
-export async function getEmployees() {
-    return await fetchJson(`${window.location.origin}/api/employees`)
+export async function getEmployees(signal) {
+    return await fetchJson(`${window.location.origin}/api/employees`, {headers, signal})
 }
 
-export async function createEmployee(data) {
+export async function createEmployee(data, signal) {
     const options = {
         method: "POST",
         headers,
+        signal,
         body: JSON.stringify({data})
     }
     return await fetch(`${window.location.origin}/api/employees`, options)
 }
 
-export async function updateEmployee(data, employee_id) {
+export async function updateEmployee(data, employee_id, signal) {
     const options = {
         method: "PUT",
         headers,
+        signal,
         body: JSON.stringify({data})
     }
     return await fetch(`${window.location.origin}/api/employees/${employee_id}`, options)
 }
 
-export async function readEmployee(employee_id) {
-    return await fetchJson(`${window.location.origin}/api/employees/${employee_id}`, {headers})
+export async function resetPassword(data, employee_id) {
+    const options = {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({data})
+    }
+    return await fetch(`${window.location.origin}/api/employees/${employee_id}/reset`, options)
+}
+
+export async function readEmployee(employee_id, signal) {
+    return await fetchJson(`${window.location.origin}/api/employees/${employee_id}`, {headers, signal})
 }
 
 export async function deleteEmployee(employee_id) {
@@ -148,4 +161,8 @@ export async function deleteEmployee(employee_id) {
         headers
     }
     return await fetch(`${window.location.origin}/api/employees/${employee_id}`, options);
+}
+
+export async function logout() {
+    return await fetch(`${window.location.origin}/api/employees/logout`)
 }
