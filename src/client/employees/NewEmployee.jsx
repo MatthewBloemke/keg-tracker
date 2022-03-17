@@ -25,6 +25,8 @@ const NewEmployee = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const abortController = new AbortController();
+
         const invalidFields = [];
         if (!formData.employee_email) invalidFields.push("Email");
         if (!formData.employee_name) invalidFields.push("Name");
@@ -39,11 +41,10 @@ const NewEmployee = () => {
                 password: formData.password,
                 admin: formData.admin
             };
-            await createEmployee(data);
+            await createEmployee(data, abortController.signal);
             setFormData(initialFormState)
             history.push("/employees")
         }
-
     };
 
     useEffect(() => {
