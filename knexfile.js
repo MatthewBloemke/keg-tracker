@@ -22,7 +22,7 @@ const {
   POSTGRES_PASSWORD_DEV,
   POSTGRES_DATABASE_DEV,
 } = process.env;
-
+console.log(process.env.POSTGRES_USER)
 module.exports = {
   development: {
     client: "postgresql",
