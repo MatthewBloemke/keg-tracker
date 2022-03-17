@@ -4,11 +4,27 @@ import DistSubMenu from '../distributors/DistSubMenu'
 import EmployeeSubMenu from '../employees/EmployeesSubMenu'
 import KegSubMenu from '../kegs/KegSubMenu'
 import ShippingSubMenu from '../shippingHistory/ShippingSubMenu'
+import { logout } from '../utils/api'
+import { useHistory } from "react-router";
 
 const Menu = () => {
+    const history = useHistory()
+
     const onClick = ({target}) => {
         setPath(target.innerText.toLowerCase())
     }
+
+    const onLogout = async () => {
+        await logout()
+            .then(response => {
+                if (response) {
+                    history.push("/login")
+                } else {
+                    console.log('error logging out')
+                }
+            })
+    }
+
     const buttonStyle = {
         border: "none",
         background: "none"
@@ -45,6 +61,9 @@ const Menu = () => {
                         <button style={buttonStyle} onClick={onClick}>Shipping</button>
                     </Link>
                     {path.includes("shipping") ? <ShippingSubMenu/> : null}
+                </li>
+                <li>
+                    <button style={buttonStyle} onClick={onLogout}>Logout</button>
                 </li>
             </div>
 
