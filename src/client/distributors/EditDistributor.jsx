@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { editDistributor, readDistributor } from '../utils/api'
 
 const EditDistributor = () => {
+    const history = useHistory()
+
     const initialFormState = {
         distributor_name: ""
     };
@@ -25,19 +27,21 @@ const EditDistributor = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(formData)
-        const controller = new AbortController();
+        const abortController = new AbortController();
 
         if (formData.distributor_name.length === 0) {
             //set an error message to display here
         } else {
-            await editDistributor(formData, params.distributor_id) // add abort controller to this
+            await editDistributor(formData, params.distributor_id, abortController.signal)
+            setFormData(initialFormState)
+            history.push("/distributors")
         }
     }
 
     useEffect(() => {
         const abortController = new AbortController();
         const loadDistributor = async () => {
-            await readDistributor(params.distributor_id)
+            await readDistributor(params.distributor_id, abortController.signal)
                 .then((response) => {
                     setFormData({
                         ...formData,
