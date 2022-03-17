@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import {getKegs} from './utils/api'
 
 const Dashboard = () => {
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
     
     const [kegs, setKegs] = useState([]) 
     const [returnedKegs, setReturnedKegs] = useState([])
@@ -17,7 +16,7 @@ const Dashboard = () => {
             const sixtyDayKegArr = []
             const onetwentyDayKegArr = []
             const overdueKegArr = []
-            await getKegs(API_BASE_URL)
+            await getKegs()
                 .then(response => {
                     const tempKegs = response
                     for (let i = 0; i < tempKegs.length; i++) {

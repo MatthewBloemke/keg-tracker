@@ -7,7 +7,6 @@ import { loginCheck } from '../utils/api';
 
 const Layout = () => {
     const history = useHistory();
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
     const [pathName, setPathName] = useState(window.location.pathname);
 
@@ -17,7 +16,7 @@ const Layout = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
-        loginCheck(API_BASE_URL)
+        loginCheck()
         .then(response => {
             if (!response) {
                 return () => {
