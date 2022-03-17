@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
+import { useHistory } from 'react-router';
 import { createDistributor } from "../utils/api"
 
 //add pop up notifying of keg created/ not created
 
 
 const NewDistributor = () => {
-    const user = localStorage.getItem('user')
+    const history = useHistory()
     const initialFormState = {
         distributor_name: ""
     };
@@ -33,7 +34,9 @@ const NewDistributor = () => {
         if (formData.distributor_name.length === 0) {
             //set an error message to display here
         } else {
-            await createDistributor(formData, controller.signal)
+            await createDistributor(formData, controller.signal);
+            setFormData("initialFormState")
+            history.push("/distributors")
         }
     }
 
