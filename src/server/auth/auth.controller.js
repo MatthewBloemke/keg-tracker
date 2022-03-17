@@ -5,12 +5,25 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const validFields = [
     "employee_name",
     "employee_email",
-    "password",
 ]
 
 //take password out of hasValidFields and move the password validation and hashing
 //into it's own function, then hasValidFields can be used in create and update
-
+const hasPassword = (req, res, next) => {
+    bcrypt.hash(req.body.data.password, 10, (err, hash) => {
+        if (err) {
+            return next({
+                status: 400,
+                message: "Error creating password"
+            })
+        } else {
+            res.locals.newAccount = {
+                password: hash
+            }
+            next()
+        }
+    })
+}
 const hasValidFields = (req, res, next) => {
     const invalidFields = [];
     if (!req.body.data) {
@@ -19,6 +32,7 @@ const hasValidFields = (req, res, next) => {
             message: "data is missing"
         })
     }
+    console.log(req.body.data)
     const {data = {}} = req.body;
     validFields.forEach(field => {
         if (!data[field]) {
@@ -28,25 +42,19 @@ const hasValidFields = (req, res, next) => {
     if (typeof data.admin != "boolean") {
         invalidFields.push("admin")
     }
+    console.log(invalidFields)
     if (invalidFields.length) {
         return next({
             status: 400,
             message: `${invalidFields.join(", ")} missing data`
         })
     }
-    bcrypt.hash(req.body.data.password, 10, (err, hash) => {
-        if (err) {
-            console.log(err)
-        } else {
-            res.locals.newAccount = {
-                employee_name: data.employee_name,
-                employee_email: data.employee_email,
-                password: hash,
-                admin: data.admin
-            }
-            next()
-        }
-    })
+    res.locals.newAccount = {
+        employee_name: data.employee_name,
+        employee_email: data.employee_email,
+        admin: data.admin
+    }
+    next()
 };
 
 async function createAccount (req, res) {
@@ -104,10 +112,13 @@ const update = async (req, res) => {
     const updatedEmployee = {
         employee_name,
         employee_email,
-        password,
         admin
     } = data;
+    if (data.password) {
+        updatedEmployee.password = res.locals.newAccount.password
+    }
     updatedEmployee.employee_id = req.params.employeeId;
+    console.log(updatedEmployee)
     await service.update(updatedEmployee)
     res.status(200).json({data: updatedEmployee})
 }
@@ -129,12 +140,13 @@ const logout = async (req, res) => {
 }
 
 module.exports = {
-    createAccount: [hasValidFields, asyncErrorBoundary(createAccount)],
+    createAccount: [hasValidFields, hasPassword, asyncErrorBoundary(createAccount)],
     list,
     login: [asyncErrorBoundary(userExists), passwordCheck, login],
     userExists,
     logout,
     read: [asyncErrorBoundary(userExistsById), read],
-    update: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(userExistsById), update],
-    destroy: [asyncErrorBoundary(userExistsById), destroy]
+    update: [hasValidFields, asyncErrorBoundary(userExistsById), update],
+    destroy: [asyncErrorBoundary(userExistsById), destroy],
+    resetPassword: [hasPassword, asyncErrorBoundary(userExistsById), update]
 }
