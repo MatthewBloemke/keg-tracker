@@ -25,18 +25,18 @@ const fetchJson = async (url, options, onCancel) => {
     };
 };
 
-export async function getKegs(baseUrl) {
-    return await fetchJson(`${baseUrl}/api/kegs`, {headers}, []);
+export async function getKegs() {
+    return await fetchJson(`/api/kegs`, {headers}, []);
 };
 
-export async function loginCheck(baseUrl) {
-    return await fetchJson(`${baseUrl}/api/distributors`, {headers}, [])
+export async function loginCheck() {
+    return await fetchJson(`/api/distributors`, {headers}, [])
 };
 
 
 
 export async function getShippingHistory(signal) {
-    return await fetchJson(`${window.location.origin}/api/shipping`, {headers, signal}, [])
+    return await fetchJson(`/api/shipping`, {headers, signal}, [])
 }
 
 export async function createKeg(data) {
@@ -45,7 +45,7 @@ export async function createKeg(data) {
         headers,
         body: JSON.stringify({data})
     }
-    await fetch(`${window.location.origin}/api/kegs`, options)
+    await fetch(`/api/kegs`, options)
 }
 
 export async function createHistory(data) {
@@ -54,7 +54,7 @@ export async function createHistory(data) {
         headers,
         body: JSON.stringify({data})
     }
-    return await fetch(`${window.location.origin}/api/shipping`, options)
+    return await fetch(`/api/shipping`, options)
 }
 export async function verifyKeg(data) {
     const options = {
@@ -62,7 +62,7 @@ export async function verifyKeg(data) {
         headers,
         body: JSON.stringify({data})
     }
-    return await fetchJson(`${window.location.origin}/api/kegs/verify`, options)
+    return await fetchJson(`/api/kegs/verify`, options)
 }
 
 export async function editKeg(data, keg_id) {
@@ -71,7 +71,7 @@ export async function editKeg(data, keg_id) {
         headers,
         body: JSON.stringify({data})
     }
-    return await fetchJson(`${window.location.origin}/api/kegs/${keg_id}`, options)
+    return await fetchJson(`/api/kegs/${keg_id}`, options)
 }
 export async function trackKeg(data, keg_id) {
     const options = {
@@ -79,17 +79,17 @@ export async function trackKeg(data, keg_id) {
         headers,
         body: JSON.stringify({data})
     }
-    return await fetchJson(`${window.location.origin}/api/kegs/track/${keg_id}`, options)
+    return await fetchJson(`/api/kegs/track/${keg_id}`, options)
 }
 
 export async function readKeg(kegName) {
-    return await fetchJson(`${window.location.origin}/api/kegs/${kegName}`)
+    return await fetchJson(`/api/kegs/${kegName}`)
 }
 
 //Distributor Functions
 
 export async function getDistributors(signal) {
-    return await fetchJson(`${window.location.origin}/api/distributors`, {headers, signal}, [])
+    return await fetchJson(`/api/distributors`, {headers, signal}, [])
 }
 
 export async function createDistributor(data, signal) {
@@ -99,7 +99,7 @@ export async function createDistributor(data, signal) {
         signal,
         body: JSON.stringify({data})
     }
-    return await fetch(`${window.location.origin}/api/distributors`, options)
+    return await fetch(`/api/distributors`, options)
 }
 
 export async function editDistributor(data, distributor_id, signal) {
@@ -109,17 +109,17 @@ export async function editDistributor(data, distributor_id, signal) {
         signal,
         body: JSON.stringify({data})
     }
-    return await fetchJson(`${window.location.origin}/api/distributors/${distributor_id}`, options)
+    return await fetchJson(`/api/distributors/${distributor_id}`, options)
 }
 
 export async function readDistributor(distributor_id, signal) {
-    return await fetchJson(`${window.location.origin}/api/distributors/${distributor_id}`, {headers, signal}, [])
+    return await fetchJson(`/api/distributors/${distributor_id}`, {headers, signal}, [])
 }
 
 //Employees functions
 
 export async function getEmployees(signal) {
-    return await fetchJson(`${window.location.origin}/api/employees`, {headers, signal})
+    return await fetchJson(`/api/employees`, {headers, signal})
 }
 
 export async function createEmployee(data, signal) {
@@ -129,7 +129,7 @@ export async function createEmployee(data, signal) {
         signal,
         body: JSON.stringify({data})
     }
-    return await fetch(`${window.location.origin}/api/employees`, options)
+    return await fetch(`/api/employees`, options)
 }
 
 export async function updateEmployee(data, employee_id, signal) {
@@ -139,7 +139,7 @@ export async function updateEmployee(data, employee_id, signal) {
         signal,
         body: JSON.stringify({data})
     }
-    return await fetch(`${window.location.origin}/api/employees/${employee_id}`, options)
+    return await fetch(`/api/employees/${employee_id}`, options)
 }
 
 export async function resetPassword(data, employee_id) {
@@ -148,11 +148,11 @@ export async function resetPassword(data, employee_id) {
         headers,
         body: JSON.stringify({data})
     }
-    return await fetch(`${window.location.origin}/api/employees/${employee_id}/reset`, options)
+    return await fetch(`/api/employees/${employee_id}/reset`, options)
 }
 
 export async function readEmployee(employee_id, signal) {
-    return await fetchJson(`${window.location.origin}/api/employees/${employee_id}`, {headers, signal})
+    return await fetchJson(`/api/employees/${employee_id}`, {headers, signal})
 }
 
 export async function deleteEmployee(employee_id) {
@@ -160,9 +160,9 @@ export async function deleteEmployee(employee_id) {
         method: "DELETE",
         headers
     }
-    return await fetch(`${window.location.origin}/api/employees/${employee_id}`, options);
+    return await fetch(`/api/employees/${employee_id}`, options);
 }
 
 export async function logout() {
-    return await fetch(`${window.location.origin}/api/employees/logout`)
+    return await fetch(`/api/employees/logout`)
 }
