@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import {getKegs, loginCheck} from './utils/api'
-import {useHistory} from 'react-router-dom'
+import {getKegs} from './utils/api'
 
-const Dashboard = () => {   
-    const history = useHistory()
+const Dashboard = () => {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
     
     const [kegs, setKegs] = useState([]) 
@@ -13,6 +11,7 @@ const Dashboard = () => {
     const [overdueKegs, setOverdueKegs] = useState([])
 
     useEffect(() => {
+        const abortController = new AbortController()
         const loadDashboard = async () => {
             const returnedKegsArr = []
             const sixtyDayKegArr = []
@@ -45,13 +44,8 @@ const Dashboard = () => {
                     setOverdueKegs(overdueKegArr)
                 })
         }
-        loginCheck(API_BASE_URL)
-            .then(response => {
-                if (!response) {
-                    history.push("/login")
-                }
-            })
         loadDashboard()
+        return () => abortController.abort()
     }, [])
     return (
         <div> 
