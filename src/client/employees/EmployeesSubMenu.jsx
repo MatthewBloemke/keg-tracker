@@ -10,9 +10,6 @@ const EmployeeSubMenu = () => {
             <li>
                 <Link to="/employees/new">New Employee</Link>
             </li>
-            <li>
-                <Link to="/employees/edit">Edit Employee</Link>
-            </li>
         </ul>
     )
 }
