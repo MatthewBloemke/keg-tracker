@@ -1,0 +1,3 @@
+add abort controllers to all useEffect functions
+
+clean up api functions to all match same formatting
