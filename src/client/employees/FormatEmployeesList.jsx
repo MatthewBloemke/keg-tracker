@@ -10,7 +10,6 @@ const FormatEmployeesList = ({employees}) => {
                 <td>{employee.employee_email}</td>
                 <td>{employee.employee_name}</td>
                 <td>{employee.admin ? "Yes": "No"}</td>
-                <td><button>Reset Password</button></td>
                 <td><Link to={path}><button>Edit</button></Link></td>
             </tr>
         )
