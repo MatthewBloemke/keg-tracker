@@ -23,8 +23,7 @@ const Layout = () => {
                 history.push("/login")  
                 return () => {
                     abortController.abort()
-                    
-                } 
+                }
             }
         })
         return () => abortController.abort()
