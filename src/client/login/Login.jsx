@@ -38,7 +38,9 @@ const Login = () => {
   return (
     <main>
       <div className="header">
-        <h1>Keg Tracker</h1>
+        <p></p>
+        <h1>Welcome To Keg Tracker</h1>
+        <p id="bottomHeader"></p>
       </div>
       <div className="form">
         <form onSubmit={handleSubmit}>
