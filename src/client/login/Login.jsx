@@ -19,7 +19,6 @@ const Login = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log(formData)
     const requestOptions = {
       method: "POST",
       headers: {"Content-Type": "application/json"},
