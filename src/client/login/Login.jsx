@@ -1,5 +1,6 @@
 import React, {useState} from "react"
 import {useHistory} from 'react-router-dom'
+import { login } from "../utils/api"
 import CustomInput from "../utils/CustomInput"
 import "./login.css"
 
@@ -19,14 +20,10 @@ const Login = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const requestOptions = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({data: formData})
-    }
-    await fetch(`${window.location.origin}/api/login`, requestOptions)
+    const abortController = new AbortController();
+    await login(formData, abortController.signal)
       .then(response => {
-        if (response.status === 200) {
+        if (response === "working") {
           localStorage.setItem("user", formData.employee_email)
           history.push("/")
         } else {
@@ -40,7 +37,7 @@ const Login = () => {
       <div className="header">
         <p></p>
         <h1>Welcome To Keg Tracker</h1>
-        <p id="bottomHeader"></p>
+        <p id="bottomLoginHeader"></p>
       </div>
       <div className="form">
         <form onSubmit={handleSubmit}>

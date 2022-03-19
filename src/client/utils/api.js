@@ -25,6 +25,16 @@ const fetchJson = async (url, options, onCancel) => {
     };
 };
 
+export async function login(data, signal) {
+    const options = {
+        method: "POST",
+        headers,
+        signal,
+        body: JSON.stringify({data})
+    }
+    return await fetchJson('/api/login', options, [])
+}
+
 export async function getKegs() {
     return await fetchJson(`/api/kegs`, {headers}, []);
 };
