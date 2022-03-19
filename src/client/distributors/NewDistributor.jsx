@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { createDistributor } from "../utils/api"
 
 //add pop up notifying of keg created/ not created

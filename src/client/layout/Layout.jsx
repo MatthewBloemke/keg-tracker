@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Routes from './Routes';
 import Menu from './Menu';
 import "./Layout.css"
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { loginCheck } from '../utils/api';
 
 const Layout = () => {
@@ -33,6 +33,7 @@ const Layout = () => {
         <main>
             <div className="header">
                 <p></p>
+                <p></p>
                 <h1>Keg Tracker</h1>
                 <p id="bottomLayoutHeader"></p>
             </div>
@@ -47,7 +48,6 @@ const Layout = () => {
                 </div>
             </div>            
         </main>
-
     )
 }
 

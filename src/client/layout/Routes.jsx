@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Redirect, Route } from 'react-router';
+import { Switch, Redirect, Route } from 'react-router-dom';
 import Login from '../login/Login';
 import Dashboard from '../dashboard/Dashboard';
 import ListKegs from '../kegs/ListKegs';

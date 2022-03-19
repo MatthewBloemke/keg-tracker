@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useParams } from "react-router-dom";
 import { deleteEmployee, readEmployee, resetPassword, updateEmployee } from "../utils/api";
 
 const EditEmployee = () => {
