@@ -55,7 +55,7 @@ const EditDistributor = () => {
 
     return (
         <main>
-            <h1>New Distributor</h1>
+            <h1>Edit Distributor</h1>
             <form onSubmit={handleSubmit}>
                 <div className='row'>
                     <div className='col-md-3 labels'>
