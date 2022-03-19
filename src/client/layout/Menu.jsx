@@ -6,6 +6,7 @@ import KegSubMenu from '../kegs/KegSubMenu'
 import ShippingSubMenu from '../shippingHistory/ShippingSubMenu'
 import { logout } from '../utils/api'
 import { useHistory } from "react-router";
+import "./menu.css"
 
 const Menu = () => {
     const history = useHistory()
@@ -27,12 +28,13 @@ const Menu = () => {
 
     const buttonStyle = {
         border: "none",
-        background: "none"
+        background: "none",
+        color: "white"
     }
     const [path, setPath] = useState(window.location.pathname.slice(1))
     return (
         <nav className="navbar navbar-dark align-items-start p-0">
-            <div className="container-fluid d-flex flex-column p-0">
+            <div className="container-fluid d-flex flex-column p-0 listMenu">
                 <li>
                     <Link to="/">
                         <button style={buttonStyle} onClick={onClick}>Home</button>
@@ -42,26 +44,30 @@ const Menu = () => {
                     <Link to="/kegs">
                         <button style={buttonStyle} onClick={onClick}>Kegs</button>
                     </Link>
-                    {path.includes("kegs") ? <KegSubMenu/> : null}
+                    
                 </li>
+                {path.includes("kegs") ? <KegSubMenu/> : null}
                 <li>
                     <Link to="/distributors">
                         <button style={buttonStyle} onClick={onClick}>Distributors</button>
                     </Link>
-                    {path.includes("distributors") ? <DistSubMenu/> : null}
+                    
                 </li>
+                {path.includes("distributors") ? <DistSubMenu/> : null}
                 <li>
                     <Link to="/employees">
                         <button style={buttonStyle} onClick={onClick}>Employees</button>
                     </Link>
-                    {path.includes("employees") ? <EmployeeSubMenu/> : null}
+                    
                 </li>
+                {path.includes("employees") ? <EmployeeSubMenu/> : null}
                 <li>
                     <Link to="/shipping">
                         <button style={buttonStyle} onClick={onClick}>Shipping</button>
                     </Link>
-                    {path.includes("shipping") ? <ShippingSubMenu/> : null}
+                    
                 </li>
+                {path.includes("shipping") ? <ShippingSubMenu/> : null}
                 <li>
                     <button style={buttonStyle} onClick={onLogout}>Logout</button>
                 </li>

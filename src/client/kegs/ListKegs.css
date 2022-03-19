@@ -1,0 +1,16 @@
+th {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+table {
+    width: 75%;
+    margin: 5px auto;
+    table-layout: fixed;
+    text-align: center;
+    
+}
+
+th, td {
+    border: solid gray 2px;
+}

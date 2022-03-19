@@ -1,0 +1,35 @@
+#distContainer, #inputContainer {
+    text-align: center;
+}
+
+#kegContainer {
+    text-align: left;
+}
+
+#trackKegContainer {
+    margin-top: 20px;
+}
+
+#trackKegs {
+    padding-left: 10px;
+}
+form {
+    text-align: center;
+}
+
+.form-select {
+    width: 75%;
+    display: inline;
+}
+
+.kegId {
+    background-color: white;
+    font-size: 25px;
+}
+.btn-danger {
+    margin-left: 10px;
+}
+
+#keg_name, #date_shipped {
+    width: 50%;
+}

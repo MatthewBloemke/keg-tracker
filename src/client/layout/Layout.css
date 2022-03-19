@@ -1,4 +1,16 @@
 .side-bar {
     min-width: 200px;
-    background-color: rgb(3, 184, 72);
+    background-color: blue;
+}
+
+#bottomLayoutHeader {
+    margin-bottom: 0;
+}
+
+#mainDisplay {
+    padding-left: 0;
+}
+
+.side-bar {
+    border-right: solid lightgray 5px;
 }

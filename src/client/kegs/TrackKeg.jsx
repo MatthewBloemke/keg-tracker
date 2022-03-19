@@ -3,6 +3,7 @@ import { createHistory, trackKeg, getDistributors, getKegs, verifyKeg } from '..
 import DistAsSelect from '../distributors/DistAsSelect';
 import FormatKegIdList from './FormatKegIdList';
 import CustomInput from '../utils/CustomInput';
+import "./TrackKeg.css"
 
 //todo: add a way to ship multiple kegs to one company at once, change returned to shipped in keg display
 
@@ -96,24 +97,24 @@ const TrackKeg = () => {
 
     return (
         <div>
-            <h1>Track Kegs</h1>
+            <h1 id='trackKegs'>Track Kegs</h1>
             <div className="row">
                 <div className="col-md-8">
                     <form onSubmit={handleSubmit}>
-                        <div className="row">
-                            <div className="col-md-6">
-                                <label htmlFor="distributor_id">Distributor</label> <br/>
-                                <select id="distributor_id" name="distributor_id" onChange={handleChange}><DistAsSelect dist={dist}/></select> <br/>       
+                        <div className="row" id="trackKegContainer">
+                            <div className="col-md-6" id='distContainer'>
+                                <h3>Distributor</h3> <br/>
+                                <select className='form-select form-select-lg' id="distributor_id" name="distributor_id" onChange={handleChange}><DistAsSelect dist={dist}/></select> <br/>       
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-6" id='inputContainer'>
                                 <CustomInput label="Keg Id" color="blue" name="keg_name"  type="text" handleChange={handleKegChange} value={kegName} disabled={formData.distributor_id.length ? null : "disabled"}/> <br/>
                                 <CustomInput label="date" color="blue" type="date" name="date_shipped" handleChange={handleChange} value={formData.date_shipped}/>
                             </div>
                         </div>
-                        <button type="submit">Submit</button>
+                        <button className='btn btn-success btn-lg' type="submit">Submit</button>
                     </form>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-4" id='kegContainer'>
                     <FormatKegIdList kegIds={keg_names} onDelete={onDelete}/>
                 </div>
             </div>
