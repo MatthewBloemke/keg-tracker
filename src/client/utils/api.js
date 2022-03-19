@@ -13,13 +13,13 @@ const fetchJson = async (url, options, onCancel) => {
         const payload = await response.json();
 
         if (payload.error) {
-            throw payload.error;
+            return payload.error;
         };
         return payload.data;
     } catch (error) {
         if (error.name !== "AbortError") {
             console.error(error.stack);
-            throw error;
+            return error;
         };
         return onCancel;
     };
