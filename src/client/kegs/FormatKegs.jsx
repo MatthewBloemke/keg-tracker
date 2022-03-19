@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import "./ListKegs.css"
 
 const FormatKegs = ({kegs, distributors}) => {
     const kegTable = []
-    console.log(distributors)
     kegs.forEach(keg => {
         const path=`/kegs/edit/${keg.keg_id}`
-        console.log(keg)
         const distributor = distributors.find(({distributor_id}) => distributor_id === keg.shipped_to)
-        console.log(distributor)
         kegTable.push(
             <tr key ={keg.keg_id}>
                 <td>{keg.keg_name}</td>
@@ -16,7 +14,7 @@ const FormatKegs = ({kegs, distributors}) => {
                 <td>{keg.keg_status}</td>
                 <td>{keg.date_shipped}</td>
                 <td>{distributor ? distributor.distributor_name : null}</td>
-                <td><Link to={path}><button id={keg.keg_id}>Edit</button></Link></td>
+                <td><Link to={path}><button className='btn btn-primary' id={keg.keg_id}>Edit</button></Link></td>
             </tr>
         )
     })
@@ -24,11 +22,11 @@ const FormatKegs = ({kegs, distributors}) => {
         <table>
             <thead>
                 <tr>
-                    <th>Keg Number</th>
-                    <th>Keg Size</th>
-                    <th>Keg Status</th>
-                    <th>Date Shipped</th>
-                    <th>Shipped_to</th>                 
+                    <th >Keg Number</th>
+                    <th >Keg Size</th>
+                    <th >Keg Status</th>
+                    <th >Date Shipped</th>
+                    <th >Distributor</th>                 
                 </tr>
             </thead>
             <tbody>
