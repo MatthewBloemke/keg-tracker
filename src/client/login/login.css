@@ -1,7 +1,8 @@
 input:focus {
     outline: none !important;
-    border-color: blue;
+    border-color: #62a3ff;
 }
+
 
 input {
     margin-bottom: 20px;
@@ -20,19 +21,31 @@ main {
 .form, .header {
     text-align: center;
 }
+
+.form {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
 h1 {
     margin-bottom: 0;
     padding-top: 15px;
     padding-bottom:18px;
-    background-color: blue;
+    background-color: #1675d1;
     color: white;
 }
 p {
     margin-bottom: 0;
-    background-color: lightgray;
+    background-color: #004a9f;
     padding-top: 10px;
 }
 
 #bottomLoginHeader {
     margin-bottom: 15px;
 }
+
+body {
+    height: 100%;
+    background-color: #E1E2E1;
+}
+

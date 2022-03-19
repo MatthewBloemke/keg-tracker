@@ -4,6 +4,8 @@
 
 #kegContainer {
     text-align: left;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 #trackKegContainer {
@@ -28,6 +30,7 @@ form {
 }
 .btn-danger {
     margin-left: 10px;
+    margin-right: 10px
 }
 
 #keg_name, #date_shipped {
