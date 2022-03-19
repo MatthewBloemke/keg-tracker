@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {getKegs} from './utils/api'
+import {getKegs} from '../utils/api'
 
 const Dashboard = () => {
     
