@@ -30,16 +30,24 @@ const Layout = () => {
     }, [pathName])
     const height = {height: "100vh"}
     return (
-        <div style={height} className="container-fluid">
-            <div className="row h-100">
-                <div className="col-md-2 side-bar">
-                    <Menu/>
-                </div>
-                <div className="col">
-                    <Routes/>
-                </div>
+        <main>
+            <div className="header">
+                <p></p>
+                <h1>Keg Tracker</h1>
+                <p id="bottomLayoutHeader"></p>
             </div>
-        </div>
+            <div style={height} className="container-fluid">
+                <div className="row h-100">
+                    <div className="col-md-2 side-bar">
+                        <Menu/>
+                    </div>
+                    <div className="col" id="mainDisplay">
+                        <Routes/>
+                    </div>
+                </div>
+            </div>            
+        </main>
+
     )
 }
 
