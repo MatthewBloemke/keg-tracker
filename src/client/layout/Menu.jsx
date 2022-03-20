@@ -10,12 +10,15 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import { logout } from '../utils/api'
 import { useHistory } from "react-router-dom";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import "./menu.css"
 
 const Menu = () => {
     const history = useHistory()
 
     const onClick = ({target}) => {
+        console.log(target.innerText.toLowerCase())
         setPath(target.innerText.toLowerCase())
     }
 
@@ -38,7 +41,8 @@ const Menu = () => {
 
     const style = {
         width: '100%',
-        bgcolor: 'background.paper'
+        bgcolor: '#1675d1',
+        color: "#ffffff"
     }
 
     const [path, setPath] = useState(window.location.pathname.slice(1))
@@ -46,14 +50,36 @@ const Menu = () => {
         <nav className="navbar navbar-dark align-items-start p-0">
             <div className="container-fluid d-flex flex-column p-0 listMenu">
                 <List sx={style} component="nav">
-                    <ListItem button>
+                    <ListItem button onClick={onClick} component={Link} to="/dashboard">
                         <ListItemText primary="Home"/>
                     </ListItem>
                     <Divider />
-                    <ListItem button divider>
-                        <ListItemText primay="Kegs"/>
+                    <ListItem button divider onClick={onClick} component={Link} to="/kegs">
+                        <ListItemText primary="Kegs"/>
                     </ListItem>
-                    
+                    {path.includes("kegs") ? <KegSubMenu/> : null}
+                    <Divider/>
+                    <ListItem button divider onClick={onClick} component={Link} to="/distributors">
+                        <ListItemText primary="Distributors"/>
+                    </ListItem>
+                    {path.includes("distributors") ? <DistSubMenu/> : null}
+                    <Divider/>
+                    <ListItem button divider onClick={onClick} component={Link} to="/employees">
+                        <ListItemText primary="Employees"/>
+                    </ListItem>
+                    {path.includes("employees") ? <EmployeeSubMenu/> : null}
+                    <Divider/>
+                    <ListItem button onClick={onClick} component={Link} to="/shipping">
+                        <ListItemText primary="Shipping"/>
+                    </ListItem>
+                    <Divider/>
+                    {path.includes("shipping") ? <ShippingSubMenu/> : null}
+                    <ListItem button onClick={onLogout}>
+                        <ListItemText primary="Logout"/>
+                        <ListItemIcon>
+                            <ExitToAppIcon className="icon"/>
+                        </ListItemIcon>
+                    </ListItem>
                 </List>
                 {/* <li>
                     <Link to="/">
