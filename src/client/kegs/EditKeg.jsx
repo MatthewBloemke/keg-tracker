@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router";
-import { createKeg, editKeg, getDistributors, readKeg } from "../utils/api";
+import { useParams } from "react-router-dom";
+import { editKeg, readKeg } from "../utils/api";
 import "./NewKeg.css"
 
 const EditKeg = () => {
     const params = useParams()
+    console.log(params.kegId)
     const user = localStorage.getItem('user')
     const initialFormState ={
         keg_name: "",
@@ -14,18 +15,19 @@ const EditKeg = () => {
     }
 
     useEffect(() => {
+        const abortController = new AbortController();
         const loadKeg = async () => {
-            await readKeg(params.kegName)
+            await readKeg(params.kegId)
                 .then(response => {
-                    console.log(response[0].keg_name)
                     setFormData({
                         ...formData,
-                        keg_name: response[0].keg_name,
-                        keg_size: response[0].keg_size
+                        keg_name: response.keg_name,
+                        keg_size: response.keg_size
                     })
                 })            
         }
         loadKeg()
+        return () => abortController.Abort()
     }, [params.kegName])
 
     const [formData, setFormData] = useState(initialFormState);
@@ -39,7 +41,7 @@ const EditKeg = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const controller = new AbortController();
+        const abortController = new AbortController();
         const invalidFields = [];
         if (!Number(formData.keg_name) || formData.keg_name.length != 4) {
             invalidFields.push("keg_name")
@@ -47,12 +49,12 @@ const EditKeg = () => {
         if (invalidFields.length) {
             console.log("invalid") // error message component here
         } else {
-            await editKeg(formData)
+            await editKeg(formData, params.kegId, abortController.signal)
         }
     }
     return (
         <main>
-            <h1>New Keg</h1>
+            <h1>Edit Keg</h1>
             <form onSubmit={handleSubmit}>
                 <div className="row">
                     <div className="col-md-3 labels">
