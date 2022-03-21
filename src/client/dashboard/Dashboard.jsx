@@ -71,7 +71,7 @@ const Dashboard = () => {
 
     return (
         <div > 
-            <h1>This is the dashboard</h1>
+            <h1 id="dashHeader">Dashboard</h1>
             <div className='cardContainer'>
                 <Card className={classes.root} variant="outlined">
                     <CardContent>

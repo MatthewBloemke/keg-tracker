@@ -1,4 +1,9 @@
 .cardContainer {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#dashHeader {
+    padding-left: 20px;
 }
