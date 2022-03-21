@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { createHistory, getDistributors, trackKeg, verifyKeg } from '../utils/api';
-import DistAsSelect from '../distributors/DistAsSelect';
 import FormatKegIdList from './FormatKegIdList';
 import CustomInput from '../utils/CustomInput';
 
