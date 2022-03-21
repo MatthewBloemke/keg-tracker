@@ -39,7 +39,7 @@ const Routes = () => {
             <Route path="/kegs/return">
                 <ReturnKeg/>
             </Route>
-            <Route path="/kegs/edit/:keg_id">
+            <Route path="/kegs/edit/:kegId">
                 <EditKeg/>
             </Route>
             <Route path="/distributors" exact={true}>
