@@ -81,44 +81,7 @@ const Menu = () => {
                         </ListItemIcon>
                     </ListItem>
                 </List>
-                {/* <li>
-                    <Link to="/">
-                        <button style={buttonStyle} onClick={onClick}>Home</button>
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/kegs">
-                        <button style={buttonStyle} onClick={onClick}>Kegs</button>
-                    </Link>
-                    
-                </li>
-                {path.includes("kegs") ? <KegSubMenu/> : null}
-                <li>
-                    <Link to="/distributors">
-                        <button style={buttonStyle} onClick={onClick}>Distributors</button>
-                    </Link>
-                    
-                </li>
-                {path.includes("distributors") ? <DistSubMenu/> : null}
-                <li>
-                    <Link to="/employees">
-                        <button style={buttonStyle} onClick={onClick}>Employees</button>
-                    </Link>
-                    
-                </li>
-                {path.includes("employees") ? <EmployeeSubMenu/> : null}
-                <li>
-                    <Link to="/shipping">
-                        <button style={buttonStyle} onClick={onClick}>Shipping</button>
-                    </Link>
-                    
-                </li>
-                {path.includes("shipping") ? <ShippingSubMenu/> : null}
-                <li>
-                    <button style={buttonStyle} onClick={onLogout}>Logout</button>
-                </li> */}
             </div>
-
         </nav>
     )
 
