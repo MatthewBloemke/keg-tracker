@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { createHistory, trackKeg, getDistributors, getKegs, verifyKeg } from '../utils/api';
-import DistAsSelect from '../distributors/DistAsSelect';
 import FormatKegIdList from './FormatKegIdList';
 import CustomInput from '../utils/CustomInput';
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel';
+import {MenuItem, TextField} from '@mui/material'
+import Select from '@mui/material/Select';
 import "./TrackKeg.css"
 
 //todo: add a way to ship multiple kegs to one company at once, change returned to shipped in keg display
@@ -14,22 +18,27 @@ const TrackKeg = () => {
     const initialFormState = {
         date_shipped: `${date.getFullYear()}-${("0"+month).slice(-2)}-${("0"+day).slice(-2)}`,
         keg_id: [],
-        distributor_id: "",
         employee_email: localStorage.getItem('user'),
         keg_status: "shipped",
     }
 
     const [keg_names, setKeg_names] = useState([]);
-    const [dist, setDist] = useState([]);
+    const [distArr, setDistArr] = useState([]);
+    const [dist, setDist] = useState("")
     const [formData, setFormData] = useState(initialFormState);
     const [kegName, setKegName] = useState("");
 
-    const handleChange = ({target}) => {
+    const handleChange = (event) => {
+        console.log("change")
         setFormData({
             ...formData,
-            [target.name]: target.value
+            [event.target.name]: event.target.value
         });
     };
+
+    const handleDistChange = (event) => {
+        setDist(event.target.value)
+    }
 
     const handleKegChange = async ({target}) => {
         setKegName(target.value)
@@ -62,13 +71,13 @@ const TrackKeg = () => {
             const data = {
                 date_shipped: formData.date_shipped,
                 keg_id,
-                distributor_id: formData.distributor_id,
+                distributor_id: dist,
                 employee_email: formData.employee_email,
                 keg_status: "shipped"
             }
             
             await createHistory(data)
-            await trackKeg(data, keg_id)
+            await trackKeg(data, keg_id, abortController.signal)
             setFormData(initialFormState)
             setKeg_names([])
         })
@@ -89,8 +98,20 @@ const TrackKeg = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
-        getDistributors(abortController.signal)
-            .then(setDist)
+        const loadDistributors = () => {
+            getDistributors(abortController.signal)
+                .then(response => {
+                    const distOptions = []
+                    response.forEach(item => {
+                        distOptions.push(
+                            <MenuItem sx={{ color: "#004a9f"}} key={item.distributor_id} value={item.distributor_id}>{item.distributor_name}</MenuItem>
+                        )      
+                    })
+                    setDistArr(distOptions)
+                })            
+        }
+        loadDistributors()
+
 
         return () => abortController.abort()
     }, [])
@@ -103,11 +124,30 @@ const TrackKeg = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="row" id="trackKegContainer">
                             <div className="col-md-6" id='distContainer'>
-                                <h3>Distributor</h3> <br/>
-                                <select className='form-select form-select-lg' id="distributor_id" name="distributor_id" onChange={handleChange}><DistAsSelect dist={dist}/></select> <br/>       
+                                <h3>Choose a Distributor to Ship to</h3> <br/>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl sx={{width: "80%"}}>
+                                        <InputLabel>Distributor</InputLabel>
+                                        <Select
+                                            value={dist}
+                                            label="Distributor"
+                            
+                                            name="distributor_id"
+                                            onChange={handleDistChange}
+                                            // sx={{color: 'blue'}}
+                                        >
+                                            {distArr}
+                                            {/* {dist.map(item => {
+                                                <MenuItem sx={{color:"blue"}} key={item.distributor_id} value={item.distributor_id}>{item.distributor_name}</MenuItem>
+                                            })} */}
+                                        </Select>                                        
+                                    </FormControl>
+                                </Box>
+
                             </div>
                             <div className="col-md-6" id='inputContainer'>
-                                <CustomInput label="Keg Id" color="blue" name="keg_name"  type="text" handleChange={handleKegChange} value={kegName} disabled={formData.distributor_id.length ? null : "disabled"}/> <br/>
+                            <TextField id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
+                                {/* <CustomInput label="Keg Id" color="blue" name="keg_name"  type="text" handleChange={handleKegChange} value={kegName} disabled={dist ? null : "disabled"}/> <br/> */}
                                 <CustomInput label="date" color="blue" type="date" name="date_shipped" handleChange={handleChange} value={formData.date_shipped}/>
                             </div>
                         </div>
