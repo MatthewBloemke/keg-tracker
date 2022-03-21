@@ -1,18 +1,26 @@
 import React from 'react'
-import {Route, Switch} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Layout from './layout/Layout'
 import Login from './login/Login'
+import {ThemeProvider} from '@mui/material'
+import customTheme from "./utils/theme"
+
 
 const App = () => {
     return (
-        <Switch>
-            <Route path='/login'>
-                <Login/>
-            </Route>
-            <Route path="/">
-                <Layout/>
-            </Route>
-        </Switch>
+        <ThemeProvider theme={customTheme}>
+            <Router>
+                <Switch>
+                    <Route path='/login'>
+                        <Login/>
+                    </Route>
+                    <Route path="/">
+                        <Layout/>
+                    </Route>
+                </Switch>
+            </Router>            
+        </ThemeProvider>
+
     )
 }
 
