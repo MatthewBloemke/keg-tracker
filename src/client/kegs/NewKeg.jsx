@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import DistAsSelect from "../distributors/DistAsSelect";
 import { createKeg, getDistributors } from "../utils/api";
 import "./NewKeg.css"
 
@@ -86,7 +85,7 @@ const NewKeg = () => {
                             <option value="shipped">Shipped</option>
                         </select> <br/>
                         <input type="date" id="date_shipped" name="date_shipped" value={formData.date_shipped} onChange={handleChange}/> <br/>
-                        {shipped ? <select id="distributor_id" name="distributor_id" onChange={handleChange}><DistAsSelect dist={dist} /></select> : null} <br/>
+                        {shipped ? <select id="distributor_id" name="distributor_id" onChange={handleChange}></select> : null} <br/>
                         
                         <button type="submit">Submit</button>
                     </div>
