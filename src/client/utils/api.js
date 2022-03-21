@@ -75,10 +75,11 @@ export async function verifyKeg(data) {
     return await fetchJson(`/api/kegs/verify`, options)
 }
 
-export async function editKeg(data, keg_id) {
+export async function editKeg(data, keg_id, signal) {
     const options = {
         method: 'PUT',
         headers,
+        signal,
         body: JSON.stringify({data})
     }
     return await fetchJson(`/api/kegs/${keg_id}`, options)
