@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { useHistory, useParams } from 'react-router-dom';
 import { editDistributor, readDistributor } from '../utils/api'
+import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel} from '@mui/material'
 
 const EditDistributor = () => {
     const history = useHistory()
@@ -54,21 +55,11 @@ const EditDistributor = () => {
     }, [])
 
     return (
-        <main>
-            <h1>Edit Distributor</h1>
-            <form onSubmit={handleSubmit}>
-                <div className='row'>
-                    <div className='col-md-3 labels'>
-                        <label htmlFor='distributor_name'>Distributor Name</label>
-                    </div>
-                    <div className='col-md-3 inputs'>
-                        <input type="text" id='distributor_name' name="distributor_name" value={formData.distributor_name} onChange={handleChange} /> <br/>
-                        <button type='submit' disabled={disabled}>Submit</button>
-                    </div>
-                </div>
-
-            </form>
-        </main>
+        <Grid container spacing={3}>
+            <Grid xs={12}>
+                <h1>Edit Distributor</h1>
+            </Grid>
+        </Grid>
     )  
 }
 
