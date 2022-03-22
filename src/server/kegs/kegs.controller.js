@@ -27,6 +27,14 @@ function verifyKeg (req, res, next) {
     res.json({data: res.locals.keg})
 }
 
+const isUniqueKeg = async (req, res, next) => {
+    let keg = await service.readByName(req.body.data.keg_name)
+    if (keg) {
+        return next({status: 400, message: `Keg ${req.body.data.keg_name} already exists`})
+    }
+    next()
+}
+
 async function hasValidFields (req, res, next) {
     if (!req.body.data) {
         return next({
@@ -82,7 +90,7 @@ async function createKeg (req, res) {
     }
 
     const createdKeg = await service.create(newKeg)
-    res.status(201).json({data: createdKeg})
+    res.status(201).json({data: createdKeg[0]})
 }
 
 async function update (req, res) {
@@ -145,8 +153,8 @@ async function destroy(req, res) {
 module.exports = {
     list: asyncErrorBoundary(list),
     read: [asyncErrorBoundary(kegExists), read],
-    create: [asyncErrorBoundary(hasValidFields), createKeg],
-    update: [asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), update],
+    create: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(isUniqueKeg), createKeg],
+    update: [asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), asyncErrorBoundary(isUniqueKeg), update],
     destroy: [asyncErrorBoundary(kegExists), destroy],
     verifyKeg: [asyncErrorBoundary(kegExistsByName), verifyKeg],
     track: [asyncErrorBoundary(hasValidTrackingFields), track]
