@@ -1,29 +1,36 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton} from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit'
 
 const FormatDistributors = ({distributors}) => {
     const distTable = [];
-    console.log(distributors)
     distributors.forEach(dist => {
         const path = `/distributors/edit/${dist.distributor_id}`
         distTable.push(
-            <tr key = {dist.distributor_id}>
-                <td>{dist.distributor_name}</td>
-                <td><Link to={path}><button id={dist.distributor_id}>Edit</button></Link></td>
-            </tr>
+            <TableRow
+                key={dist.distributor_id}
+                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+            >
+                <TableCell align='center' component='th' scope="row">
+                    <IconButton className="editButton" component={Link} to={path}><EditIcon/></IconButton> {dist.distributor_name}
+                </TableCell>
+            </TableRow>
         )
     })
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Distributor Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                {distTable}
-            </tbody>
-        </table>
+        <TableContainer className="tableContainer" component={Paper}>
+            <Table sx={{width: "80%"}}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell align='center'>Distributor Name</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {distTable}
+                </TableBody>
+            </Table>
+        </TableContainer>
     )
 }
 
