@@ -3,10 +3,18 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Layout from './layout/Layout'
 import Login from './login/Login'
 import {ThemeProvider} from '@mui/material'
-import customTheme from "./utils/theme"
+import {createTheme} from '@mui/material'
+import {blue, teal} from '@mui/material/colors';
 
 
 const App = () => {
+    const customTheme = createTheme({
+        palette: {
+            primary: blue,
+            secondary: teal
+        }
+    })
+
     return (
         <ThemeProvider theme={customTheme}>
             <Router>
@@ -20,8 +28,7 @@ const App = () => {
                 </Switch>
             </Router>            
         </ThemeProvider>
-
-    )
+    );
 }
 
 export default App;
