@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { createHistory, getDistributors, trackKeg, verifyKeg } from '../utils/api';
+import React, { useState } from 'react'
+import { createHistory, trackKeg, verifyKeg } from '../utils/api';
 import FormatKegIdList from './FormatKegIdList';
-import CustomInput from '../utils/CustomInput';
+import {FormControl, TextField, Alert, Grid, Button} from '@mui/material'
 
 const ReturnKeg = () => {
     const date = new Date()
@@ -19,21 +19,29 @@ const ReturnKeg = () => {
     const [keg_names, setKeg_names] = useState([])
     const [formData, setFormData] = useState(initialFormState);
     const [kegName, setKegName] = useState("")
+    const [alert, setAlert] = useState(null)
+    const [error, setError] = useState(null)
 
     const handleKegChange = async ({target}) => {
         setKegName(target.value)
         if (target.value.length===4) {
-            if (keg_names.includes(target.value)) {//add error message here
+            if (keg_names.includes(target.value)) {
+                setError(`Keg ${target.value} has already been added`)
                 setKegName("")
             } else {
                 await verifyKeg({keg_name: target.value})
                     .then(response => {
-                        //add functionality to only allow shipped kegs to pass
-                        setKeg_names([...keg_names, target.value])
-                        setFormData({
-                            ...formData,
-                            keg_id: [...formData.keg_id, response.keg_id]
-                        })
+                        if (response.error) {
+                            setError(response.error)
+                        } else {
+                            //add functionality to only allow shipped kegs to pass
+                            setKeg_names([...keg_names, target.value])
+                            setFormData({
+                                ...formData,
+                                keg_id: [...formData.keg_id, response.keg_id]
+                            })                            
+                        }
+
                     })
                     .catch(err => {
                         console.log(err)
@@ -57,7 +65,14 @@ const ReturnKeg = () => {
             }
 
             await createHistory(data)
-            await trackKeg(data, keg_id)
+            await trackKeg(data, keg_id, abortController.signal)                
+                .then(response => {
+                    if (response.error) {
+                        setError(response.error)
+                    } else {
+                        setAlert("Kegs successfully returned")
+                    }
+                })
             setFormData(initialFormState)
             setKeg_names([])
         })
@@ -78,22 +93,34 @@ const ReturnKeg = () => {
     }
 
     return (
-        <div>
-            <h1>Return Kegs</h1>
-                <div className="row">
-                    <div className="col-md-8">
-                        <form onSubmit={handleSubmit}>
-                            <div className="row">
-                                    <CustomInput label="Keg Id" color="blue" name="keg_name"  type="text" handleChange={handleKegChange} value={kegName}/> <br/>
-                            </div>
-                            <button type="submit">Submit</button>
-                        </form>
-                    </div>
-                    <div className="col-md-4">
-                        <FormatKegIdList kegIds={keg_names} onDelete={onDelete}/>
-                    </div>
-                </div>
-        </div>
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <h1>Return Kegs</h1>
+            </Grid>
+            <Grid item xs={6} >
+                <Grid container justifyContent="center">
+                    <FormControl>
+                        <TextField  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} />
+                        {/* <button type="submit">Submit</button> */}
+                        <Button sx={{width:"50%", margin:"auto", marginTop: "15px"}} type="submit" variant='contained' color="success" onClick={handleSubmit}>Submit</Button>
+                    </FormControl>
+                </Grid>
+                {/* <form onSubmit={handleSubmit}> */}
+
+                    
+                {/* </form> */}
+            </Grid>
+            <Grid item xs={6}>
+                <Grid container direction="row" justifyContent="flex-start">
+                    <FormatKegIdList kegIds={keg_names} onDelete={onDelete}/>
+                </Grid>
+                
+            </Grid>
+            <Grid item xs={6}>
+                {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
+                {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
+            </Grid>       
+        </Grid>
     )
 }
 
