@@ -14,7 +14,7 @@ const DistSubMenu = () => {
     }
     return (
         <List sx={style} component="nav">
-            <ListItem button component={Link} to="/distrubutors">
+            <ListItem button component={Link} to="/distributors">
                 <ListItemText primary="View Distributors"/>
             </ListItem>
             <Divider/>
