@@ -11,15 +11,14 @@ const fetchJson = async (url, options, onCancel) => {
             return undefined;
         };
         const payload = await response.json();
-
         if (payload.error) {
-            return payload.error;
+            return {status: response.status, error: payload.error};
         };
         return payload.data;
     } catch (error) {
         if (error.name !== "AbortError") {
             console.error(error.stack);
-            return error;
+            return {status: response.status, error};
         };
         return onCancel;
     };
@@ -49,13 +48,14 @@ export async function getShippingHistory(signal) {
     return await fetchJson(`/api/shipping`, {headers, signal}, [])
 }
 
-export async function createKeg(data) {
+export async function createKeg(data, signal) {
     const options = {
         method: "POST",
         headers,
+        signal,
         body: JSON.stringify({data})
     }
-    await fetch(`/api/kegs`, options)
+    return await fetchJson(`/api/kegs`, options, [])
 }
 
 export async function createHistory(data) {
@@ -84,10 +84,11 @@ export async function editKeg(data, keg_id, signal) {
     }
     return await fetchJson(`/api/kegs/${keg_id}`, options)
 }
-export async function trackKeg(data, keg_id) {
+export async function trackKeg(data, keg_id, signal) {
     const options = {
         method: 'PUT',
         headers,
+        signal,
         body: JSON.stringify({data})
     }
     return await fetchJson(`/api/kegs/track/${keg_id}`, options)
