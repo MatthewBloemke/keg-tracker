@@ -79,7 +79,7 @@ const Dashboard = () => {
                         <Typography className={classes.pos}>{kegs ? kegs.length + " kegs in system" : null}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button size='medium' component={Link} to="/kegs">View Kegs</Button>
+                        <Button size='medium' >View Kegs</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} variant="outlined">
