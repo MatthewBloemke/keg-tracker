@@ -20,7 +20,7 @@ const KegSubMenu = () => {
             </ListItem>
             <Divider/>
             <ListItem button divider component={Link} to="/kegs/track">
-                <ListItemText primary="Track Kegs"/>
+                <ListItemText primary="Ship Kegs"/>
             </ListItem>
             <Divider/>
             <ListItem button divider component={Link} to="/kegs/return">
@@ -31,20 +31,6 @@ const KegSubMenu = () => {
                 <ListItemText primary="Create Kegs"/>
             </ListItem>
         </List>
-        // <ul>
-        //     <li>
-        //         <Link to="/kegs">View Kegs</Link>
-        //     </li>
-        //     <li>
-        //         <Link to="/kegs/track">Track Kegs</Link>
-        //     </li>
-        //     <li>
-        //         <Link to="/kegs/new">New Keg</Link>
-        //     </li>
-        //     <li>
-        //         <Link to="/kegs/return">Return Kegs</Link>
-        //     </li>
-        // </ul>
     )
 }
 
