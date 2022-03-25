@@ -34,8 +34,7 @@ const Layout = () => {
             <div className="header">
                 <p></p>
                 <p></p>
-                <h1>Keg Tracker</h1>
-                <p id="bottomLayoutHeader"></p>
+                <h1>Loon Juice Keg Tracker</h1>
             </div>
             <div style={height} className="container-fluid">
                 <div className="row h-100">
