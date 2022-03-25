@@ -35,7 +35,6 @@ const Login = () => {
   }
 
   return (
-    <Container>
       <Box sx={{backgroundColor: 'primary'}}>
         <div className="header">
           <p></p>
@@ -53,7 +52,6 @@ const Login = () => {
           {errorMessage ? <Alert onClose={() => {setErrorMessage(null)}} sx={{width: "30%", margin: "auto"}} variant="filled" severity="error">{errorMessage.message}</Alert>: null}
         </div>             
       </Box>
-    </Container>
 
   );
 }
