@@ -15,8 +15,12 @@ const KegSubMenu = () => {
     }
     return (
         <List sx={style} component="nav">
-            <ListItem button component={Link} to="/kegs">
-                <ListItemText primary="View Kegs"/>
+            <ListItem button component={Link} to="/kegs/list/shipped">
+                <ListItemText primary="View Shipped Kegs"/>
+            </ListItem>
+            <Divider/>
+            <ListItem button component={Link} to="/kegs/list/returned">
+                <ListItemText primary="View Returned Kegs"/>
             </ListItem>
             <Divider/>
             <ListItem button divider component={Link} to="/kegs/track">
