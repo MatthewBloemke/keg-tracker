@@ -128,13 +128,6 @@ const Dashboard = () => {
                     </CardActions>
                 </Card>                
             </div>
-
-            {/* <p>Total Kegs {kegs ? kegs.length : null}</p>
-            <p>Kegs returned {returnedKegs ? returnedKegs.length : null}</p>
-            <p>Total shipped kegs {returnedKegs ? (kegs.length - returnedKegs.length) : null}</p>
-            <p>0-60 Days {sixtyDayKegs ? sixtyDayKegs.length : null}</p>
-            <p>60-120 Days {onetwentyDayKegs ? onetwentyDayKegs.length : null}</p>
-            <p>120+ Days {overdueKegs ? overdueKegs.length : null}</p> */}
         </div>
     )
 }
