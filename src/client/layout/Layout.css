@@ -12,6 +12,13 @@
     padding-right: 0;
 }
 
-h1 {
-    border-bottom: solid #004a9f 3px;
+.subHeader {
+    border-bottom: solid #004a9f 4px;
+    padding-left: 10px;
+}
+
+.header {
+    border-bottom: solid #004a9f 4px;
+    border-top: solid #004a9f 18px;
+    padding-left: 0 !important;
 }
