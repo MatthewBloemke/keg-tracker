@@ -7,9 +7,6 @@ import "./NewKeg.css"
 
 const NewKeg = () => {
     const user = localStorage.getItem('user')
-    const date = new Date()
-    const month = String(date.getMonth() + 1)
-    const day = String(date.getDate())
 
     const initialFormState ={
         keg_name: "",
@@ -18,10 +15,9 @@ const NewKeg = () => {
         distributor_id: "",
         employee_email: user
     }
-    const initialDate = `${date.getFullYear()}-${("0"+month).slice(-2)}-${("0"+day).slice(-2)}`
 
     const [formData, setFormData] = useState(initialFormState);
-    const [date_shipped, setDate_shipped] = useState(initialDate)
+    const [date_shipped, setDate_shipped] = useState(new Date(Date.now()))
     const [distArr, setDistArr] = useState([]);
     const [error, setError] = useState(null)
     const [alert, setAlert] = useState(null)
@@ -59,7 +55,7 @@ const NewKeg = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const controller = new AbortController();
-        console.log(formData)
+        date_shipped.setHours(0,0,0,0)
         const data ={
             keg_name: formData.keg_name,
             keg_status: formData.keg_status,
@@ -84,28 +80,27 @@ const NewKeg = () => {
         }
         if (invalidFields.length) {
             if (invalidFields.length === 1) {
-                setError(`${invalidFields[0]} is invalid`)
+                setError(`${invalidFields[0]} is invalid`);
             } else {
-                setError(`${invalidFields.join(", ")} are invalid`)
+                setError(`${invalidFields.join(", ")} are invalid`);
             }
         } else {
             await createKeg(data, controller.signal)
                 .then(response => {
-                    console.log(response)
                     if (response.error) {
-                        console.log("error")
-                        setError(response.error)
+                        console.log("error");
+                        setError(response.error);
                     } else {
-                        setAlert("Keg successfully created")
-                    }
-                })
-            setFormData(initialFormState)
-        }
-    }
+                        setAlert("Keg successfully created");
+                    };
+                });
+            setFormData(initialFormState);
+        };
+    };
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} >
-                <h1>Create New Keg</h1>
+                <h1 className="subHeader">Create New Keg</h1>
             </Grid>
             <Grid item xs={6}>
                 <Grid container justifyContent="flex-end">
@@ -200,7 +195,7 @@ const NewKeg = () => {
                 </Grid>
             </Grid>
             <Grid item xs={12} >
-                <Grid container  justifyContent="center" spacing={1}>
+                <Grid container justifyContent="center" spacing={1}>
                     {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                     {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
                 </Grid>
