@@ -16,7 +16,8 @@ import "./menu.css"
 
 const Menu = () => {
     const history = useHistory()
-
+    const [path, setPath] = useState(window.location.pathname.slice(1));
+    
     const onClick = ({target}) => {
         console.log(target.innerText.toLowerCase())
         setPath(target.innerText.toLowerCase())
@@ -33,28 +34,20 @@ const Menu = () => {
             })
     }
 
-    const buttonStyle = {
-        border: "none",
-        background: "none",
-        color: "white"
-    }
-
     const style = {
         width: '100%',
         bgcolor: '#1675d1',
         color: "#ffffff"
     }
 
-    const [path, setPath] = useState(window.location.pathname.slice(1))
+
     return (
-        <nav className="navbar navbar-dark align-items-start p-0">
-            <div className="container-fluid d-flex flex-column p-0 listMenu">
                 <List sx={style} component="nav">
                     <ListItem button onClick={onClick} component={Link} to="/dashboard">
                         <ListItemText primary="Home"/>
                     </ListItem>
                     <Divider />
-                    <ListItem button divider onClick={onClick} component={Link} to="/kegs">
+                    <ListItem button divider onClick={onClick} component={Link} to="/kegs/list/shipped">
                         <ListItemText primary="Kegs"/>
                     </ListItem>
                     {path.includes("kegs") ? <KegSubMenu/> : null}
@@ -81,8 +74,6 @@ const Menu = () => {
                         </ListItemIcon>
                     </ListItem>
                 </List>
-            </div>
-        </nav>
     )
 
 }
