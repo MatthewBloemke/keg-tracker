@@ -37,9 +37,7 @@ const Login = () => {
   return (
       <Box sx={{backgroundColor: 'primary'}}>
         <div className="header">
-          <p></p>
-          <p></p>
-          <h1>Welcome To Keg Tracker</h1>
+          <h1 className="subHeader">Welcome To Keg Tracker</h1>
         </div>
         <div className="form">
           <form onSubmit={handleSubmit}>
