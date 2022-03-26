@@ -57,7 +57,7 @@ const NewEmployee = () => {
 
     return (
         <main>
-            <h1>New Employee</h1>
+            <h1 className="subHeader">New Employee</h1>
             <form onSubmit={handleSubmit}>
                 <div className="row">
                     <div className="col-md-3 labels">

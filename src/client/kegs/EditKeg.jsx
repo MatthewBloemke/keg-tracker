@@ -79,7 +79,7 @@ const EditKeg = () => {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} >
-                <h1>Edit Keg</h1>
+                <h1 className="subHeader">Edit Keg</h1>
             </Grid>
             <Grid item xs={6}>
                 <Grid container justifyContent="flex-end">

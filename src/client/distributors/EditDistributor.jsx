@@ -57,7 +57,7 @@ const EditDistributor = () => {
     return (
         <Grid container spacing={3}>
             <Grid xs={12}>
-                <h1>Edit Distributor</h1>
+                <h1 className='subHeader'>Edit Distributor</h1>
             </Grid>
         </Grid>
     )  

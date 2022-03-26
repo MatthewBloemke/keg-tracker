@@ -111,7 +111,7 @@ const EditEmployee = () => {
 
     return (
         <main>
-            <h1>Edit Employee</h1>
+            <h1 className="subHeader">Edit Employee</h1>
                 <div className="row">
                     <div className="col-md-6">
                         <form onSubmit={handleSubmit}>
