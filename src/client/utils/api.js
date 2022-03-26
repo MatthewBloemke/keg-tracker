@@ -34,8 +34,8 @@ export async function login(data, signal) {
     return await fetchJson('/api/login', options, [])
 }
 
-export async function getKegs() {
-    return await fetchJson(`/api/kegs`, {headers}, []);
+export async function getKegs(signal) {
+    return await fetchJson(`/api/kegs`, {headers, signal}, []);
 };
 
 export async function loginCheck() {
@@ -94,8 +94,8 @@ export async function trackKeg(data, keg_id, signal) {
     return await fetchJson(`/api/kegs/track/${keg_id}`, options)
 }
 
-export async function readKeg(kegName) {
-    return await fetchJson(`/api/kegs/${kegName}`)
+export async function readKeg(kegId, signal) {
+    return await fetchJson(`/api/kegs/${kegId}`, {headers, signal})
 }
 
 //Distributor Functions
