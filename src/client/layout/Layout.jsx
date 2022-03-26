@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Routes from './Routes';
 import Menu from './Menu';
-import "./Layout.css"
+import "./Layout.css"; 
 import { useHistory } from 'react-router-dom';
 import { loginCheck } from '../utils/api';
 
@@ -11,29 +11,26 @@ const Layout = () => {
     const [pathName, setPathName] = useState(window.location.pathname);
 
     history.listen((location) => {
-        setPathName(location.pathname)
-    })
+        setPathName(location.pathname);
+    });
 
     useEffect(() => {
-        const abortController = new AbortController()
+        const abortController = new AbortController();
         loginCheck()
         .then(response => {
             if (!response) {
-                console.log("no auth token")
-                history.push("/login")  
+                history.push("/login") ; 
                 return () => {
                     abortController.abort()
-                }
-            }
-        })
-        return () => abortController.abort()
-    }, [pathName])
-    const height = {height: "100vh"}
+                };
+            };
+        });
+        return () => abortController.abort();
+    }, [pathName]);
+    const height = {height: "100vh"};
     return (
         <main>
             <div className="header">
-                <p></p>
-                <p></p>
                 <h1>Loon Juice Keg Tracker</h1>
             </div>
             <div style={height} className="container-fluid">
@@ -47,7 +44,7 @@ const Layout = () => {
                 </div>
             </div>            
         </main>
-    )
-}
+    );
+};
 
 export default Layout;
