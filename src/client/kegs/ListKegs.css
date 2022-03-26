@@ -5,3 +5,11 @@
 .tableContainer {
     max-width: 75%;
 }
+
+.MuiTablePagination-displayedRows {
+    background-color: white;
+}
+
+.MuiDataGrid-menuList {
+    color:#1976d2;
+}
