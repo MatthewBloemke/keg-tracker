@@ -27,7 +27,7 @@ const Routes = () => {
             <Route path="/dashboard" exact={true}>
                 <Dashboard/>
             </Route>
-            <Route path="/kegs" exact={true}>
+            <Route path="/kegs/list/:status" exact={true}>
                 <ListKegs/>
             </Route>
             <Route path="/kegs/new">
