@@ -95,20 +95,16 @@ const ReturnKeg = () => {
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
-                <h1>Return Kegs</h1>
+                <h1 className="subHeader">Return Kegs</h1>
             </Grid>
             <Grid item xs={6} >
                 <Grid container justifyContent="center">
                     <FormControl>
                         <TextField  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} />
-                        {/* <button type="submit">Submit</button> */}
+                        <h5 style={{marginBottom: '10px', marginTop: "10px"}}>Kegs Shipped: {keg_names.length}</h5>
                         <Button sx={{width:"50%", margin:"auto", marginTop: "15px"}} type="submit" variant='contained' color="success" onClick={handleSubmit}>Submit</Button>
                     </FormControl>
                 </Grid>
-                {/* <form onSubmit={handleSubmit}> */}
-
-                    
-                {/* </form> */}
             </Grid>
             <Grid item xs={6}>
                 <Grid container direction="row" justifyContent="flex-start">
