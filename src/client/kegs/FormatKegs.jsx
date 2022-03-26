@@ -1,88 +1,65 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import {IconButton} from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
+import {DataGrid} from '@mui/x-data-grid'
 
 import "./ListKegs.css"
 
-const FormatKegs = ({kegs, distributors}) => {
-    const kegTable = [];
-    kegs.forEach(keg => {
-        const path=`/kegs/edit/${keg.keg_id}`
-        const distributor = distributors.find(({distributor_id}) => distributor_id === keg.shipped_to)
-        kegTable.push(
-            <TableRow
-            key={keg.keg_id}
-            sx={{ '&:last-child td, &:last-child th': {border: 0}}}
-        >
-            <TableCell component="th" scope="row">
-
-                <IconButton className='editButton' component={Link} to={path}><EditIcon/></IconButton> {keg.keg_name}
-            </TableCell>
-            <TableCell>{keg.keg_size}</TableCell>
-            <TableCell>{keg.keg_status}</TableCell>
-            <TableCell>{keg.date_shipped}</TableCell>
-            <TableCell>{distributor ? distributor.distributor_name : null}</TableCell>
-        </TableRow>
+const FormatKegs = ({kegs, distributors, status}) => {
+    const renderEditButton = (params) => {
+        return (
+            <strong>
+                <IconButton className='editButton' component={Link} to={`/kegs/edit/${params.row.id}`}><EditIcon/></IconButton>
+            </strong>
         )
-    })
+    }
+
+    const kegTableRows = [];
+    const columns = [
+        {field: "keg_name", headerName: "Keg Number", width: 140},
+        {field: "keg_size", headerName: "Keg Size", width: 100},
+        {field: "keg_status", headerName: "Keg Status", width: 160, sortable: false},
+        {field: "date_shipped", headerName: "Date Shipped", width: 180},
+        {field: "days_out", headerName: "Days Out", width: 120},
+        {field: "distributor", headerName: "Distributor", width: 180},
+        {field: "editButton", headerName: "", width: 70, renderCell: renderEditButton, sortable: false}
+    ];
+    kegs.forEach(keg => {
+        const current_distributor = distributors.find(({distributor_id}) => distributor_id === keg.shipped_to)
+        const today = new Date(Date.now());
+        today.setHours(0,0,0,0)
+        console.log(keg.date_shipped)
+        const date_shipped = new Date(keg.date_shipped)
+        date_shipped.setHours(0,0,0,0)
+        const month = String(date_shipped.getMonth() + 1)
+        const day = String(date_shipped.getDate())
+        console.log(day)
+        const timeDifference = today.getTime() - date_shipped.getTime()
+        const keg_days_out = timeDifference/1000/3600/24;
+        console.log(date_shipped)
+        kegTableRows.push(
+            {
+                id: keg.keg_id,
+                keg_name: keg.keg_name,
+                keg_size: keg.keg_size,
+                keg_status: keg.keg_status,
+                date_shipped: `${("0"+month).slice(-2)}-${("0"+day).slice(-2)}-${date_shipped.getFullYear()}`,
+                days_out: status === "shipped" ? Math.floor(keg_days_out) : null,
+                distributor: current_distributor ? current_distributor.distributor_name : null
+            }
+        );
+    });
 
     return (
-        <TableContainer className='tableContainer' component={Paper}>
-            <Table sx={{ width: "80%" }}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Keg Number</TableCell>
-                        <TableCell>Keg Size</TableCell>
-                        <TableCell>Keg Status</TableCell>
-                        <TableCell>Date Shipped</TableCell>
-                        <TableCell>Distributor</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {kegTable}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <DataGrid
+            rows={kegTableRows}
+            columns={columns}
+            pageSize={50}
+            rowsPerPageOptions={[50]}
+            sx={{backgroundColor: 'white', width: '70%', height: '100vh'}}
+        />
     )
-    // kegs.forEach(keg => {
-    //     const path=`/kegs/edit/${keg.keg_id}`
-    //     const distributor = distributors.find(({distributor_id}) => distributor_id === keg.shipped_to)
-    //     kegTable.push(
-    //         <tr key ={keg.keg_id}>
-    //             <td>{keg.keg_name}</td>
-    //             <td>{keg.keg_size}</td>
-    //             <td>{keg.keg_status}</td>
-    //             <td>{keg.date_shipped}</td>
-    //             <td>{distributor ? distributor.distributor_name : null}</td>
-    //             <td><Link to={path}><button className='btn btn-primary' id={keg.keg_id}>Edit</button></Link></td>
-    //         </tr>
-    //     )
-    // })
-    // return (
-    //     <table>
-    //         <thead>
-    //             <tr>
-    //                 <th >Keg Number</th>
-    //                 <th >Keg Size</th>
-    //                 <th >Keg Status</th>
-    //                 <th >Date Shipped</th>
-    //                 <th >Distributor</th>                 
-    //             </tr>
-    //         </thead>
-    //         <tbody>
-    //             {kegTable}
-    //         </tbody>            
-    //     </table>
-
-    // )
 }
 
 export default FormatKegs
