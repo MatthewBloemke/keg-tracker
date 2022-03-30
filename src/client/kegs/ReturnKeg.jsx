@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import { createHistory, trackKeg, verifyKeg } from '../utils/api';
 import FormatKegIdList from './FormatKegIdList';
 import {FormControl, TextField, Alert, Grid, Button} from '@mui/material'
+import {LocalizationProvider, DatePicker, } from '@mui/lab'
+import DateFnsUtils from '@mui/lab/AdapterDateFns'
 
 const ReturnKeg = () => {
     const date = new Date()
     const month = String(date.getMonth() + 1)
     const day = String(date.getDate())
     const initialFormState = {
-        date_shipped: `${date.getFullYear()}-${"0"+month.slice(-2)}-${("0"+day).slice(-2)}`,
         keg_id: [],
         keg_status: "returned",
         shipped_to: null,
@@ -21,6 +22,7 @@ const ReturnKeg = () => {
     const [kegName, setKegName] = useState("")
     const [alert, setAlert] = useState(null)
     const [error, setError] = useState(null)
+    const [date_shipped, setDate_shipped] = useState(new Date(Date.now()))
 
     const handleKegChange = async ({target}) => {
         setKegName(target.value)
@@ -31,15 +33,23 @@ const ReturnKeg = () => {
             } else {
                 await verifyKeg({keg_name: target.value})
                     .then(response => {
+                        let timeA = new Date(response.date_shipped);
+                        let timeB = new Date(date_shipped);
+                        timeA.setHours(0,0,0,0)
+                        timeB.setHours(0,0,0,0)
+                        let timeDifference = timeB.getTime() - timeA.getTime()
                         if (response.error) {
                             setError(response.error)
+                        } else if (response.keg_status === "returned") {
+                            setError(`Keg ${response.keg_name} has already been returned`)
+                        } else if (timeDifference < 0) {
+                            setError(`Returned date cannot be before the Keg's shipped date of ${timeA}`)
                         } else {
-                            //add functionality to only allow shipped kegs to pass
                             setKeg_names([...keg_names, target.value])
                             setFormData({
                                 ...formData,
                                 keg_id: [...formData.keg_id, response.keg_id]
-                            })                            
+                            })                             
                         }
 
                     })
@@ -54,10 +64,11 @@ const ReturnKeg = () => {
     const handleSubmit = (event) => {
         event.preventDefault()
         console.log(formData)
+        date_shipped.setHours(0,0,0,0)
         const abortController = new AbortController()
         formData.keg_id.forEach( async keg_id => {
             const data = {
-                date_shipped: formData.date_shipped,
+                date_shipped: date_shipped,
                 keg_id,
                 distributor_id: null,
                 employee_email: formData.employee_email,
@@ -95,15 +106,28 @@ const ReturnKeg = () => {
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
-                <h1 className="subHeader">Return Kegs</h1>
+                <h2 className="subHeader">Return Kegs</h2>
             </Grid>
             <Grid item xs={6} >
                 <Grid container justifyContent="center">
                     <FormControl>
-                        <TextField  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} />
-                        <h5 style={{marginBottom: '10px', marginTop: "10px"}}>Kegs Shipped: {keg_names.length}</h5>
+                        <TextField  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} sx={{marginBottom: "30px"}}/>
+                        <LocalizationProvider dateAdapter={DateFnsUtils}>
+                            <DatePicker
+                                label="Date Shipped"
+                                value={date_shipped}
+                                name="date_shipped"
+                                onChange={(newDate) => {
+                                    setDate_shipped(newDate);
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>                    
+                        
+                        <h5 style={{marginBottom: '10px', marginTop: "25px"}}>Kegs Shipped: {keg_names.length}</h5>
                         <Button sx={{width:"50%", margin:"auto", marginTop: "15px"}} type="submit" variant='contained' color="success" onClick={handleSubmit}>Submit</Button>
-                    </FormControl>
+                    </FormControl>                        
+
                 </Grid>
             </Grid>
             <Grid item xs={6}>
