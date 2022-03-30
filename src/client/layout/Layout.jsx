@@ -31,26 +31,13 @@ const Layout = () => {
     const height = {height: "100vh"};
     return (
         <main>
-            {/* <div className="header">
-                
-            </div>
-            <div style={height} className="container-fluid">
-                <div className="row h-100">
-                    <div className="col-md-2 side-bar">
-                        
-                    </div>
-                    <div className="col" id="mainDisplay">
-                        
-                    </div>
-                </div>
-            </div>             */}
             <Grid container spacing={0}>
                 <Grid item xs={12}>
                     <Grid container justifyContent="center" sx={{backgroundColor: '#1675d1', borderTop: "solid #004a9f 18px", borderBottom: 'solid #004a9f 4px'}}>
                         <h1 id="mainHeading">Loon Juice Keg Tracker</h1>
                     </Grid>
                 </Grid>
-                <Grid item xs={2} sx={{backgroundColor: '#1675d1', height: '100vh'}}>
+                <Grid item xs={2} sx={{backgroundColor: '#1675d1', height: '100vh', borderRight: "solid #004a9f 3px"}}>
                     <Menu/>
                 </Grid>
                 <Grid item xs={10}>
