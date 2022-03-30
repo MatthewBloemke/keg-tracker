@@ -17,8 +17,12 @@ const hasPassword = (req, res, next) => {
                 message: "Error creating password"
             })
         } else {
-            res.locals.newAccount = {
-                password: hash
+            if (res.locals.newAccount) {
+                res.locals.newAccount["password"] = hash;
+            } else {
+                res.locals.newAccount = {
+                    password: hash
+                }                
             }
             next()
         }
@@ -34,6 +38,7 @@ const hasValidFields = (req, res, next) => {
     }
     console.log(req.body.data)
     const {data = {}} = req.body;
+    console.log(data)
     validFields.forEach(field => {
         if (!data[field]) {
             invalidFields.push(field)
@@ -42,7 +47,6 @@ const hasValidFields = (req, res, next) => {
     if (typeof data.admin != "boolean") {
         invalidFields.push("admin")
     }
-    console.log(invalidFields)
     if (invalidFields.length) {
         return next({
             status: 400,
