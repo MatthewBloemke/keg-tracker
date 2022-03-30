@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {getKegs} from '../utils/api'
+import {getKegs, getShippingHistory} from '../utils/api'
 import {Card, CardContent, CardActions, Button, Typography} from "@mui/material";
 import {makeStyles} from "@mui/styles"
 import {Link} from 'react-router-dom'
@@ -7,11 +7,15 @@ import './dashboard.css'
 
 const Dashboard = () => {
     
+    const date = new Date(Date.now())
+    const month = date.getMonth()
+    const year = date.getYear()
     const [kegs, setKegs] = useState([]) 
     const [returnedKegs, setReturnedKegs] = useState([])
     const [sixtyDayKegs, setSixtyDayKegs] = useState([])
     const [onetwentyDayKegs, setOnetwentyDayKegs] = useState([])
     const [overdueKegs, setOverdueKegs] = useState([])
+    const [monthlyShipped, setMonthlyShipped] = useState([])
 
     const useStyles = makeStyles({
         root: {
@@ -45,6 +49,8 @@ const Dashboard = () => {
                         } else {
                             let timeA = new Date();
                             let timeB = new Date(tempKegs[i].date_shipped)
+                            timeA.setHours(0,0,0,0)
+                            timeB.setHours(0,0,0,0)
                             let timeDifference = timeA.getTime() - timeB.getTime()
                             let daysDifference = timeDifference/1000/3600/24;
                             if (daysDifference < 60) {
@@ -62,16 +68,29 @@ const Dashboard = () => {
                     setOnetwentyDayKegs(onetwentyDayKegArr)
                     setOverdueKegs(overdueKegArr)
                 })
+            await getShippingHistory(abortController.signal)
+                .then(response => {
+                    const shippingList = []
+                    response.forEach(entry => {
+                        const tempDate = new Date(entry.date_shipped);
+                        if (tempDate.getMonth() === month && tempDate.getYear() === year && entry.keg_status === "shipped") {
+                            console.log(tempDate.getYear())
+                            shippingList.push(entry)
+                        }
+                    })
+                    setMonthlyShipped(shippingList)
+                })
         }
         loadDashboard()
         return () => abortController.abort()
     }, [])
 
     const classes = useStyles();
+    console.log(monthlyShipped, monthlyShipped.length)
 
     return (
         <div > 
-            <h1 id="dashHeader">Dashboard</h1>
+            <h2>Dashboard</h2>
             <div className='cardContainer'>
                 <Card className={classes.root} variant="outlined">
                     <CardContent>
@@ -126,7 +145,16 @@ const Dashboard = () => {
                     <CardActions>
                         <Button size='medium' >{'View Kegs out for >120 days'}</Button>
                     </CardActions>
-                </Card>                
+                </Card>
+                <Card className={classes.root} variant="outlined">
+                    <CardContent>
+                        <Typography className={classes.title}>Number of Kegs Shipped this month</Typography>
+                        <Typography className={classes.pos}>{monthlyShipped.length} kegs have been shipped this month</Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button size="medium" >View shipping history</Button>
+                    </CardActions>
+                </Card>
             </div>
         </div>
     )
