@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { createKeg, getDistributors } from "../utils/api";
+import { createHistory, createKeg, getDistributors } from "../utils/api";
 import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel} from '@mui/material'
 import {LocalizationProvider, DatePicker, } from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
@@ -56,7 +56,7 @@ const NewKeg = () => {
         event.preventDefault();
         const controller = new AbortController();
         date_shipped.setHours(0,0,0,0)
-        const data ={
+        const data = {
             keg_name: formData.keg_name,
             keg_status: formData.keg_status,
             keg_size: formData.keg_size,
@@ -86,12 +86,30 @@ const NewKeg = () => {
             }
         } else {
             await createKeg(data, controller.signal)
-                .then(response => {
+                .then(async (response) => {
+                    console.log(formData)
                     if (response.error) {
                         console.log("error");
                         setError(response.error);
+                    } else if (formData.keg_status === "shipped") {
+                        console.log("creating history")
+                        const shippingData = {
+                            date_shipped,
+                            keg_id: response.keg_id,
+                            distributor_id: formData.distributor_id,
+                            employee_email: user,
+                            keg_status: "shipped"
+                        }
+                        await createHistory(shippingData)
+                            .then(response => {
+                                if (response.error) {
+                                    setError(response.error)
+                                } else {
+                                    setAlert("Keg successfully created")
+                                }
+                            })
                     } else {
-                        setAlert("Keg successfully created");
+                        setAlert("Keg successfully created")
                     };
                 });
             setFormData(initialFormState);
