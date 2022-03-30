@@ -10,7 +10,7 @@ import {MenuItem, TextField, Alert, Grid} from '@mui/material'
 
 const Shipping = ({monthlyOnly}) => {
     const [shipping, setShipping] = useState([])
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(new Date(Date.now()))
     const [kegs, setKegs] = useState([]);
     const [distributors, setDistributors] = useState([]);    
 
