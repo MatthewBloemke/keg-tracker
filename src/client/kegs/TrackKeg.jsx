@@ -9,8 +9,6 @@ import {LocalizationProvider, DatePicker, } from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
 import "./TrackKeg.css"
 
-//todo: add a way to ship multiple kegs to one company at once, change returned to shipped in keg display
-
 const TrackKeg = () => {
     const initialFormState = {
         keg_id: [],
@@ -39,10 +37,17 @@ const TrackKeg = () => {
             } else {
                 await verifyKeg({keg_name: target.value})
                     .then(response => {
+                        let timeA = new Date(response.date_shipped);
+                        let timeB = new Date(date_shipped);
+                        timeA.setHours(0,0,0,0)
+                        timeB.setHours(0,0,0,0)
+                        let timeDifference = timeB.getTime() - timeA.getTime()
                         if (response.error) {
                             setError(response.error)
                         } else if (response.keg_status === "shipped") {
                             setError(`Keg ${response.keg_name} is already shipped.`)
+                        } else if (timeDifference < 0) {
+                            setError(`Keg cannot be shipped before latest return date of ${timeA}`)
                         } else {
                             setKeg_names([...keg_names, target.value])
                             setFormData({
@@ -120,7 +125,7 @@ const TrackKeg = () => {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
-                <h1 id='trackKegs' className='subHeader'>Track Kegs</h1>
+                <h2 id='trackKegs' className='subHeader'>Track Kegs</h2>
             </Grid>
             <Grid item xs={6}>
                 <Grid container direction="row" justifyContent="center">
