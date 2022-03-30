@@ -41,6 +41,7 @@ const NewEmployee = () => {
                 password: formData.password,
                 admin: formData.admin
             };
+            console.log(data)
             await createEmployee(data, abortController.signal);
             setFormData(initialFormState)
             history.push("/employees")
@@ -48,7 +49,7 @@ const NewEmployee = () => {
     };
 
     useEffect(() => {
-        if (formData.employee_name && formData.employee_email.split("@").length === 2 && formData.password === formData.passwordMatch && formData.password) {
+        if (formData.employee_name && formData.employee_email && formData.password === formData.passwordMatch && formData.password) {
             setDisabled(null)
         } else {
             setDisabled("disabled")
