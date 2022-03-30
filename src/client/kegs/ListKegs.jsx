@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getDistributors, getKegs } from '../utils/api'
 import FormatKegs from './FormatKegs'
+import {Grid} from '@mui/material'
 import "./ListKegs.css"
 
 //todo: add more comprehensive filter options
@@ -35,7 +36,15 @@ const ListKegs = () => {
     }, [params.status]);
 
     return (
-        <FormatKegs kegs={kegs} distributors={distributors} status={params.status}/>
+        <Grid container>
+            <Grid item xs={12}>
+                <h2 style={{paddingLeft: "10px"}}>{params.status === "shipped" ? "Shipped Kegs" : "Returned Kegs"}</h2>
+            </Grid>
+            <Grid item xs={12}>
+                <FormatKegs kegs={kegs} distributors={distributors} status={params.status}/> 
+            </Grid>
+        </Grid>
+        
     );
 };
 
