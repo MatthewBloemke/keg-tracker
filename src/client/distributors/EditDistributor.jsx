@@ -4,21 +4,21 @@ import { editDistributor, readDistributor } from '../utils/api'
 import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel} from '@mui/material'
 
 const EditDistributor = () => {
-    const history = useHistory()
-
     const initialFormState = {
         distributor_name: ""
     };
     
     const params = useParams()
     const [formData, setFormData] = useState(initialFormState);
-    const [disabled, setDisabled] = useState("disabled")
+    const [disabled, setDisabled] = useState(true)
+    const [error, setError] = useState(null);
+    const [alert, setAlert] = useState(null);
 
     const handleChange = ({target}) => {
         if (target.value.length > 0) {
-            setDisabled(null)
+            setDisabled(false)
         } else {
-            setDisabled("disabled")
+            setDisabled(true)
         }
         setFormData({
             ...formData,
@@ -31,11 +31,17 @@ const EditDistributor = () => {
         const abortController = new AbortController();
 
         if (formData.distributor_name.length === 0) {
-            //set an error message to display here
+            setError("Name cannot be empty")
         } else {
             await editDistributor(formData, params.distributor_id, abortController.signal)
-            setFormData(initialFormState)
-            history.push("/distributors")
+                .then(response => {
+                    if (response.error) {
+                        setError(response.error)
+                    } else {
+                        setAlert("Distributor successfully updated")
+                        setFormData(initialFormState)
+                    }
+                })
         }
     }
 
@@ -56,8 +62,27 @@ const EditDistributor = () => {
 
     return (
         <Grid container spacing={3}>
-            <Grid xs={12}>
-                <h1 className='subHeader'>Edit Distributor</h1>
+            <Grid item xs={12}>
+                <h1 style={{paddingLeft: '10px'}}>Edit Distributor</h1>
+            </Grid>
+            <Grid item xs={6}>
+                <Grid container justifyContent='flex-end'>
+                    <h5 style={{marginTop: '15px'}}>Distributor Name</h5>
+                </Grid>
+            </Grid>
+            <Grid item xs={6}>
+                <TextField sx={{width: "40%"}} id="outlined-basic" label="Distributor_name" name='distributor_name' onChange={handleChange} value={formData.distributor_name} />
+            </Grid>
+            <Grid item xs={12} >
+                <Grid container  justifyContent="center" spacing={1}>
+                    <Button onClick={handleSubmit} size="large" variant="contained" disabled={disabled} color="success">Submit</Button> <br/>
+                </Grid>
+            </Grid>
+            <Grid item xs={12} >
+                <Grid container justifyContent="center" spacing={1}>
+                    {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
+                    {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
+                </Grid>
             </Grid>
         </Grid>
     )  
