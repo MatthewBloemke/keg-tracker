@@ -1,6 +1,7 @@
 [
     {
-        "distributor_name": "company A"
+        "distributor_name": "company A",
+        "days_out_arr": [60,50,30,68]
     },
     {
         "distributor_name": "company B"
