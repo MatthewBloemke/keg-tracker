@@ -124,6 +124,16 @@ export async function editDistributor(data, distributor_id, signal) {
     return await fetchJson(`/api/distributors/${distributor_id}`, options)
 }
 
+export async function updateDaysOut(data, distributor_id, signal) {
+    const options = {
+        method: "PUT",
+        headers, 
+        signal,
+        body: JSON.stringify({data})
+    }
+    return await fetchJson(`/api/distributors/daysOut/${distributor_id}`, options)
+}
+
 export async function readDistributor(distributor_id, signal) {
     return await fetchJson(`/api/distributors/${distributor_id}`, {headers, signal}, [])
 }
