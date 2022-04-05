@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { createHistory, trackKeg, verifyKeg } from '../utils/api';
+import { createHistory, readDistributor, trackKeg, updateDaysOut, verifyKeg } from '../utils/api';
 import FormatKegIdList from './FormatKegIdList';
 import {FormControl, TextField, Alert, Grid, Button} from '@mui/material'
 import {LocalizationProvider, DatePicker, } from '@mui/lab'
@@ -9,16 +9,11 @@ const ReturnKeg = () => {
     const date = new Date()
     const month = String(date.getMonth() + 1)
     const day = String(date.getDate())
-    const initialFormState = {
-        keg_id: [],
-        keg_status: "returned",
-        shipped_to: null,
-        employee_email: localStorage.getItem('user')
-    }
+    const user = localStorage.getItem('user');
 
 
+    const [keg_data, setKeg_data] = useState([])
     const [keg_names, setKeg_names] = useState([])
-    const [formData, setFormData] = useState(initialFormState);
     const [kegName, setKegName] = useState("")
     const [alert, setAlert] = useState(null)
     const [error, setError] = useState(null)
@@ -32,7 +27,7 @@ const ReturnKeg = () => {
                 setKegName("")
             } else {
                 await verifyKeg({keg_name: target.value})
-                    .then(response => {
+                    .then(async (response) => {
                         let timeA = new Date(response.date_shipped);
                         let timeB = new Date(date_shipped);
                         timeA.setHours(0,0,0,0)
@@ -45,11 +40,16 @@ const ReturnKeg = () => {
                         } else if (timeDifference < 0) {
                             setError(`Returned date cannot be before the Keg's shipped date of ${timeA}`)
                         } else {
-                            setKeg_names([...keg_names, target.value])
-                            setFormData({
-                                ...formData,
-                                keg_id: [...formData.keg_id, response.keg_id]
-                            })                             
+                            await readDistributor(response.shipped_to)
+                                .then((dist_response) => {
+                                    if (dist_response.error) {
+                                        setError(dist_response.error)
+                                    } else {
+                                        setKeg_data([...keg_data, [target.value, response.keg_id, dist_response, Math.round(timeDifference/1000/3600/24)]])
+                                        setKeg_names([...keg_names, target.value])
+                                    }
+                                })
+
                         }
 
                     })
@@ -61,46 +61,49 @@ const ReturnKeg = () => {
         }
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log(formData)
         date_shipped.setHours(0,0,0,0)
         const abortController = new AbortController()
-        formData.keg_id.forEach( async keg_id => {
+        for (let i = 0; i < keg_data.length; i++) {
             const data = {
                 date_shipped: date_shipped,
-                keg_id,
+                keg_id: keg_data[i][1],
                 distributor_id: null,
-                employee_email: formData.employee_email,
+                employee_email: user,
                 keg_status: "returned"
             }
-
+            const distData = {
+                distributor_name: keg_data[i][2].distributor_name,
+                days_out_arr: keg_data[i][2].days_out_arr ? [...keg_data[i][2].days_out_arr, keg_data[i][3]]: [keg_data[i][3]]
+            }
             await createHistory(data)
-            await trackKeg(data, keg_id, abortController.signal)                
+            await updateDaysOut(distData, keg_data[i][2].distributor_id, abortController.signal)
+            await trackKeg(data, keg_data[i][1], abortController.signal)                
                 .then(response => {
+                    console.log(response)
                     if (response.error) {
                         setError(response.error)
                     } else {
                         setAlert("Kegs successfully returned")
                     }
                 })
-            setFormData(initialFormState)
+            setKeg_data([])
             setKeg_names([])
-        })
+        }
 
     }
 
+    console.log(keg_data)
+
     const onDelete = (e) => {
-        const index = keg_names.indexOf(e.currentTarget.name)
-        let tempNameArr = keg_names;
-        let tempIdArr = formData.keg_id;
-        tempNameArr.splice(index, 1);
-        tempIdArr.splice(index, 1)
+        const index = keg_data.indexOf(e.currentTarget.name)
+        let tempDataArr = keg_data;
+        let tempNameArr = keg_names
+        tempDataArr.splice(index, 1);
+        tempNameArr.splice(index, 1)
+        setKeg_data([...tempDataArr]);
         setKeg_names([...tempNameArr])
-        setFormData({
-            ...formData,
-            keg_id: [...tempIdArr]
-        })
     }
 
     return (
@@ -124,7 +127,7 @@ const ReturnKeg = () => {
                             />
                         </LocalizationProvider>                    
                         
-                        <h5 style={{marginBottom: '10px', marginTop: "25px"}}>Kegs Shipped: {keg_names.length}</h5>
+                        <h5 style={{marginBottom: '10px', marginTop: "25px"}}>Kegs Shipped: {keg_data.length}</h5>
                         <Button sx={{width:"50%", margin:"auto", marginTop: "15px"}} type="submit" variant='contained' color="success" onClick={handleSubmit}>Submit</Button>
                     </FormControl>                        
 
@@ -132,7 +135,7 @@ const ReturnKeg = () => {
             </Grid>
             <Grid item xs={6}>
                 <Grid container direction="row" justifyContent="flex-start">
-                    <FormatKegIdList kegIds={keg_names} onDelete={onDelete}/>
+                    <FormatKegIdList kegIds={keg_data} onDelete={onDelete}/>
                 </Grid>
                 
             </Grid>
