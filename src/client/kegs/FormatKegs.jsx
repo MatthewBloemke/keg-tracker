@@ -29,15 +29,12 @@ const FormatKegs = ({kegs, distributors, status}) => {
         const current_distributor = distributors.find(({distributor_id}) => distributor_id === keg.shipped_to)
         const today = new Date(Date.now());
         today.setHours(0,0,0,0)
-        console.log(keg.date_shipped)
         const date_shipped = new Date(keg.date_shipped)
         date_shipped.setHours(0,0,0,0)
         const month = String(date_shipped.getMonth() + 1)
         const day = String(date_shipped.getDate())
-        console.log(day)
         const timeDifference = today.getTime() - date_shipped.getTime()
         const keg_days_out = timeDifference/1000/3600/24;
-        console.log(date_shipped)
         kegTableRows.push(
             {
                 id: keg.keg_id,
@@ -52,13 +49,16 @@ const FormatKegs = ({kegs, distributors, status}) => {
     });
 
     return (
-        <DataGrid
-            rows={kegTableRows}
-            columns={columns}
-            pageSize={50}
-            rowsPerPageOptions={[50]}
-            sx={{backgroundColor: 'white', width: '70%', height: '100vh'}}
-        />
+        <div style={{height: '100%'}}>
+            <DataGrid
+                rows={kegTableRows}
+                columns={columns}
+                pageSize={50}
+                rowsPerPageOptions={[50]}
+                sx={{backgroundColor: 'white', width: '70%'}}
+            />
+        </div>
+
     )
 }
 
