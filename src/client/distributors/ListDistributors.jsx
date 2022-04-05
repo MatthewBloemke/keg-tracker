@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { getDistributors } from '../utils/api'
 import FormatDistributors from './FormatDistributors';
+import {Grid} from '@mui/material'
 
 const ListDistributors = () => {
     const [dist, setDist] = useState([]);
@@ -15,7 +16,15 @@ const ListDistributors = () => {
     }, [])
 
     return (
-        <FormatDistributors distributors={dist}/>
+        <Grid>
+            <Grid item xs={12}>
+                <h1 style={{paddingLeft: '10px'}}>Distributors</h1>
+            </Grid>
+            <Grid item xs={12}>
+                <FormatDistributors distributors={dist}/>
+            </Grid>
+        </Grid>
+        
     )
 }
 
