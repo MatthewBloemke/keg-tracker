@@ -1,33 +1,42 @@
 import React from "react";
 import {Link} from 'react-router-dom'
+import {IconButton} from '@mui/material'
+import { DataGrid } from "@mui/x-data-grid";
+import EditIcon from '@mui/icons-material/Edit'
 
 const FormatEmployeesList = ({employees}) => {
-    const employeesTable = [];
-    employees.forEach(employee => {
-        const path=`/employees/edit/${employee.employee_id}`
-        employeesTable.push(
-            <tr key={employee.employee_id}>
-                <td>{employee.employee_email}</td>
-                <td>{employee.employee_name}</td>
-                <td>{employee.admin ? "Yes": "No"}</td>
-                <td><Link to={path}><button>Edit</button></Link></td>
-            </tr>
+    const employeeRows = [];
+
+    const renderEditButton = (params) => {
+        return <IconButton component={Link} to={`/employees/edit/${params.row.id}`}><EditIcon/></IconButton>
+    }
+
+    const columns = [
+        {field: 'employee_email', headerName: "Employee Username", width: 150},
+        {field: 'employee_name', headerName: "Employee Name", width: 150},
+        {field: 'admin', headerName: 'Admin', width: 100},
+        {field: " ", headerName: " ", width: 80, renderCell: renderEditButton}
+    ]
+
+    employees.forEach(({employee_id, employee_email, employee_name, admin}) => {
+        employeeRows.push(
+            {
+                id: employee_id,
+                employee_email,
+                employee_name,
+                admin
+            }
         )
     })
 
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Name</th>
-                    <th>Admin?</th>
-                </tr>
-            </thead>
-            <tbody>
-                {employeesTable}
-            </tbody>
-        </table>
+        <DataGrid
+            rows={employeeRows}
+            columns={columns}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            sx={{backgroundColor: 'white', width: '70%', height: '100vh'}}
+        />
     )
 }
 
