@@ -1,18 +1,16 @@
 import React from 'react'
+import {Fab} from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const FormatKegIdList = ({kegIds, onDelete}) => {
     const formattedList = []
-    kegIds.forEach(id => {//add functionality to delete button
+    kegIds.forEach(id => {
+        const tempId = id[0].length === 4 ? id[0] + "  " : id + "  ";
         formattedList.push(
-            
-                <p style={{backgroundColor: "#E1E2E1"}} key={id} className='kegId'>{id} 
-                    <button name={id} onClick={onDelete} className="btn btn-danger">
-                        <svg name={id} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash-fill" viewBox="0 0 16 16">
-                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-                        </svg>
-                    </button>
-                </p>
-            
+            <p style={{backgroundColor: "#E1E2E1"}} key={tempId} className='kegId'>
+                {tempId}
+                <Fab xs={{marginLeft: '10px'}} size='small' aria-label='delete' color='error' name={tempId} onClick={onDelete}><DeleteIcon/></Fab>
+            </p>
         )
     })
     return formattedList
