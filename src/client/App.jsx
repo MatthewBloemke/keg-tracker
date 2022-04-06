@@ -8,26 +8,18 @@ import {blue, teal} from '@mui/material/colors';
 
 
 const App = () => {
-    const customTheme = createTheme({
-        palette: {
-            primary: blue,
-            secondary: teal
-        }
-    })
 
     return (
-        <ThemeProvider theme={customTheme}>
-            <Router>
-                <Switch>
-                    <Route path='/login'>
-                        <Login/>
-                    </Route>
-                    <Route path="/">
-                        <Layout/>
-                    </Route>
-                </Switch>
-            </Router>            
-        </ThemeProvider>
+        <Router>
+            <Switch>
+                <Route path='/login'>
+                    <Login/>
+                </Route>
+                <Route path="/">
+                    <Layout/>
+                </Route>
+            </Switch>
+        </Router>
     );
 }
 
