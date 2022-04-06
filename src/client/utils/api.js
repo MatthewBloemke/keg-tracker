@@ -58,18 +58,20 @@ export async function createKeg(data, signal) {
     return await fetchJson(`/api/kegs`, options, [])
 }
 
-export async function createHistory(data) {
+export async function createHistory(data, signal) {
     const options = {
         method: 'POST',
         headers,
+        signal,
         body: JSON.stringify({data})
     }
-    return await fetch(`/api/shipping`, options)
+    return await fetchJson(`/api/shipping`, options)
 }
-export async function verifyKeg(data) {
+export async function verifyKeg(data, signal) {
     const options = {
         method: 'POST',
         headers,
+        signal,
         body: JSON.stringify({data})
     }
     return await fetchJson(`/api/kegs/verify`, options)
@@ -164,27 +166,29 @@ export async function updateEmployee(data, employee_id, signal) {
     return await fetchJson(`/api/employees/${employee_id}`, options)
 }
 
-export async function resetPassword(data, employee_id) {
+export async function resetPassword(data, employee_id, signal) {
     const options = {
         method: "PUT",
         headers,
+        signal,
         body: JSON.stringify({data})
     }
-    return await fetch(`/api/employees/${employee_id}/reset`, options)
+    return await fetchJson(`/api/employees/${employee_id}/reset`, options)
 }
 
 export async function readEmployee(employee_id, signal) {
     return await fetchJson(`/api/employees/${employee_id}`, {headers, signal})
 }
 
-export async function deleteEmployee(employee_id) {
+export async function deleteEmployee(employee_id, signal) {
     const options = {
         method: "DELETE",
-        headers
+        headers,
+        signal
     }
-    return await fetch(`/api/employees/${employee_id}`, options);
+    return await fetchJson(`/api/employees/${employee_id}`, options);
 }
 
-export async function logout() {
-    return await fetch(`/api/employees/logout`)
+export async function logout(signal) {
+    return await fetchJson(`/api/employees/logout`, {headers, signal})
 }
