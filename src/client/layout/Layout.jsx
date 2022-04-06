@@ -14,6 +14,7 @@ const Layout = () => {
     const [pathName, setPathName] = useState(window.location.pathname);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const [error, setError] = useState(null)
 
     history.listen((location) => {
         setPathName(location.pathname);
@@ -28,12 +29,13 @@ const Layout = () => {
     }
 
     const onLogout = async () => {
-        await logout()
+        const controller = new AbortController()
+        await logout(controller.signal)
             .then(response => {
-                if (response) {
-                    history.push("/login")
+                if (response.error) {
+                    setError(response.error)
                 } else {
-                    console.log('error logging out')
+                    history.push("/login")
                 }
             })
     }
@@ -48,68 +50,69 @@ const Layout = () => {
 
     useEffect(() => {
         const abortController = new AbortController();
-        loginCheck()
-        .then(response => {
-            if (!response) {
-                history.push("/login") ; 
-                return () => {
-                    abortController.abort()
+        loginCheck(abortController.signal)
+            .then(response => {
+                if (!response) {
+                    history.push("/login") ; 
+                    return () => {
+                        abortController.abort()
+                    };
                 };
-            };
-        });
+            });
         return () => abortController.abort();
     }, [pathName]);
     
 
     return (
         <main>
-                    <Grid container justifyContent="center" >
-                        <AppBar position="static">
-                            <Toolbar>
-                                <IconButton
-                                    size="large"
-                                    edge="start"
-                                    color="inherit"
-                                    aria-label="menu"
-                                    sx={{mr: 2}}
-                                    onClick={() => setIsDrawerOpen(true)}
-                                >
-                                    <MenuIcon />
-                                </IconButton>
-                                <Typography variant='h5' component="div" sx={{flexGrow: 1}}>
-                                    Loon Juice Keg Tracker
-                                </Typography>
-                                <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-                                    <SideMenu closeDrawer={closeDrawer}/>
-                                </Drawer>
-                                <div>
-                                    <IconButton
-                                        size="large"
-                                        aria-label="account of current user"
-                                        aria-controls="menu-appbar"
-                                        aria-haspopup="true"
-                                        onClick={handleAccountMenu}
-                                        color="inherit"
-                                    >
-                                        <AccountCircle/>
-                                    </IconButton>
-                                    <Menu
-                                        id="menu-appbar"
-                                        anchorEl={anchorEl}
-                                        anchorOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'right'
-                                        }}
-                                        open={Boolean(anchorEl)}
-                                        onClose={handleAccountClose}
-                                    >
-                                        <MenuItem onClick={editAccount}>My Account</MenuItem>
-                                        <MenuItem onClick={onLogout}>Logout</MenuItem>
-                                    </Menu>
-                                </div>
-                            </Toolbar>
-                        </AppBar>
+            <Grid container justifyContent="center" >
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{mr: 2}}
+                            onClick={() => setIsDrawerOpen(true)}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant='h5' component="div" sx={{flexGrow: 1}}>
+                            Loon Juice Keg Tracker
+                        </Typography>
+                        <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+                            <SideMenu closeDrawer={closeDrawer}/>
+                        </Drawer>
+                        <div>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleAccountMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle/>
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right'
+                                }}
+                                open={Boolean(anchorEl)}
+                                onClose={handleAccountClose}
+                            >
+                                <MenuItem onClick={editAccount}>My Account</MenuItem>
+                                <MenuItem onClick={onLogout}>Logout</MenuItem>
+                            </Menu>
+                        </div>
+                    </Toolbar>
+                </AppBar>
                 <Grid item xs={12}>
+                    {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                     <Routes/>
                 </Grid>
             </Grid>
