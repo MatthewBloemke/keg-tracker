@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 import { editKeg, readKeg } from "../utils/api";
-import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel} from '@mui/material'
+import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel, Divider, AppBar, Typography} from '@mui/material'
 import "./NewKeg.css"
 
 const EditKeg = () => {
@@ -77,25 +77,20 @@ const EditKeg = () => {
         }
     }
     return (
-        <Grid container spacing={3}>
+        <Grid container spacing={3} textAlign="center">
             <Grid item xs={12} >
-                <h1 className="subHeader">Edit Keg</h1>
+                <Divider/>
+                <AppBar position="static">
+                    <Typography variant="h5" component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                        Edit Keg
+                    </Typography>
+                </AppBar>
             </Grid>
-            <Grid item xs={6}>
-                <Grid container justifyContent="flex-end">
-                    <h5 style={{marginTop: "30px"}}>Keg Number</h5>
-                </Grid>
+            <Grid item xs={12} sx={{ paddingTop: "12px"}}>
+                <TextField sx={{width: "10%", minWidth:"250px"}} id ="outlined-basic" label="Keg Number" name="keg_name" margin="normal" onChange={handleChange} value={formData.keg_name} />
             </Grid>
-            <Grid item xs={6} sx={{ paddingTop: "12px"}}>
-                <TextField sx={{width: "40%"}} id ="outlined-basic" label="Keg Number" name="keg_name" margin="normal" onChange={handleChange} value={formData.keg_name} />
-            </Grid>
-            <Grid item xs={6}>
-                <Grid container justifyContent="flex-end">
-                    <h5 style={{marginTop: "14px"}}>Keg Size</h5>
-                </Grid>
-            </Grid>
-            <Grid item xs={6}>
-                <FormControl sx={{width: "40%"}}>
+            <Grid item xs={12}>
+                <FormControl sx={{width: "10%", minWidth:"250px"}}>
                     <InputLabel>Keg Size</InputLabel>
                     <Select
                         value={formData.keg_size}
@@ -103,20 +98,20 @@ const EditKeg = () => {
                         name='keg_size'
                         onChange={handleChange}
                     >
-                        <MenuItem sx={{ color: "#004a9f"}} value="1/2 BBL">1/2 BBL</MenuItem>
-                        <MenuItem sx={{ color: "#004a9f"}} value="1/6 BBL">1/6 BBL</MenuItem>
+                        <MenuItem value="1/2 BBL">1/2 BBL</MenuItem>
+                        <MenuItem value="1/6 BBL">1/6 BBL</MenuItem>
                     </Select>                    
                 </FormControl>
             </Grid>
             <Grid item xs={12} >
                 <Grid container  justifyContent="center" spacing={1}>
-                    <Button onClick={handleSubmit} size="large" variant="contained" color="success">Submit</Button> <br/>
+                    <Button onClick={handleSubmit} size="large" variant="contained" >Submit</Button> <br/>
                 </Grid>
             </Grid>
             <Grid item xs={12} >
                 <Grid container  justifyContent="center" spacing={1}>
-                    {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
-                    {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
+                    {error ? <Alert onClose={() => {setError(null)}} sx={{minWidth: "250px", width: "10%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
+                    {alert ? <Alert onClose={() => {setAlert(null)}} sx={{minWidth: "250px", width: "10%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
                 </Grid>
             </Grid>
         </Grid>
