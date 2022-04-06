@@ -111,7 +111,7 @@ export async function createDistributor(data, signal) {
         signal,
         body: JSON.stringify({data})
     }
-    return await fetch(`/api/distributors`, options)
+    return await fetchJson(`/api/distributors`, options)
 }
 
 export async function editDistributor(data, distributor_id, signal) {
@@ -151,7 +151,7 @@ export async function createEmployee(data, signal) {
         signal,
         body: JSON.stringify({data})
     }
-    return await fetch(`/api/employees`, options)
+    return await fetchJson(`/api/employees`, options)
 }
 
 export async function updateEmployee(data, employee_id, signal) {
@@ -161,7 +161,7 @@ export async function updateEmployee(data, employee_id, signal) {
         signal,
         body: JSON.stringify({data})
     }
-    return await fetch(`/api/employees/${employee_id}`, options)
+    return await fetchJson(`/api/employees/${employee_id}`, options)
 }
 
 export async function resetPassword(data, employee_id) {
