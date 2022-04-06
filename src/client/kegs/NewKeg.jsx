@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { createHistory, createKeg, getDistributors } from "../utils/api";
-import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel} from '@mui/material'
+import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel, Divider, AppBar, Typography} from '@mui/material'
 import {LocalizationProvider, DatePicker, } from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
 import "./NewKeg.css"
@@ -116,25 +116,20 @@ const NewKeg = () => {
         };
     };
     return (
-        <Grid container spacing={3}>
+        <Grid container spacing={3} textAlign="center">
             <Grid item xs={12} >
-                <h1 className="subHeader">Create New Keg</h1>
+                <Divider/>
+                <AppBar position="static">
+                    <Typography variant="h5" component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                        Create Keg
+                    </Typography>
+                </AppBar>
             </Grid>
-            <Grid item xs={6}>
-                <Grid container justifyContent="flex-end">
-                    <h5 style={{marginTop: "30px"}}>Keg Number</h5>
-                </Grid>
+            <Grid item xs={12} sx={{ paddingTop: "12px"}}>
+                <TextField sx={{width: "10%", minWidth:"250px"}} id ="outlined-basic" label="Keg Number" name="keg_name" margin="normal" onChange={handleChange} value={formData.keg_name} />
             </Grid>
-            <Grid item xs={6} sx={{ paddingTop: "12px"}}>
-                <TextField sx={{width: "40%"}} id ="outlined-basic" label="Keg Number" name="keg_name" margin="normal" onChange={handleChange} value={formData.keg_name} />
-            </Grid>
-            <Grid item xs={6}>
-                <Grid container justifyContent="flex-end">
-                    <h5 style={{marginTop: "14px"}}>Keg Size</h5>
-                </Grid>
-            </Grid>
-            <Grid item xs={6}>
-                <FormControl sx={{width: "40%"}}>
+            <Grid item xs={12}>
+                <FormControl sx={{width: "10%", minWidth:"250px"}}>
                     <InputLabel>Keg Size</InputLabel>
                     <Select
                         value={formData.keg_size}
@@ -142,19 +137,14 @@ const NewKeg = () => {
                         name='keg_size'
                         onChange={handleChange}
                     >
-                        <MenuItem sx={{ color: "#004a9f"}} value="1/2 BBL">1/2 BBL</MenuItem>
-                        <MenuItem sx={{ color: "#004a9f"}} value="1/6 BBL">1/6 BBL</MenuItem>
+                        <MenuItem value="1/2 BBL">1/2 BBL</MenuItem>
+                        <MenuItem value="1/6 BBL">1/6 BBL</MenuItem>
                     </Select>                    
                 </FormControl>
 
-            </Grid>      
-            <Grid item xs={6}>
-                <Grid container justifyContent="flex-end">
-                    <h5 style={{marginTop: "14px"}}>Keg Status</h5>
-                </Grid>
             </Grid>
-            <Grid item xs={6}>
-                <FormControl sx={{width: "40%"}}>
+            <Grid item xs={12}>
+                <FormControl sx={{width: "10%", minWidth:"250px"}}>
                     <InputLabel>Keg Status</InputLabel>
                     <Select
                         value={formData.keg_status}
@@ -162,21 +152,15 @@ const NewKeg = () => {
                         name="keg_status"
                         onChange={handleChange}
                     >
-                        <MenuItem sx={{ color: "#004a9f"}} value="returned">Returned</MenuItem>
-                        <MenuItem sx={{ color: "#004a9f"}} value="shipped">Shipped</MenuItem>
+                        <MenuItem value="returned">Returned</MenuItem>
+                        <MenuItem value="shipped">Shipped</MenuItem>
                     </Select>                    
                 </FormControl>
 
             </Grid>
-            <Grid item xs={6}>
-                <Grid container justifyContent="flex-end">
-                    <h5 style={{marginTop: "14px"}}>Date Shipped</h5>
-                </Grid>
-            </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
                 <LocalizationProvider  dateAdapter={DateFnsUtils}>
                     <DatePicker
-                    
                         label="Date Shipped"
                         value={date_shipped}
                         name="date_shipped"
@@ -184,17 +168,12 @@ const NewKeg = () => {
                             setDate_shipped(newDate);
                         }}
                         disabled={formData.keg_status === "returned" ? true : false}
-                        renderInput={(params) => <TextField sx={{width: "40%"}} {...params} />}
+                        renderInput={(params) => <TextField sx={{width: "10%", minWidth:"250px"}} {...params} />}
                     />
                 </LocalizationProvider>
             </Grid>
-            <Grid item xs={6}>
-                <Grid container justifyContent="flex-end">
-                    <h5 style={{marginTop: "14px"}}>Distributor</h5>
-                </Grid>
-            </Grid>
-            <Grid item xs={6}>
-                <FormControl sx={{width: "40%",}}>
+            <Grid item xs={12}>
+                <FormControl sx={{width: "10%", minWidth:"250px"}}>
                     <InputLabel>Distributor</InputLabel>
                     <Select
                         value={formData.distributor_id}
@@ -209,13 +188,13 @@ const NewKeg = () => {
             </Grid>
             <Grid item xs={12} >
                 <Grid container  justifyContent="center" spacing={1}>
-                    <Button onClick={handleSubmit} size="large" variant="contained" color="success">Submit</Button> <br/>
+                    <Button onClick={handleSubmit} size="large" variant="contained" >Submit</Button> <br/>
                 </Grid>
             </Grid>
             <Grid item xs={12} >
                 <Grid container justifyContent="center" spacing={1}>
-                    {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
-                    {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
+                    {error ? <Alert onClose={() => {setError(null)}} sx={{minWidth: "250px", width: "10%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
+                    {alert ? <Alert onClose={() => {setAlert(null)}} sx={{minWidth: "250px", width: "10%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
                 </Grid>
             </Grid>
         </Grid>
