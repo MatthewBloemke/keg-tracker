@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getDistributors, getKegs } from '../utils/api'
 import FormatKegs from './FormatKegs'
-import {Grid} from '@mui/material'
+import {AppBar, Divider, Grid, Typography} from '@mui/material'
 import "./ListKegs.css"
-
-//todo: add more comprehensive filter options
 
 const ListKegs = () => {
     const params = useParams();
@@ -38,8 +36,14 @@ const ListKegs = () => {
     return (
         <Grid container>
             <Grid item xs={12}>
-                <h2 style={{paddingLeft: "10px"}}>{params.status === "shipped" ? "Shipped Kegs" : "Returned Kegs"}</h2>
+                <Divider/>
+                <AppBar position='static'>
+                    <Typography variant='h5' component='div' sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                        {params.status === "shipped" ? "Shipped Kegs" : "Returned Kegs"}
+                    </Typography>
+                </AppBar>
             </Grid>
+
             <Grid item xs={12}>
                 <FormatKegs kegs={kegs} distributors={distributors} status={params.status}/> 
             </Grid>
