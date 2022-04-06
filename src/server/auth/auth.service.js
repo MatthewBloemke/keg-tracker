@@ -22,6 +22,7 @@ const readByEmail = (employee_email) => {
     return knex("employees")
         .select("*")
         .where({employee_email})
+        .first()
 }
 
 const update = (updatedAccount) => {
