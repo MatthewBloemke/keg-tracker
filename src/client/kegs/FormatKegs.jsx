@@ -17,13 +17,13 @@ const FormatKegs = ({kegs, distributors, status}) => {
 
     const kegTableRows = [];
     const columns = [
-        {field: "keg_name", headerName: "Keg Number", width: 140},
-        {field: "keg_size", headerName: "Keg Size", width: 100},
-        {field: "keg_status", headerName: "Keg Status", width: 160, sortable: false},
-        {field: "date_shipped", headerName: "Date Shipped", width: 180},
-        {field: "days_out", headerName: "Days Out", width: 120},
-        {field: "distributor", headerName: "Distributor", width: 180},
-        {field: "editButton", headerName: "", width: 70, renderCell: renderEditButton, sortable: false}
+        {field: "keg_name", headerName: "Keg Number", minWidth: 140, flex: 1},
+        {field: "keg_size", headerName: "Keg Size", minWidth: 100, flex: 1},
+        {field: "keg_status", headerName: "Keg Status", minWidth: 160, sortable: false, flex: 1},
+        {field: "date_shipped", headerName: "Date Shipped", minWidth: 180, flex: 1},
+        {field: "days_out", headerName: "Days Out", minWidth: 120, flex: 1},
+        {field: "distributor", headerName: "Distributor", minWidth: 180, flex: 1},
+        {field: "editButton", headerName: "", minWidth: 70, renderCell: renderEditButton, sortable: false, flex: 1}
     ];
     kegs.forEach(keg => {
         const current_distributor = distributors.find(({distributor_id}) => distributor_id === keg.shipped_to)
@@ -49,13 +49,12 @@ const FormatKegs = ({kegs, distributors, status}) => {
     });
 
     return (
-        <div style={{height: '100%'}}>
+        <div id="data" style={{height: '100vh'}}>
             <DataGrid
                 rows={kegTableRows}
                 columns={columns}
                 pageSize={50}
-                rowsPerPageOptions={[50]}
-                sx={{backgroundColor: 'white', width: '70%'}}
+                rowsPerPageOptions={[50]}z
             />
         </div>
 
