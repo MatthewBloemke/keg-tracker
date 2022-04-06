@@ -87,7 +87,6 @@ const NewKeg = () => {
         } else {
             await createKeg(data, controller.signal)
                 .then(async (response) => {
-                    console.log(formData)
                     if (response.error) {
                         console.log("error");
                         setError(response.error);
