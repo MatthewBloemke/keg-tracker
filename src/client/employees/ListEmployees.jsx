@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getEmployees} from '../utils/api';
 import FormatEmployeesList from './FormatEmployeesList'
-import {Grid} from '@mui/material'
+import {AppBar, Divider, Grid, Typography} from '@mui/material'
 
 const ListEmployees = () => {
     const [employees, setEmployees] = useState([]);
@@ -15,7 +15,12 @@ const ListEmployees = () => {
     return (
         <Grid>
             <Grid item xs={12}>
-                <h1 style={{paddingLeft: '10px'}}>Employees</h1>
+                <Divider/>
+                <AppBar position='static'>
+                    <Typography variant='h5' component='div' sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                        Employees
+                    </Typography>
+                </AppBar>
             </Grid>
             <Grid item xs={12}>
                 <FormatEmployeesList employees={employees}/>

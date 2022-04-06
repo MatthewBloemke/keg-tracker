@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { useHistory, useParams } from 'react-router-dom';
 import { editDistributor, readDistributor } from '../utils/api'
-import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel} from '@mui/material'
+import { FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel, Divider, AppBar, Typography} from '@mui/material'
 
 const EditDistributor = () => {
     const initialFormState = {
@@ -27,7 +27,6 @@ const EditDistributor = () => {
     }
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(formData)
         const abortController = new AbortController();
 
         if (formData.distributor_name.length === 0) {
@@ -61,27 +60,27 @@ const EditDistributor = () => {
     }, [])
 
     return (
-        <Grid container spacing={3}>
+        <Grid container textAlign="center" spacing={3}>
             <Grid item xs={12}>
-                <h1 style={{paddingLeft: '10px'}}>Edit Distributor</h1>
+                <Divider/>
+                <AppBar position='static'>
+                    <Typography variant='h5' component='div' sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                        Edit Distributor
+                    </Typography>
+                </AppBar>
             </Grid>
-            <Grid item xs={6}>
-                <Grid container justifyContent='flex-end'>
-                    <h5 style={{marginTop: '15px'}}>Distributor Name</h5>
-                </Grid>
-            </Grid>
-            <Grid item xs={6}>
-                <TextField sx={{width: "40%"}} id="outlined-basic" label="Distributor_name" name='distributor_name' onChange={handleChange} value={formData.distributor_name} />
+            <Grid item xs={12}>
+                <TextField sx={{width: "10%", minWidth: "250px"}} id="outlined-basic" label="Distributor name" name='distributor_name' onChange={handleChange} value={formData.distributor_name} />
             </Grid>
             <Grid item xs={12} >
                 <Grid container  justifyContent="center" spacing={1}>
-                    <Button onClick={handleSubmit} size="large" variant="contained" disabled={disabled} color="success">Submit</Button> <br/>
+                    <Button onClick={handleSubmit} size="large" variant="contained" disabled={disabled} >Submit</Button> <br/>
                 </Grid>
             </Grid>
             <Grid item xs={12} >
                 <Grid container justifyContent="center" spacing={1}>
-                    {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
-                    {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
+                    {error ? <Alert onClose={() => {setError(null)}} sx={{width: "30%", minWidth: "250px", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
+                    {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "30%", minWidth: "250px", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
                 </Grid>
             </Grid>
         </Grid>

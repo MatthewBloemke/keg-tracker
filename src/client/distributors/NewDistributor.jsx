@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
 import { createDistributor } from "../utils/api"
-import {TextField, Alert, Grid, Button} from "@mui/material"
+import {TextField, Alert, Grid, Button, Divider, AppBar, Typography} from "@mui/material"
 
+//add validtion preventing duplicates
 
 const NewDistributor = () => {
     const initialFormState = {
@@ -47,27 +48,27 @@ const NewDistributor = () => {
     }
 
     return (
-        <Grid container spacing={3}>
+        <Grid container textAlign='center' spacing={3}>
             <Grid item xs={12}>
-                <h1 style={{paddingLeft: '10px'}}>Create New Distributor</h1>
+                <Divider/>
+                <AppBar position='static'>
+                    <Typography variant='h5' component='div' sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                        New Distributor
+                    </Typography>
+                </AppBar>
             </Grid>
-            <Grid item xs={6}>
-                <Grid container justifyContent='flex-end'>
-                    <h5 style={{marginTop: '15px'}}>Distributor Name</h5>
-                </Grid>
-            </Grid>
-            <Grid item xs={6}>
-                <TextField sx={{width: "40%"}} id="outlined-basic" label="Distributor Name" name='distributor_name' onChange={handleChange} value={formData.distributor_name} />
+            <Grid item xs={12}>
+                <TextField sx={{width: "10%", minWidth: "250px"}} id="outlined-basic" label="Distributor Name" name='distributor_name' onChange={handleChange} value={formData.distributor_name} />
             </Grid>
             <Grid item xs={12} >
                 <Grid container  justifyContent="center" spacing={1}>
-                    <Button onClick={handleSubmit} size="large" variant="contained" disabled={disabled} color="success">Submit</Button> <br/>
+                    <Button onClick={handleSubmit} size="large" variant="contained" disabled={disabled}>Submit</Button> <br/>
                 </Grid>
             </Grid>
             <Grid item xs={12} >
                 <Grid container justifyContent="center" spacing={1}>
-                    {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
-                    {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
+                    {error ? <Alert onClose={() => {setError(null)}} sx={{minWidth: "250px", width: "30%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
+                    {alert ? <Alert onClose={() => {setAlert(null)}} sx={{minWidth: "250px", width: "30%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
                 </Grid>
             </Grid>
         </Grid>

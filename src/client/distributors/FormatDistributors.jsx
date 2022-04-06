@@ -9,15 +9,15 @@ const FormatDistributors = ({distributors}) => {
         return (
             <div style={{display: 'flex', flexWrap: 'wrap'}}>
                 <IconButton className="editButton" component={Link} to={`/distributors/edit/${params.row.id}`}><EditIcon/></IconButton>
-                <p style={{marginTop: '15px', marginLeft: '4px'}}> {params.row.distributor_name}</p>
             </div>
             
             )
     }
     const distTable = [];
     const columns = [
-        {field: "distributor_name", headerName: "Distributor Name", width: 220, renderCell: renderEditButton},
-        {field: "ave_days_out", headerName: "Average Turn Over Time", width: 180}
+        {field: "distributor_name", headerName: "Distributor Name", minWidth: 220, flex: 1},
+        {field: "ave_days_out", headerName: "Average Turn Over Time", minWidth: 180, flex: 1},
+        {field: "editButton", headerName: "", minWidth: 70, renderCell: renderEditButton, sortable: false, flex: 1}
     ]
 
 
@@ -33,13 +33,15 @@ const FormatDistributors = ({distributors}) => {
         )
     })
     return (
-        <DataGrid
-            rows={distTable}
-            columns={columns}
-            pageSize={25}
-            rowsPerPageOptions={[25]}
-            sx={{backgroundColor: 'white', width: '70%', height: '100vh'}}
-        />
+        <div id="data" style={{height: '100vh'}}>
+            <DataGrid
+                rows={distTable}
+                columns={columns}
+                pageSize={25}
+                rowsPerPageOptions={[25]}
+            />            
+        </div>
+
     )
 }
 

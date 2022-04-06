@@ -12,10 +12,10 @@ const FormatEmployeesList = ({employees}) => {
     }
 
     const columns = [
-        {field: 'employee_email', headerName: "Employee Username", width: 150},
-        {field: 'employee_name', headerName: "Employee Name", width: 150},
-        {field: 'admin', headerName: 'Admin', width: 100},
-        {field: " ", headerName: " ", width: 80, renderCell: renderEditButton}
+        {field: 'employee_email', headerName: "Employee Username", minWidth: 150, flex: 1},
+        {field: 'employee_name', headerName: "Employee Name", minWidth: 150, flex: 1},
+        {field: 'admin', headerName: 'Admin', minWidth: 100, flex: 1},
+        {field: " ", headerName: " ", minWidth: 80, flex: 1, renderCell: renderEditButton}
     ]
 
     employees.forEach(({employee_id, employee_email, employee_name, admin}) => {
@@ -30,13 +30,15 @@ const FormatEmployeesList = ({employees}) => {
     })
 
     return (
-        <DataGrid
-            rows={employeeRows}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
-            sx={{backgroundColor: 'white', width: '70%', height: '100vh'}}
-        />
+        <div style={{height: '100vh'}}>
+            <DataGrid
+                rows={employeeRows}
+                columns={columns}
+                pageSize={10}
+                rowsPerPageOptions={[10]}
+            />
+        </div>
+
     )
 }
 
