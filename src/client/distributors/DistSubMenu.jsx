@@ -1,26 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
-const DistSubMenu = () => {
+const DistSubMenu = ({closeDrawer}) => {
     const style = {
-        width: '100%',
-        bgcolor: '#1675d1',
-        color: "#ffffff",
         paddingLeft: "20px"
     }
     return (
         <List sx={style} component="nav">
-            <ListItem button component={Link} to="/distributors">
+            <ListItemButton onClick={closeDrawer} component={Link} to="/distributors">
                 <ListItemText primary="View Distributors"/>
-            </ListItem>
+            </ListItemButton>
             <Divider/>
-            <ListItem button component={Link} to="/distributors/new">
+            <ListItemButton onClick={closeDrawer} component={Link} to="/distributors/new">
                 <ListItemText primary="New Distributor"/>
-            </ListItem>
+            </ListItemButton>
         </List>
     )
 }
