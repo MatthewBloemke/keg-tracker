@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import {getKegs, getShippingHistory} from '../utils/api'
-import {Card, CardContent, CardActions, Button, Typography, AppBar, Divider} from "@mui/material";
+import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, AppBar, Divider} from "@mui/material";
 import {makeStyles} from "@mui/styles"
-import {Link} from 'react-router-dom'
+import {useTheme} from '@mui/material/styles'
 import './dashboard.css'
 
 const Dashboard = () => {
@@ -16,6 +16,9 @@ const Dashboard = () => {
     const [onetwentyDayKegs, setOnetwentyDayKegs] = useState([])
     const [overdueKegs, setOverdueKegs] = useState([])
     const [monthlyShipped, setMonthlyShipped] = useState([])
+
+    const theme = useTheme();
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
     const useStyles = makeStyles({
         root: {
@@ -76,7 +79,6 @@ const Dashboard = () => {
                     response.forEach(entry => {
                         const tempDate = new Date(entry.date_shipped);
                         if (tempDate.getMonth() === month && tempDate.getYear() === year && entry.keg_status === "shipped") {
-                            console.log(tempDate.getYear())
                             shippingList.push(entry)
                         }
                     })
@@ -88,13 +90,12 @@ const Dashboard = () => {
     }, [])
 
     const classes = useStyles();
-    console.log(monthlyShipped, monthlyShipped.length)
 
     return (
         <div id="dashboard">
             <Divider/>
             <AppBar position="static">
-                <Typography variant='h5' component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                <Typography variant='h5' textAlign={smallScreen ? "center": null} component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
                     Dashboard
                 </Typography>
             </AppBar>

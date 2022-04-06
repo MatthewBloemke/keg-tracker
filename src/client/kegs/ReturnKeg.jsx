@@ -1,30 +1,33 @@
 import React, { useState } from 'react'
 import { createHistory, readDistributor, trackKeg, updateDaysOut, verifyKeg } from '../utils/api';
 import FormatKegIdList from './FormatKegIdList';
-import {FormControl, TextField, Alert, Grid, Button, Divider, AppBar, Typography} from '@mui/material'
+import {FormControl, TextField, Alert, Grid, Button, Divider, AppBar, Typography, useMediaQuery} from '@mui/material'
 import {LocalizationProvider, DatePicker, } from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
+import { useTheme } from "@mui/material/styles";
+
 
 const ReturnKeg = () => {
-    const date = new Date()
     const user = localStorage.getItem('user');
-
-
     const [keg_data, setKeg_data] = useState([])
     const [keg_names, setKeg_names] = useState([])
     const [kegName, setKegName] = useState("")
     const [alert, setAlert] = useState(null)
     const [error, setError] = useState(null)
     const [date_shipped, setDate_shipped] = useState(new Date(Date.now()))
+    const theme = useTheme();
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+
 
     const handleKegChange = async ({target}) => {
+        const controller = new AbortController()
         setKegName(target.value)
         if (target.value.length===4) {
             if (keg_names.includes(target.value)) {
                 setError(`Keg ${target.value} has already been added`)
                 setKegName("")
             } else {
-                await verifyKeg({keg_name: target.value})
+                await verifyKeg({keg_name: target.value}, controller.signal)
                     .then(async (response) => {
                         let timeA = new Date(response.date_shipped);
                         let timeB = new Date(date_shipped);
@@ -38,7 +41,7 @@ const ReturnKeg = () => {
                         } else if (timeDifference < 0) {
                             setError(`Returned date cannot be before the Keg's shipped date of ${timeA}`)
                         } else {
-                            await readDistributor(response.shipped_to)
+                            await readDistributor(response.shipped_to, controller.signal)
                                 .then((dist_response) => {
                                     if (dist_response.error) {
                                         setError(dist_response.error)
@@ -52,7 +55,7 @@ const ReturnKeg = () => {
 
                     })
                     .catch(err => {
-                        console.log(err)
+                        setError(err)
                     })
                 setKegName("")     
             }
@@ -75,11 +78,10 @@ const ReturnKeg = () => {
                 distributor_name: keg_data[i][2].distributor_name,
                 days_out_arr: keg_data[i][2].days_out_arr ? [...keg_data[i][2].days_out_arr, keg_data[i][3]]: [keg_data[i][3]]
             }
-            await createHistory(data)
+            await createHistory(data, controller.signal)
             await updateDaysOut(distData, keg_data[i][2].distributor_id, abortController.signal)
             await trackKeg(data, keg_data[i][1], abortController.signal)                
                 .then(response => {
-                    console.log(response)
                     if (response.error) {
                         setError(response.error)
                     } else {
@@ -91,8 +93,6 @@ const ReturnKeg = () => {
         }
 
     }
-
-    console.log(keg_data)
 
     const onDelete = (e) => {
         const index = keg_data.indexOf(e.currentTarget.name)
@@ -109,7 +109,7 @@ const ReturnKeg = () => {
             <Grid item xs={12}>
                 <Divider/>
                 <AppBar position="static">
-                    <Typography variant="h5" component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                    <Typography variant="h5" component="div" textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
                         Return Kegs
                     </Typography>
                 </AppBar>

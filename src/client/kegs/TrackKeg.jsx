@@ -3,10 +3,11 @@ import { createHistory, trackKeg, getDistributors, verifyKeg } from '../utils/ap
 import FormatKegIdList from './FormatKegIdList';
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
-import {MenuItem, TextField, Alert, Button, Grid, AppBar, Typography, Divider} from '@mui/material'
+import {MenuItem, TextField, Alert, Button, Grid, AppBar, Typography, Divider, useMediaQuery} from '@mui/material'
 import Select from '@mui/material/Select';
-import {LocalizationProvider, DatePicker, } from '@mui/lab'
+import {LocalizationProvider, DatePicker} from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
+import { useTheme } from "@mui/material/styles";
 import "./TrackKeg.css"
 
 const TrackKeg = () => {
@@ -24,18 +25,22 @@ const TrackKeg = () => {
     const [kegName, setKegName] = useState("");
     const [alert, setAlert] = useState(null)
     const [error, setError] = useState(null)
+    const theme = useTheme();
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+
     const handleDistChange = (event) => {
         setDist(event.target.value)
     }
 
     const handleKegChange = async ({target}) => {
+        const controller = new AbortController()
         setKegName(target.value)
         if (target.value.length===4) {
             if (keg_names.includes(target.value)) {
                 setError(`Keg ${target.value} has already been added`)
                 setKegName("")
             } else {
-                await verifyKeg({keg_name: target.value})
+                await verifyKeg({keg_name: target.value}, controller.signal)
                     .then(response => {
                         let timeA = new Date(response.date_shipped);
                         let timeB = new Date(date_shipped);
@@ -77,7 +82,7 @@ const TrackKeg = () => {
                 keg_status: "shipped"
             }
             
-            await createHistory(data)
+            await createHistory(data, abortController.signal)
             await trackKeg(data, keg_id, abortController.signal)
                 .then(response => {
                     if (response.error) {
@@ -106,8 +111,8 @@ const TrackKeg = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
-        const loadDistributors = () => {
-            getDistributors(abortController.signal)
+        const loadDistributors = async () => {
+            await getDistributors(abortController.signal)
                 .then(response => {
                     const distOptions = []
                     response.forEach(item => {
@@ -127,7 +132,7 @@ const TrackKeg = () => {
             <Grid item xs={12}>
                 <Divider/>
                 <AppBar position='static'>
-                    <Typography variant='h5' component='div' sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
                         Ship Kegs
                     </Typography>
                 </AppBar>

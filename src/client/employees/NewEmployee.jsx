@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createEmployee } from "../utils/api";
-import { Grid, TextField, FormControl, Select, MenuItem, InputLabel, Alert, Button, Stack, Divider, AppBar, Typography } from "@mui/material";
-
-//prevent creation of user with duplicate username
+import { Grid, TextField, FormControl, Select, useMediaQuery, MenuItem, InputLabel, Alert, Button, Stack, Divider, AppBar, Typography } from "@mui/material";
+import {useTheme} from '@mui/material/styles'
 
 const NewEmployee = () => {
     const initialFormState = {
@@ -18,6 +17,10 @@ const NewEmployee = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const [passwordError, setPasswordError] = useState(false)
+
+    const theme = useTheme();
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+
 
     const handleChange = ({target}) => {
         setFormData({
@@ -73,7 +76,7 @@ const NewEmployee = () => {
             <Grid item xs={12}>
                 <Divider/>
                 <AppBar position='static'>
-                    <Typography variant='h5' component='div' sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
                         Create Employee
                     </Typography>
                 </AppBar>

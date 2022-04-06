@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { deleteEmployee, readEmployee, resetPassword, updateEmployee } from "../utils/api";
-import { Grid, TextField, FormControl, Select, MenuItem, InputLabel, Alert, Button, Stack } from "@mui/material";
+import { Grid, TextField, FormControl, Select, MenuItem, InputLabel, Alert, Button, Divider, AppBar, Typography, useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 
 const EditEmployee = () => {
@@ -31,6 +32,9 @@ const EditEmployee = () => {
             [target.name]: target.value
         })
     }
+
+    const theme = useTheme();
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -134,60 +138,55 @@ const EditEmployee = () => {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12}><h1 style={{paddingLeft: '10px'}}>Edit Employee</h1></Grid>
-            <Grid item xs={5}>
-                <Grid container spacing={3}>
-                    <Grid item xs={6}>
-                        <Stack alignItems="end">
-                            <h5 style={{marginRight: "20px", marginTop: '15px'}}>Name</h5>
-                            <h5 style={{marginRight: "20px", marginTop: '38px'}}>Username</h5>
-                            <h5 style={{marginRight: "20px", marginTop: '38px'}}>Admin?</h5>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <TextField sx={{width: "60%", marginBottom: '15px'}} id="outlined-basic" label="Name" name="employee_name" onChange={handleChange} value={formData.employee_name} /> <br/>
-                        <TextField sx={{width: "60%", marginBottom: '15px'}} id="outlined-basic" label="Username" name="employee_email" onChange={handleChange} value={formData.employee_email} /> <br/>
-                        <FormControl>
-                            <InputLabel>Admin</InputLabel>
-                            <Select
-                                value={formData.admin}
-                                label="Admin"
-                                name="admin"
-                                onChange={handleChange}
-                            >
-                                <MenuItem sx={{ color: "#004a9f"}} value={true}>True</MenuItem>
-                                <MenuItem sx={{ color: "#004a9f"}} value={false}>False</MenuItem>
-                            </Select>
-                        </FormControl>
-
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid container justifyContent="space-evenly">
-                            <Button disabled={disabled} onClick={onDelete} variant="contained" color="error">Delete User</Button>
-                            <Button onClick={handleSubmit} variant="contained" color="success">Submit</Button>
+            <Grid item xs={12}>
+                <Divider/>
+                <AppBar position="static">
+                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                        Edit Employee
+                    </Typography>
+                </AppBar>    
+            </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
+                    <Grid container textAlign='center' spacing={3}>
+                        <Grid item xs={12}>
+                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} id="outlined-basic" label="Name" name="employee_name" onChange={handleChange} value={formData.employee_name} /> <br/>
+                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} id="outlined-basic" label="Username" name="employee_email" onChange={handleChange} value={formData.employee_email} /> <br/>
+                            <FormControl sx={{width: '10%', minWidth:'250px'}}>
+                                <InputLabel>Admin</InputLabel>
+                                <Select
+                                    value={formData.admin}
+                                    label="Admin"
+                                    name="admin"
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value={true}>True</MenuItem>
+                                    <MenuItem value={false}>False</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container justifyContent="space-evenly">
+                                <Button disabled={disabled} onClick={onDelete} variant="contained" color="error">Delete User</Button>
+                                <Button onClick={handleSubmit} variant="contained" color="success">Submit</Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-            <Grid item xs={7}>
-                <Grid container spacing={3}>
-                    <Grid item xs={6}>
-                        <Stack alignItems="end">
-                            <h5 style={{marginRight: "20px", marginTop: '15px'}}>Password</h5>
-                            <h5 style={{marginRight: "20px", marginTop: '38px'}}>Retype Password</h5>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <TextField sx={{width: "60%", marginBottom: '15px'}} id="outlined-basic" type="password" label="Password" name="password" onChange={handleChange} value={formData.password} /> <br/>
-                        <TextField sx={{width: "60%", marginBottom: '15px'}} id="outlined-basic" helperText={passwordError ? "Password do not match": null} error = {passwordError} type="password" label="Retype Password" name="passwordMatch" onChange={handleChange} value={formData.passwordMatch} /> <br/>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid container justifyContent="center">
-                            <Button onClick={submitPassword} variant="contained" color="success" disabled={passwordDisabled}>Reset Password</Button>
+                
+                <Grid item xs={12} sm={6} md={6} lg={6}>
+                    {smallScreen ? <Divider sx = {{mb: "15px"}}/> : null}
+                    <Grid container textAlign='center' spacing={3}>
+                        <Grid item xs={12}>
+                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} id="outlined-basic" type="password" label="Password" name="password" onChange={handleChange} value={formData.password} /> <br/>
+                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} id="outlined-basic" helperText={passwordError ? "Password do not match": null} error = {passwordError} type="password" label="Retype Password" name="passwordMatch" onChange={handleChange} value={formData.passwordMatch} /> <br/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container justifyContent="center">
+                                <Button onClick={submitPassword} variant="contained" color="success" disabled={passwordDisabled}>Reset Password</Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
             <Grid item xs={12}>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                 {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}

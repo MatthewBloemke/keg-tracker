@@ -2,34 +2,48 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getDistributors, getKegs } from '../utils/api'
 import FormatKegs from './FormatKegs'
-import {AppBar, Divider, Grid, Typography} from '@mui/material'
-import "./ListKegs.css"
+import {AppBar, Divider, Grid, Typography, useMediaQuery} from '@mui/material'
+import { useTheme } from "@mui/material/styles";
 
 const ListKegs = () => {
     const params = useParams();
     const [kegs, setKegs] = useState([]);
     const [distributors, setDistributors] = useState([]);
+    const [error, setError] = useState(null)
+    const theme = useTheme();
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+
     useEffect(() => {
         const returnedKegs = []
         const shippedKegs = []
         const abortController = new AbortController();
         getDistributors(abortController.signal)
-            .then(setDistributors);
-        console.log(params.status)
+            .then(response => {
+                if (response.error) {
+                    setError(response.error)
+                } else {
+                    setDistributors(response)
+                }
+            });
         getKegs(abortController.signal)
             .then(response => {
-                response.forEach(keg => {
-                    if (keg.keg_status === "returned") {
-                        returnedKegs.push(keg);
-                    } else if (keg.keg_status === "shipped") {
-                        shippedKegs.push(keg);
-                    };
-                });
-                if (params.status === "returned") {
-                    setKegs(returnedKegs); 
+                if (response.error) {
+                    setError(response.error)
                 } else {
-                    setKegs(shippedKegs);
-                };
+                    response.forEach(keg => {
+                        if (keg.keg_status === "returned") {
+                            returnedKegs.push(keg);
+                        } else if (keg.keg_status === "shipped") {
+                            shippedKegs.push(keg);
+                        };
+                    });
+                    if (params.status === "returned") {
+                        setKegs(returnedKegs); 
+                    } else {
+                        setKegs(shippedKegs);
+                    };                    
+                }
+
             });
     }, [params.status]);
 
@@ -38,13 +52,14 @@ const ListKegs = () => {
             <Grid item xs={12}>
                 <Divider/>
                 <AppBar position='static'>
-                    <Typography variant='h5' component='div' sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
                         {params.status === "shipped" ? "Shipped Kegs" : "Returned Kegs"}
                     </Typography>
                 </AppBar>
             </Grid>
 
             <Grid item xs={12}>
+                {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                 <FormatKegs kegs={kegs} distributors={distributors} status={params.status}/> 
             </Grid>
         </Grid>

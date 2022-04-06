@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { createDistributor } from "../utils/api"
-import {TextField, Alert, Grid, Button, Divider, AppBar, Typography} from "@mui/material"
+import {TextField, Alert, Grid, Button, Divider, AppBar, Typography, useMediaQuery} from "@mui/material"
+import { useTheme } from "@mui/material/styles";
 
 const NewDistributor = () => {
     const initialFormState = {
@@ -11,6 +12,9 @@ const NewDistributor = () => {
     const [disabled, setDisabled] = useState(true);
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
+
+    const theme = useTheme();
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
     const handleChange = ({target}) => {
         if (target.value.length > 0) {
@@ -46,20 +50,18 @@ const NewDistributor = () => {
     }
 
     return (
-        <Grid container textAlign='center' spacing={3}>
+        <Grid container spacing={3}>
             <Grid item xs={12}>
                 <Divider/>
                 <AppBar position='static'>
-                    <Typography variant='h5' component='div' sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
                         New Distributor
                     </Typography>
                 </AppBar>
             </Grid>
             <Grid item xs={12}>
-                <TextField sx={{width: "10%", minWidth: "250px"}} id="outlined-basic" label="Distributor Name" name='distributor_name' onChange={handleChange} value={formData.distributor_name} />
-            </Grid>
-            <Grid item xs={12} >
-                <Grid container  justifyContent="center" spacing={1}>
+                <Grid container alignItems="center" direction="column">
+                    <TextField sx={{width: "10%", minWidth: "250px", mb: "20px"}} id="outlined-basic" label="Distributor Name" name='distributor_name' onChange={handleChange} value={formData.distributor_name} />
                     <Button onClick={handleSubmit} size="large" variant="contained" disabled={disabled}>Submit</Button> <br/>
                 </Grid>
             </Grid>
