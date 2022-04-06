@@ -49,7 +49,7 @@ const TrackKeg = () => {
                         } else if (timeDifference < 0) {
                             setError(`Keg cannot be shipped before latest return date of ${timeA}`)
                         } else {
-                            setKeg_names([...keg_names, target.value])
+                            setKeg_names([...keg_names, response.keg_name])
                             setFormData({
                                 ...formData,
                                 keg_id: [...formData.keg_id, response.keg_id]

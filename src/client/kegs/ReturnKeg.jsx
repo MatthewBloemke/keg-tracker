@@ -43,8 +43,8 @@ const ReturnKeg = () => {
                                     if (dist_response.error) {
                                         setError(dist_response.error)
                                     } else {
-                                        setKeg_data([...keg_data, [target.value, response.keg_id, dist_response, Math.round(timeDifference/1000/3600/24)]])
-                                        setKeg_names([...keg_names, target.value])
+                                        setKeg_data([...keg_data, [response.keg_name, response.keg_id, dist_response, Math.round(timeDifference/1000/3600/24)]])
+                                        setKeg_names([...keg_names, response.keg_name])
                                     }
                                 })
 
