@@ -2,8 +2,6 @@ import React, {useState} from 'react'
 import { createDistributor } from "../utils/api"
 import {TextField, Alert, Grid, Button, Divider, AppBar, Typography} from "@mui/material"
 
-//add validtion preventing duplicates
-
 const NewDistributor = () => {
     const initialFormState = {
         distributor_name: ""
