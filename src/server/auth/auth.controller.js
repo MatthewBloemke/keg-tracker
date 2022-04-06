@@ -37,7 +37,7 @@ const hasValidFields = (req, res, next) => {
         })
     }
     const {data = {}} = req.body;
-    console.log(data)
+    
     validFields.forEach(field => {
         if (!data[field]) {
             invalidFields.push(field)
@@ -84,8 +84,8 @@ const userExistsById = async (req, res, next) => {
 const userExists = async (req, res, next) => {
     const employee = await service.readByEmail(req.body.data.employee_email)
 
-    if (employee.length) {
-        res.locals.employee = employee[0];
+    if (employee) {
+        res.locals.employee = employee;
         return next()
     }
     next({
@@ -121,7 +121,7 @@ const update = async (req, res) => {
         updatedEmployee.password = res.locals.newAccount.password
     }
     updatedEmployee.employee_id = req.params.employeeId;
-    console.log(updatedEmployee)
+    
     await service.update(updatedEmployee)
     res.status(200).json({data: updatedEmployee})
 }
@@ -149,7 +149,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     res.clearCookie("token");
-    res.end();
+    res.json({"data": "logged out"});
 }
 
 module.exports = {
