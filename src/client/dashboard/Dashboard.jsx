@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {getKegs, getShippingHistory} from '../utils/api'
-import {Card, CardContent, CardActions, Button, Typography} from "@mui/material";
+import {Card, CardContent, CardActions, Button, Typography, AppBar, Divider} from "@mui/material";
 import {makeStyles} from "@mui/styles"
 import {Link} from 'react-router-dom'
 import './dashboard.css'
@@ -19,7 +19,9 @@ const Dashboard = () => {
 
     const useStyles = makeStyles({
         root: {
-            width: "30%",
+            minWidth: '250px',
+            width: '30%',
+            maxWidth: "25%",
             marginLeft: "10px",
             marginTop: "5px"
         },
@@ -89,8 +91,13 @@ const Dashboard = () => {
     console.log(monthlyShipped, monthlyShipped.length)
 
     return (
-        <div > 
-            <h2>Dashboard</h2>
+        <div id="dashboard">
+            <Divider/>
+            <AppBar position="static">
+                <Typography variant='h5' component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                    Dashboard
+                </Typography>
+            </AppBar>
             <div className='cardContainer'>
                 <Card className={classes.root} variant="outlined">
                     <CardContent>
