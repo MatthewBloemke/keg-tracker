@@ -36,7 +36,6 @@ const hasValidFields = (req, res, next) => {
             message: "data is missing"
         })
     }
-    console.log(req.body.data)
     const {data = {}} = req.body;
     console.log(data)
     validFields.forEach(field => {
@@ -127,6 +126,16 @@ const update = async (req, res) => {
     res.status(200).json({data: updatedEmployee})
 }
 
+const isUniqueUser = async (req, res, next) => {
+    const user = await service.readByEmail(req.body.data.employee_email)
+    if (user) {
+        if (user.employee_id != req.params.employeeId) {
+            return next({status: 400, message: `User ${req.body.data.employee_email} already exists`})
+        }
+    }
+    next()
+}
+
 const destroy = async (req, res) => {
     await service.destroy(req.params.employeeId)
     res.sendStatus(200)
@@ -144,13 +153,13 @@ const logout = async (req, res) => {
 }
 
 module.exports = {
-    createAccount: [hasValidFields, hasPassword, asyncErrorBoundary(createAccount)],
+    createAccount: [hasValidFields, hasPassword, asyncErrorBoundary(isUniqueUser), asyncErrorBoundary(createAccount)],
     list,
     login: [asyncErrorBoundary(userExists), passwordCheck, login],
     userExists,
     logout,
     read: [asyncErrorBoundary(userExistsById), read],
-    update: [hasValidFields, asyncErrorBoundary(userExistsById), update],
+    update: [hasValidFields, asyncErrorBoundary(userExistsById), asyncErrorBoundary(isUniqueUser), update],
     destroy: [asyncErrorBoundary(userExistsById), destroy],
     resetPassword: [hasPassword, asyncErrorBoundary(userExistsById), update]
 }

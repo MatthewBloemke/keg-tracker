@@ -31,6 +31,16 @@ const hasValidDaysOut = (req, res, next) => {
     next()
 }
 
+const isUniqueDistributor = async (req, res, next) => {
+    let distributor = await service.readByName(req.body.data.distributor_name)
+    if (distributor) {
+        if (distributor.distributor_id != req.params.distributorId) {
+            return next({status: 400, message: `Distributor ${req.body.data.distributor_name} already exists`})
+        }
+    }
+    next()
+}
+
 function hasValidFields (req, res, next) {
     if (!req.body.data) {
         next({
@@ -84,8 +94,8 @@ async function destroy(req, res) {
 module.exports = {
     list: asyncErrorBoundary(list),
     read: [asyncErrorBoundary(distributorExists), read],
-    create: [asyncErrorBoundary(hasValidFields), create],
-    update: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(distributorExists), update],
+    create: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(isUniqueDistributor), create],
+    update: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(distributorExists), asyncErrorBoundary(isUniqueDistributor), update],
     updateDaysOut: [hasValidFields, asyncErrorBoundary(distributorExists), hasValidDaysOut, update],
     destroy: [asyncErrorBoundary(distributorExists), destroy],
     distributorExists,

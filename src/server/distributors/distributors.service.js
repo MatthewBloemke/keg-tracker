@@ -15,6 +15,12 @@ function read(distributor_id) {
         .where({distributor_id})
         .first()
 }
+function readByName(distributor_name) {
+    return knex("distributors")
+        .select("*")
+        .where({distributor_name})
+        .first();
+}
 function update(updatedDistributor) {
     return knex("distributors")
         .select("*")
@@ -34,5 +40,6 @@ module.exports = {
     read,
     update,
     destroy,
-    create
+    create,
+    readByName
 }

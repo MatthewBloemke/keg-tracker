@@ -28,11 +28,13 @@ function verifyKeg (req, res, next) {
 }
 
 const isUniqueKeg = async (req, res, next) => {
-    let keg = await service.readByName(req.body.data.keg_name)
+    let keg = await service.readByName(req.body.data.keg_name);
     if (keg) {
-        return next({status: 400, message: `Keg ${req.body.data.keg_name} already exists`})
-    }
-    next()
+        if (keg.keg_id != req.params.kegId) {
+            return next({status: 400, message: `Keg ${req.body.data.keg_name} already exists`})
+        };
+    };
+    next();
 }
 
 async function hasValidFields (req, res, next) {
