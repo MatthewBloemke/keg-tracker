@@ -22,7 +22,7 @@ const EditEmployee = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const [disabled, setDisabled] = useState(false);
-    const [passwordDisabled, setPasswordDisabled] = useState("disabled")
+    const [passwordDisabled, setPasswordDisabled] = useState(true)
     const [passwordError, setPasswordError] = useState(false)
 
     const handleChange = ({target}) => {
@@ -40,7 +40,7 @@ const EditEmployee = () => {
         if (!formData.employee_name) invalidFields.push("Name");
         if (typeof formData.admin != "boolean") invalidFields.push("Admin")
         if (invalidFields.length) {
-            setErrorMessage(invalidFields.join(", ") + "are invalid")
+            setError(invalidFields.join(", ") + "are invalid")
         } else {
             const data = {
                 employee_email: formData.employee_email,
@@ -51,6 +51,8 @@ const EditEmployee = () => {
                 .then(response => {
                     if (response.error) {
                         setError(response.error)
+                    } else {
+                        setAlert("Employee Succesfully updated")
                     }
                 });
             setFormData(initialFormState)
