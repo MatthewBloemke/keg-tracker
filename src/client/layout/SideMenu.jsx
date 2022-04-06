@@ -8,17 +8,10 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-import { logout } from '../utils/api'
-import { useHistory } from "react-router-dom";
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import {ExpandLess, ExpandMore} from '@mui/icons-material'
 import { Collapse } from '@mui/material' 
-import "./menu.css"
 
 const SideMenu = ({closeDrawer}) => {
-    const history = useHistory()
-    const [path, setPath] = useState(window.location.pathname.slice(1));
     const [kegsOpen, setKegsOpen] = useState(false)
     const [distOpen, setDistOpen] = useState(false);
     const [employeesOpen, setEmployeesOpen] = useState(false);

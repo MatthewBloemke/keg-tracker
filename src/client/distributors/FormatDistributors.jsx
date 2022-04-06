@@ -10,7 +10,6 @@ const FormatDistributors = ({distributors}) => {
             <div style={{display: 'flex', flexWrap: 'wrap'}}>
                 <IconButton className="editButton" component={Link} to={`/distributors/edit/${params.row.id}`}><EditIcon/></IconButton>
             </div>
-            
             )
     }
     const distTable = [];
@@ -23,7 +22,6 @@ const FormatDistributors = ({distributors}) => {
 
 
     distributors.forEach(dist => {
-        const path = `/distributors/edit/${dist.distributor_id}`
         distTable.push(
             {
                 id: dist.distributor_id,

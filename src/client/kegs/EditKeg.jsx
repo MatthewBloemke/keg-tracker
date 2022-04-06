@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 import { editKeg, readKeg } from "../utils/api";
 import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel, Divider, AppBar, Typography} from '@mui/material'
-import "./NewKeg.css"
 
 const EditKeg = () => {
     const params = useParams()
     const user = localStorage.getItem('user')
     const initialFormState ={
         keg_name: "",
-        keg_size: "large",
+        keg_size: "1/2 BBL",
         keg_status: "returned",
         employee_email: user,
         distributor_id: null,
@@ -21,7 +20,6 @@ const EditKeg = () => {
         const loadKeg = async () => {
             await readKeg(params.kegId)
                 .then(response => {
-                    console.log(response)
                     if (response.error) {
                         setError(response.error)
                     } else {
@@ -55,7 +53,6 @@ const EditKeg = () => {
         event.preventDefault();
         const abortController = new AbortController();
         const invalidFields = [];
-        console.log(formData)
         if (!Number(formData.keg_name) || formData.keg_name.length != 4) {
             invalidFields.push("keg_name")
         }

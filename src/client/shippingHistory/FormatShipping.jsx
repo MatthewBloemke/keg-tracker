@@ -1,21 +1,16 @@
 import React from 'react'
 import {DataGrid} from '@mui/x-data-grid'
-/**
- * TODO: 
- * add buttons to change month and day
- * 
- */
+
 const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) => {
-    const abortController = new AbortController();
     const month = date.getMonth()
     const year = date.getYear()
     const day = date.getDay()
     const shippingListRows = []
     const columns = [
-        {field: "date_shipped", headerName: "Date Shipped", width: 130},
-        {field: "keg_name", headerName: "Keg Number", width: 130},
-        {field: "distributor_name", headerName: "Distributor", width: 130},
-        {field: "employee_email", headerName: "Employee", width: 150}
+        {field: "date_shipped", headerName: "Date Shipped", minWidth: 130, flex: 1},
+        {field: "keg_name", headerName: "Keg Number", minWidth: 130, flex: 1},
+        {field: "distributor_name", headerName: "Distributor", minWidth: 130, flex: 1},
+        {field: "employee_email", headerName: "Employee", minWidth: 150, flex: 1}
     ]
     shippingList.forEach(async (entry) => {
         const current_distributor = distributors.find(({distributor_id}) => distributor_id === entry.distributor_id)
@@ -25,7 +20,6 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
         const tempDay = String(tempDate.getDate());
         if (monthlyOnly) {
             if (tempDate.getMonth() === month && tempDate.getYear() === year) {
-                console.log(tempDate.getYear())
                 shippingListRows.push(
                     {
                         id: entry.shipping_id,
@@ -56,7 +50,7 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
             columns={columns}
             pageSize={50}
             rowsPerPageOptions={[50]}
-            sx={{backgroundColor: 'white', width: '70%', height: '100vh'}}
+            sx={{height: '100vh'}}
         />
     )
 }

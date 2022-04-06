@@ -4,8 +4,6 @@ import {IconButton} from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
 import {DataGrid} from '@mui/x-data-grid'
 
-import "./ListKegs.css"
-
 const FormatKegs = ({kegs, distributors, status}) => {
     const renderEditButton = (params) => {
         return (
