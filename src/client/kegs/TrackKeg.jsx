@@ -3,7 +3,7 @@ import { createHistory, trackKeg, getDistributors, verifyKeg } from '../utils/ap
 import FormatKegIdList from './FormatKegIdList';
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
-import {MenuItem, TextField, Alert, Button, Grid} from '@mui/material'
+import {MenuItem, TextField, Alert, Button, Grid, AppBar, Typography, Divider} from '@mui/material'
 import Select from '@mui/material/Select';
 import {LocalizationProvider, DatePicker, } from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
@@ -125,56 +125,52 @@ const TrackKeg = () => {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
-                <h2 id='trackKegs' className='subHeader'>Track Kegs</h2>
+                <Divider/>
+                <AppBar position='static'>
+                    <Typography variant='h5' component='div' sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                        Ship Kegs
+                    </Typography>
+                </AppBar>
             </Grid>
-            <Grid item xs={6}>
-                <Grid container direction="row" justifyContent="center">
-                    <Grid item xs={6}>
-                        <Grid container justifyContent="center">
-                            <h4 style={{marginTop: "20px", marginBottom:"40px"}}>Choose a Distributor to Ship to</h4>
-                            <FormControl sx={{width: "50%"}}>
-                                <InputLabel>Distributor</InputLabel>
-                                <Select
-                                    value={dist}
-                                    label="Distributor"
-                                    name="distributor_id"
-                                    onChange={handleDistChange}
-                                >
-                                {distArr}
-                                </Select>                                        
-                            </FormControl>                            
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Grid container justifyContent="center">
-                            <TextField sx={{marginBottom: '15px'}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
-                            <FormControl sx={{width: "50%", marginBottom: "30px"}}>
-                                <LocalizationProvider dateAdapter={DateFnsUtils}>
-                                    <DatePicker
-                                        label="Date Shipped"
-                                        value={date_shipped}
-                                        name="date_shipped"
-                                        onChange={(newDate) => {
-                                            setDate_shipped(newDate);
-                                        }}
-                                        renderInput={(params) => <TextField {...params} />}
-                                    />
-                                </LocalizationProvider>
-                            </FormControl>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid container justifyContent="center">
-                            <h5 style={{marginBottom: '20px'}}>Kegs Shipped: {keg_names.length}</h5> <br/>                       
-                        </Grid>
-                        <Grid container justifyContent="center">
-                            <Button onClick={handleSubmit} size="large" variant="contained" color="success">Submit</Button>
-                        </Grid>
-                    </Grid>
+            <Grid item xs={12}>
+                <Grid container alignItems="center" direction="column">
+                    <FormControl sx={{ minWidth: "250px", width: "10%"}}>
+                        <InputLabel>Distributor</InputLabel>
+                        <Select
+                            value={dist}
+                            label="Distributor"
+                            name="distributor_id"
+                            onChange={handleDistChange}
+                        >
+                        {distArr}
+                        </Select>                                        
+                    </FormControl> <br/>
+                    <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
+                    <FormControl sx={{width: "10%", minWidth: "250px", marginBottom: "30px"}}>
+                        <LocalizationProvider dateAdapter={DateFnsUtils}>
+                            <DatePicker
+                                label="Date Shipped"
+                                value={date_shipped}
+                                name="date_shipped"
+                                onChange={(newDate) => {
+                                    setDate_shipped(newDate);
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
+                    </FormControl>
+                </Grid>
+                <Grid container justifyContent="center">
+                    <Typography variant='h6' component='div' sx={{marginBottom: "15px"}}>
+                        Kegs Shipped: {keg_names.length}
+                    </Typography>
+                </Grid>
+                <Grid container justifyContent="center">
+                    <Button onClick={handleSubmit} size="large" variant="contained">Submit</Button>
                 </Grid>
             </Grid>
-            <Grid item xs={6} >
-                <Grid container direction="row">
+            <Grid item xs={12} >
+                <Grid container direction="row" justifyContent="space-around">
                     <FormatKegIdList kegIds={keg_names} onDelete={onDelete}/>
                 </Grid>
             </Grid>

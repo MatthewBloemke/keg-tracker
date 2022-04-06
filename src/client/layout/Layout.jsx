@@ -1,19 +1,50 @@
 import React, { useEffect, useState } from 'react'
 import Routes from './Routes';
-import Menu from './Menu';
+import SideMenu from './SideMenu';
 import "./Layout.css"; 
 import { useHistory } from 'react-router-dom';
-import { loginCheck } from '../utils/api';
-import {Grid} from '@mui/material'
+import { loginCheck, logout } from '../utils/api';
+import {AppBar, Grid, IconButton, Toolbar, Typography, MenuItem, Menu, Drawer} from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu';
+import { AccountCircle } from '@mui/icons-material';
 
 const Layout = () => {
     const history = useHistory();
 
     const [pathName, setPathName] = useState(window.location.pathname);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
     history.listen((location) => {
         setPathName(location.pathname);
     });
+
+    const handleAccountMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const handleAccountClose = () => {
+        setAnchorEl(null)
+    }
+
+    const onLogout = async () => {
+        await logout()
+            .then(response => {
+                if (response) {
+                    history.push("/login")
+                } else {
+                    console.log('error logging out')
+                }
+            })
+    }
+
+    const editAccount = () => {
+        setAnchorEl(null)
+    }
+
+    const closeDrawer = () => {
+        setIsDrawerOpen(false)
+    }
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -28,19 +59,57 @@ const Layout = () => {
         });
         return () => abortController.abort();
     }, [pathName]);
-    const height = {height: "100vh"};
+    
+
     return (
         <main>
-            <Grid container spacing={0}>
+                    <Grid container justifyContent="center" >
+                        <AppBar position="static">
+                            <Toolbar>
+                                <IconButton
+                                    size="large"
+                                    edge="start"
+                                    color="inherit"
+                                    aria-label="menu"
+                                    sx={{mr: 2}}
+                                    onClick={() => setIsDrawerOpen(true)}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                                <Typography variant='h5' component="div" sx={{flexGrow: 1}}>
+                                    Loon Juice Keg Tracker
+                                </Typography>
+                                <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+                                    <SideMenu closeDrawer={closeDrawer}/>
+                                </Drawer>
+                                <div>
+                                    <IconButton
+                                        size="large"
+                                        aria-label="account of current user"
+                                        aria-controls="menu-appbar"
+                                        aria-haspopup="true"
+                                        onClick={handleAccountMenu}
+                                        color="inherit"
+                                    >
+                                        <AccountCircle/>
+                                    </IconButton>
+                                    <Menu
+                                        id="menu-appbar"
+                                        anchorEl={anchorEl}
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right'
+                                        }}
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleAccountClose}
+                                    >
+                                        <MenuItem onClick={editAccount}>My Account</MenuItem>
+                                        <MenuItem onClick={onLogout}>Logout</MenuItem>
+                                    </Menu>
+                                </div>
+                            </Toolbar>
+                        </AppBar>
                 <Grid item xs={12}>
-                    <Grid container justifyContent="center" sx={{backgroundColor: '#1675d1', borderTop: "solid #004a9f 18px", borderBottom: 'solid #004a9f 4px'}}>
-                        <h1 id="mainHeading">Loon Juice Keg Tracker</h1>
-                    </Grid>
-                </Grid>
-                <Grid item xs={2} sx={{backgroundColor: '#1675d1', height: '100vh', borderRight: "solid #004a9f 3px"}}>
-                    <Menu/>
-                </Grid>
-                <Grid item xs={10}>
                     <Routes/>
                 </Grid>
             </Grid>

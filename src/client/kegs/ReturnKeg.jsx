@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { createHistory, readDistributor, trackKeg, updateDaysOut, verifyKeg } from '../utils/api';
 import FormatKegIdList from './FormatKegIdList';
-import {FormControl, TextField, Alert, Grid, Button} from '@mui/material'
+import {FormControl, TextField, Alert, Grid, Button, Divider, AppBar, Typography} from '@mui/material'
 import {LocalizationProvider, DatePicker, } from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
 
 const ReturnKeg = () => {
     const date = new Date()
-    const month = String(date.getMonth() + 1)
-    const day = String(date.getDate())
     const user = localStorage.getItem('user');
 
 
@@ -107,15 +105,20 @@ const ReturnKeg = () => {
     }
 
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
             <Grid item xs={12}>
-                <h2 className="subHeader">Return Kegs</h2>
+                <Divider/>
+                <AppBar position="static">
+                    <Typography variant="h5" component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
+                        Return Kegs
+                    </Typography>
+                </AppBar>
             </Grid>
-            <Grid item xs={6} >
-                <Grid container justifyContent="center">
-                    <FormControl>
-                        <TextField  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} sx={{marginBottom: "30px"}}/>
-                        <LocalizationProvider dateAdapter={DateFnsUtils}>
+            <Grid item xs={12} >
+                <Grid container alignItems='center' direction="column">
+                    <FormControl sx={{ minWidth: "250px", width: "10%"}}>
+                        <TextField  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} sx={{ minWidth: "250px", width: "10%", mb: "20px"}}/>
+                        <LocalizationProvider  dateAdapter={DateFnsUtils}>
                             <DatePicker
                                 label="Date Shipped"
                                 value={date_shipped}
@@ -126,20 +129,20 @@ const ReturnKeg = () => {
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>                    
-                        
-                        <h5 style={{marginBottom: '10px', marginTop: "25px"}}>Kegs Shipped: {keg_data.length}</h5>
-                        <Button sx={{width:"50%", margin:"auto", marginTop: "15px"}} type="submit" variant='contained' color="success" onClick={handleSubmit}>Submit</Button>
+                        <Typography textAlign='center' variant='h6' component='div' sx={{marginBottom: "10px", mt: "20px"}}>
+                            Kegs Shipped: {keg_names.length}
+                        </Typography>
+                        <Button sx={{width:"50%", margin:"auto", marginTop: "15px"}} type="submit" variant='contained' onClick={handleSubmit}>Submit</Button>
                     </FormControl>                        
-
                 </Grid>
             </Grid>
-            <Grid item xs={6}>
-                <Grid container direction="row" justifyContent="flex-start">
+            <Grid item xs={12}>
+                <Grid container direction="row" justifyContent="space-around">
                     <FormatKegIdList kegIds={keg_data} onDelete={onDelete}/>
                 </Grid>
                 
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                 {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
             </Grid>       

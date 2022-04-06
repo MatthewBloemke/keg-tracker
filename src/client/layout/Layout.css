@@ -1,31 +1,4 @@
-.side-bar {
-    min-width: 200px;
-    background-color: #1675d1;
-}
-
-#bottomLayoutHeader {
-    margin-bottom: 0;
-}
-
-#mainHeading {
-    border-bottom: none;
-}
-
-#mainDisplay {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-h1 {
-    border-bottom: solid #004a9f 4px;
-}
-
-h2 {
-    background-color: #1675d1;
-    border-bottom: solid #004a9f 4px;
-    color: white;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 10px;
-    margin-bottom: 0;
+body {
+    margin: 0;
+    background-color: #E1E2E1
 }
