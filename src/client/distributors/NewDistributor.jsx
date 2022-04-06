@@ -42,7 +42,7 @@ const NewDistributor = () => {
                         setError(response.error)
                     } else {
                         setFormData(initialFormState)
-                        setAlert("Distributor successfully created")                        
+                        setAlert(`Distributor ${formData.distributor_name} successfully created`)                        
                     }
                 });
 

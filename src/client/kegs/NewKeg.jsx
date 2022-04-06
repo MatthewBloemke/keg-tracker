@@ -105,7 +105,7 @@ const NewKeg = () => {
                                 if (response.error) {
                                     setError(response.error)
                                 } else {
-                                    setAlert("Keg successfully created")
+                                    setAlert(`Keg ${formData.keg_name} successfully created`)
                                 }
                             })
                     } else {
