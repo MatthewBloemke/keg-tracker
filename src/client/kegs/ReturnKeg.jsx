@@ -78,7 +78,7 @@ const ReturnKeg = () => {
                 distributor_name: keg_data[i][2].distributor_name,
                 days_out_arr: keg_data[i][2].days_out_arr ? [...keg_data[i][2].days_out_arr, keg_data[i][3]]: [keg_data[i][3]]
             }
-            await createHistory(data, controller.signal)
+            await createHistory(data, abortController.signal)
             await updateDaysOut(distData, keg_data[i][2].distributor_id, abortController.signal)
             await trackKeg(data, keg_data[i][1], abortController.signal)                
                 .then(response => {
