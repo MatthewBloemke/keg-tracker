@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { getDistributors, getKegs } from '../utils/api'
 import FormatKegs from './FormatKegs'
 import {AppBar, Divider, Grid, Typography, useMediaQuery} from '@mui/material'
 import { useTheme } from "@mui/material/styles";
 
 const ListKegs = () => {
+    const location = useLocation()
+    const history = useHistory()
+    const overdueKegs = location.state;
     const params = useParams();
     const [kegs, setKegs] = useState([]);
     const [distributors, setDistributors] = useState([]);
@@ -40,7 +43,13 @@ const ListKegs = () => {
                     if (params.status === "returned") {
                         setKegs(returnedKegs); 
                     } else {
-                        setKegs(shippedKegs);
+                        if (location.state) {
+                            setKegs(overdueKegs)
+                            history.replace({path: "/kegs/list/shipped", state: null})
+                        } else {
+                            setKegs(shippedKegs);
+                        }
+
                     };                    
                 }
 
