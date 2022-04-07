@@ -16,6 +16,7 @@ const FormatDistributors = ({distributors}) => {
     const columns = [
         {field: "distributor_name", headerName: "Distributor Name", minWidth: 220, flex: 1},
         {field: "ave_days_out", headerName: "Average Turn Over Time", minWidth: 180, flex: 1},
+        {field: "total_kegs_shipped", headerName: "Total Kegs Shipped", minWidth: 180, flex: 1},
         {field: "editButton", headerName: "", minWidth: 70, renderCell: renderEditButton, sortable: false, flex: 1}
     ]
 
@@ -26,7 +27,8 @@ const FormatDistributors = ({distributors}) => {
             {
                 id: dist.distributor_id,
                 distributor_name: dist.distributor_name,
-                ave_days_out: dist.days_out_arr ? dist.days_out_arr.reduce((a,b) => a + b) / dist.days_out_arr.length : null
+                ave_days_out: dist.days_out_arr ? `${dist.days_out_arr.reduce((a,b) => a + b) / dist.days_out_arr.length} days` : null,
+                total_kegs_shipped: dist.days_out_arr ? `${dist.days_out_arr.length} kegs` : null
             }
         )
     })
