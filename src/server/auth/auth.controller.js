@@ -94,7 +94,7 @@ const userExists = async (req, res, next) => {
     })
 }
 const passwordCheck = async (req, res, next) => {
-    await bcrypt.compare(req.body.data.password, res.locals.employee.password, (err, result) => {
+    bcrypt.compare(req.body.data.password, res.locals.employee.password, (err, result) => {
         if (result) {
             return next()
         } else {
@@ -143,7 +143,7 @@ const destroy = async (req, res) => {
 
 const login = async (req, res) => {
     const token = jwt.sign({user: res.locals.employee.employee_name}, process.env.SECRET);
-    res.cookie('token', token, { httpOnly: true });
+    res.cookie('token', token, { maxAge: 60000 * 60 * 12, httpOnly: true });
     res.json({ "data": "working" });
 }
 
