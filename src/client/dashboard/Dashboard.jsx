@@ -4,11 +4,13 @@ import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, AppBa
 import {makeStyles} from "@mui/styles"
 import {useTheme} from '@mui/material/styles'
 import './dashboard.css'
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
     
     const date = new Date(Date.now())
-    const month = date.getMonth()
+    date.setHours(0,0,0,0)
+    const month = date.getUTCMonth()
     const year = date.getYear()
     const [kegs, setKegs] = useState([]) 
     const [returnedKegs, setReturnedKegs] = useState([])
@@ -16,6 +18,7 @@ const Dashboard = () => {
     const [onetwentyDayKegs, setOnetwentyDayKegs] = useState([])
     const [overdueKegs, setOverdueKegs] = useState([])
     const [monthlyShipped, setMonthlyShipped] = useState([])
+    const [monthlyReturned, setMonthlyReturned] = useState([])
 
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
@@ -76,13 +79,20 @@ const Dashboard = () => {
             await getShippingHistory(abortController.signal)
                 .then(response => {
                     const shippingList = []
+                    const returnedList = []
                     response.forEach(entry => {
                         const tempDate = new Date(entry.date_shipped);
-                        if (tempDate.getMonth() === month && tempDate.getYear() === year && entry.keg_status === "shipped") {
-                            shippingList.push(entry)
+                        tempDate.setHours(0,0,0,0)
+                        if (tempDate.getUTCMonth() === month && tempDate.getYear() === year) {
+                            if (entry.keg_status === "shipped") {
+                                shippingList.push(entry)
+                            } else if (entry.keg_status === "returned") {
+                                returnedList.push(entry)
+                            }
                         }
                     })
                     setMonthlyShipped(shippingList)
+                    setMonthlyReturned(returnedList)
                 })
         }
         loadDashboard()
@@ -106,7 +116,7 @@ const Dashboard = () => {
                         <Typography className={classes.pos}>{kegs ? kegs.length + " kegs in system" : null}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button size='medium' >View Kegs</Button>
+                        <Button component={Link} to="/kegs/list/shipped" size='medium' >View Kegs</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} variant="outlined">
@@ -115,7 +125,7 @@ const Dashboard = () => {
                         <Typography className={classes.pos}>{returnedKegs ? returnedKegs.length + " kegs at the warehouse" : null}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button size='medium'>View Returned Kegs</Button>
+                        <Button component={Link} to="/kegs/list/returned" size='medium'>View Returned Kegs</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} variant="outlined">
@@ -124,7 +134,7 @@ const Dashboard = () => {
                         <Typography className={classes.pos}>{kegs.length - returnedKegs.length + " kegs are shipped"}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button size='medium' >View Shipped Kegs</Button>
+                        <Button component={Link} to="/kegs/list/shipped" size='medium' >View Shipped Kegs</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} variant="outlined">
@@ -133,7 +143,7 @@ const Dashboard = () => {
                         <Typography className={classes.pos}>{sixtyDayKegs ? sixtyDayKegs.length + " kegs in system" : null}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button size='medium'>{'View Kegs out for <60 Days'}</Button>
+                        <Button component={Link} to={{pathname: "/kegs/list/shipped", state: sixtyDayKegs}} size='medium'>{'View Kegs out for <60 Days'}</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} variant="outlined">
@@ -142,7 +152,7 @@ const Dashboard = () => {
                         <Typography className={classes.pos}>{onetwentyDayKegs ? onetwentyDayKegs.length + " kegs out for over 60 days" : null}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button size='medium' >{'View Kegs out for >60 days'}</Button>
+                        <Button size='medium' component={Link} to={{pathname: "/kegs/list/shipped", state: onetwentyDayKegs}} >{'View Kegs out for >60 days'}</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} variant="outlined">
@@ -151,7 +161,7 @@ const Dashboard = () => {
                         <Typography className={classes.pos}>{overdueKegs ? overdueKegs.length + " kegs out for over 120 days" : null}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button size='medium' >{'View Kegs out for >120 days'}</Button>
+                        <Button size='medium' component={Link} to={{pathname: "/kegs/list/shipped", state: overdueKegs}} >{'View Kegs out for >120 days'}</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} variant="outlined">
@@ -160,7 +170,16 @@ const Dashboard = () => {
                         <Typography className={classes.pos}>{monthlyShipped.length} kegs have been shipped this month</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button size="medium" >View shipping history</Button>
+                        <Button size="medium" component={Link} to="/shipping/monthly" >View shipping history</Button>
+                    </CardActions>
+                </Card>
+                <Card className={classes.root} variant="outlined">
+                    <CardContent>
+                        <Typography className={classes.title}>Number of Kegs Returned this month</Typography>
+                        <Typography className={classes.pos}>{monthlyReturned.length} kegs have been returned this month</Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button size="medium" component={Link} to="/shipping/monthly" >View shipping history</Button>
                     </CardActions>
                 </Card>
             </div>
@@ -168,4 +187,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default Dashboard;
