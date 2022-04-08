@@ -57,6 +57,9 @@ jobs:
     - name: install dependencies
       run: npm install
 
+    - name: install webpack
+      run: npm install webpack
+
     - name: build
       run: npm run build-prod
 
