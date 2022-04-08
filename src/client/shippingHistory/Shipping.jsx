@@ -21,7 +21,8 @@ const Shipping = ({monthlyOnly}) => {
     date.setHours(0,0,0,0)
     const month = date.getUTCMonth()
     const year = date.getYear()
-    
+    console.log(date)
+
     const useStyles = makeStyles({
         root: {
             minWidth: '250px',
