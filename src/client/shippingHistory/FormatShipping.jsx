@@ -7,6 +7,7 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
     const year = date.getYear()
     const day = date.getUTCDay()
     const shippingListRows = []
+    console.log(date)
     const columns = [
         {field: "date_shipped", headerName: "Date Shipped", minWidth: 130, flex: 1},
         {field: "keg_name", headerName: "Keg Number", minWidth: 130, flex: 1},
@@ -14,9 +15,11 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
         {field: "employee_email", headerName: "Employee", minWidth: 150, flex: 1}
     ]
     shippingList.forEach(async (entry) => {
+        console.log(entry.date_shipped)
         const current_distributor = distributors.find(({distributor_id}) => distributor_id === entry.distributor_id)
         const current_keg = kegs.find(({keg_id}) => keg_id === entry.keg_id) 
         const tempDate = new Date(entry.date_shipped);
+        console.log(tempDate)
         tempDate.setHours(0,0,0,0)
         const tempMonth = String(tempDate.getUTCMonth() + 1);
         const tempDay = String(tempDate.getUTCDate());
