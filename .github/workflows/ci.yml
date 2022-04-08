@@ -53,11 +53,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '14.x'
-        
+      
+    - name: install webpack  
+      run: npm install webpack webpack-cli   
     - name: install dependencies
       env:
         NODE_ENV: production
-      run: npm install webpack webpack-cli
+      
       run: npm ci
 
 
