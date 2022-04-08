@@ -26,7 +26,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Build
@@ -40,13 +40,6 @@ jobs:
         run: |
           npm ci
           npm test
-
-
-      # Make changes to pull request here
-  createPullRequest:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4
