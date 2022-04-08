@@ -40,3 +40,11 @@ jobs:
         run: |
           npm ci
           npm test
+
+
+      - uses: actions/checkout@v3
+
+      # Make changes to pull request here
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
