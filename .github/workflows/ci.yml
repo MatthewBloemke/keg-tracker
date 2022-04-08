@@ -42,9 +42,14 @@ jobs:
           npm test
 
 
-      - uses: actions/checkout@v3
-
       # Make changes to pull request here
-
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v4
+        with:
+          branch: main_dev
+          
