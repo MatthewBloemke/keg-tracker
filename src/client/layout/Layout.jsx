@@ -79,7 +79,7 @@ const Layout = () => {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant='h5' component="div" sx={{flexGrow: 1}}>
-                            Keg Tracker
+                            Loon Juice Keg Tracker
                         </Typography>
                         <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
                             <SideMenu closeDrawer={closeDrawer}/>
