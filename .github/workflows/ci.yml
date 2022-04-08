@@ -58,7 +58,7 @@ jobs:
       run: npm ci
 
     - name: build
-      run: npm run build
+      run: npm run build-prod
 
     - name: restart server
       run: pm2 restart server
