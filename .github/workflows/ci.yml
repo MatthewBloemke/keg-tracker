@@ -40,33 +40,3 @@ jobs:
         run: |
           npm ci
           npm test
-
-
-  deploy:
-    needs: test
-    runs-on: self-hosted
-    steps:
-    - name: Checkout main branch
-      uses: actions/checkout@v2
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-      
-    - name: install webpack  
-      run: npm install webpack webpack-cli   
-    - name: install dependencies
-      env:
-        NODE_ENV: production
-      
-      run: npm ci
-
-
-    - name: build
-      env:
-        NODE_ENV: production
-      run: npm run build-prod
-
-    - name: restart server
-      run: pm2 restart server
