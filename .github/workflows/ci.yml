@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - '**' # Matches every branch.
+      - main_dev
 
 jobs:
   test:
