@@ -43,7 +43,7 @@ jobs:
 
 
   deploy:
-    needs: [test]
+    needs: test
     runs-on: self-hosted
     steps:
       - name: Checkout main branch
