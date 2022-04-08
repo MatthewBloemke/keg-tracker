@@ -55,7 +55,7 @@ jobs:
         node-version: '14.x'
         
     - name: install dependencies
-      run: npm install
+      run: npm ci
 
     - name: build
       env:
