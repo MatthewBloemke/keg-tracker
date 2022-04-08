@@ -8,21 +8,40 @@ on:
 jobs:
   test:
     runs-on: self-hosted
+    services:
+      # Setup postgres server for tests to connect to.
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres_user
+          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_DB: postgres_db
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started.
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
         with:
-          node-version: '14.x' 
-
-      - name: Test
+          submodules: recursive
+      - name: Build
+        env:
+          NODE_ENV: test
+          SECRET: superspecialsecret # This is just a mock secret for JWT signing. Can be set to any value.
+          POSTGRES_HOST_TEST: postgres
+          POSTGRES_USER_TEST: postgres_user
+          POSTGRES_PASSWORD_TEST: postgres_password
+          POSTGRES_DATABASE_TEST: postgres_db
         run: |
           npm ci
           npm test
-      
+
       - name: Build app
-        run: npm run build
+        run: npm run build-prod
 
       - name: Restart Server
         run: pm2 restart server
