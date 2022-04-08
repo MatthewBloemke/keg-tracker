@@ -46,19 +46,19 @@ jobs:
     needs: test
     runs-on: self-hosted
     steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v2
+    - name: Checkout main branch
+      uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
         
-        - name: install dependencies
-          run: npm ci
+    - name: install dependencies
+      run: npm ci
 
-        - name: build
-          run: npm run build
+    - name: build
+      run: npm run build
 
-        - name: restart server
-          run: pm2 restart server
+    - name: restart server
+      run: pm2 restart server
