@@ -20,7 +20,7 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
         const current_keg = kegs.find(({keg_id}) => keg_id === entry.keg_id) 
         const tempDate = new Date(entry.date_shipped);
         console.log(tempDate, "javascript date object")
-        tempDate.setHours(5,0,0,0)
+        tempDate.setHours( tempDate.getHours + 5)
         const tempMonth = String(tempDate.getUTCMonth() + 1);
         const tempDay = String(tempDate.getUTCDate());
         if (monthlyOnly) {
