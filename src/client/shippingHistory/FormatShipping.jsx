@@ -37,7 +37,7 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
                 )
             }
         } else {
-            if (tempDate.getUTCMonth() === month && tempDate.getUTCDay() === day && tempDate.getYear() === year) {
+            if (tempDate.getUTCMonth() === month && tempDate.getUTCDate() === day && tempDate.getYear() === year) {
                 shippingListRows.push(
                     {
                         id: entry.shipping_id,
