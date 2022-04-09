@@ -1,5 +1,6 @@
 import React from 'react'
 import {DataGrid} from '@mui/x-data-grid'
+import { standardizeDate } from '../utils/api'
 
 const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) => {
     date.setHours(0,0,0,0)
@@ -18,9 +19,9 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
         console.log(entry.date_shipped, "database date")
         const current_distributor = distributors.find(({distributor_id}) => distributor_id === entry.distributor_id)
         const current_keg = kegs.find(({keg_id}) => keg_id === entry.keg_id) 
-        const tempDate = new Date(entry.date_shipped + "05:00");
-        
-        console.log(tempDate, "javascript date object")
+        const utcDate = standardizeDate(entry.date_shipped)
+        const tempDate = new Date(Date.UTC(utcDate.year, utcDate.month - 1, utcDate.day, 5));
+        console.log(tempDate, "utc")
         const tempMonth = String(tempDate.getUTCMonth() + 1);
         const tempDay = String(tempDate.getUTCDate());
         if (monthlyOnly) {

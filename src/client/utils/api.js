@@ -192,3 +192,15 @@ export async function deleteEmployee(employee_id, signal) {
 export async function logout(signal) {
     return await fetchJson(`/api/employees/logout`, {headers, signal})
 }
+
+
+export function standardizeDate(date) {
+    const year = date.slice(0,4)
+    const month  = date.slice(5,7)
+    const day = date.slice(8,10)
+    return {
+        year,
+        month,
+        day
+    }
+}
