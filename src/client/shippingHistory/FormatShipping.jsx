@@ -22,10 +22,10 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
         const utcDate = standardizeDate(entry.date_shipped)
         const tempDate = new Date(Date.UTC(utcDate.year, utcDate.month - 1, utcDate.day, 5));
         console.log(tempDate, "utc")
-        const tempMonth = String(tempDate.getUTCMonth() + 1);
-        const tempDay = String(tempDate.getUTCDate());
+        const tempMonth = String(tempDate.getMonth() + 1);
+        const tempDay = String(tempDate.getDate());
         if (monthlyOnly) {
-            if (tempDate.getUTCMonth() === month && tempDate.getYear() === year) {
+            if (tempDate.getMonth() === month && tempDate.getYear() === year) {
                 shippingListRows.push(
                     {
                         id: entry.shipping_id,
@@ -37,11 +37,11 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
                 )
             }
         } else {
-            if (tempDate.getUTCMonth() === month && tempDate.getUTCDate() === day && tempDate.getYear() === year) {
+            if (tempDate.getMonth() === month && tempDate.getDate() === day && tempDate.getYear() === year) {
                 shippingListRows.push(
                     {
                         id: entry.shipping_id,
-                        date_shipped: `${("0"+tempMonth).slice(-2)}-${("0"+tempDay).slice(-2)}-${tempDate.getUTCFullYear()}`,
+                        date_shipped: `${("0"+tempMonth).slice(-2)}-${("0"+tempDay).slice(-2)}-${tempDate.getFullYear()}`,
                         keg_name: current_keg ? current_keg.keg_name : null,
                         distributor_name: current_distributor ? current_distributor.distributor_name : null,
                         employee_email: entry.employee_email
