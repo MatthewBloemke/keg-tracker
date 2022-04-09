@@ -6,7 +6,7 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
     date.setHours(0,0,0,0)
     const month = date.getUTCMonth()
     const year = date.getYear()
-    const day = date.getUTCDay()
+    const day = date.getDate()
     const shippingListRows = []
     console.log(date, "prop")
     const columns = [
