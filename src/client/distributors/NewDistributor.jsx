@@ -1,12 +1,15 @@
-import React, {useState} from 'react'
-import { createDistributor } from "../utils/api"
+import React, {useEffect, useState} from 'react'
+import { createDistributor, isAdmin } from "../utils/api"
 import {TextField, Alert, Grid, Button, Divider, AppBar, Typography, useMediaQuery} from "@mui/material"
 import { useTheme } from "@mui/material/styles";
+import { useHistory } from 'react-router-dom';
 
 const NewDistributor = () => {
     const initialFormState = {
         distributor_name: ""
     };
+
+    const history = useHistory()
 
     const [formData, setFormData] = useState(initialFormState);
     const [disabled, setDisabled] = useState(true);
@@ -48,6 +51,26 @@ const NewDistributor = () => {
 
         }
     }
+
+    useEffect(() => {
+        const abortController = new AbortController()
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    console.log(response)
+                    if (!response) {
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        adminCheck()
+        return () => abortController.abort();
+    }, [])
 
     return (
         <Grid container spacing={3}>

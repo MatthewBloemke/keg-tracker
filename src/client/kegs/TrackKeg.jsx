@@ -114,13 +114,22 @@ const TrackKeg = () => {
         const loadDistributors = async () => {
             await getDistributors(abortController.signal)
                 .then(response => {
-                    const distOptions = []
-                    response.forEach(item => {
-                        distOptions.push(
-                            <MenuItem sx={{ color: "#004a9f"}} key={item.distributor_id} value={item.distributor_id}>{item.distributor_name}</MenuItem>
-                        )      
-                    })
-                    setDistArr(distOptions)
+                    if (response.error) {
+                        setError(response.error)
+                    } else {
+                        const distOptions = []
+                        const tempDist = response;
+                        tempDist.sort((a, b) => {
+                            return a.distributor_name.toLowerCase().localeCompare(b.distributor_name.toLowerCase());
+                        })
+                        tempDist.forEach(item => {
+                            distOptions.push(
+                                <MenuItem sx={{ color: "#004a9f"}} key={item.distributor_id} value={item.distributor_id}>{item.distributor_name}</MenuItem>
+                            )      
+                        })
+                        setDistArr(distOptions)                        
+                    }
+
                 })            
         }
         loadDistributors()

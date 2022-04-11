@@ -4,7 +4,6 @@ headers.append("Content-Type", "application/json");
 const fetchJson = async (url, options, onCancel) => {
     try {
         const response = await fetch(url, options);
-
         if (response.status === 204) {
             return null;
         } else if (response.status === 401) {
@@ -203,4 +202,8 @@ export function standardizeDate(date) {
         month,
         day
     }
+}
+
+export async function isAdmin(signal) {
+    return await fetchJson("/api/employees/admin", {headers, signal})
 }

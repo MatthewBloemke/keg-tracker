@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react'
-import { getDistributors } from '../utils/api'
+import { getDistributors, isAdmin } from '../utils/api'
 import FormatDistributors from './FormatDistributors';
 import {AppBar, Divider, Grid, Typography, Alert, useMediaQuery} from '@mui/material'
 import { useTheme } from "@mui/material/styles";
+import { useHistory } from 'react-router-dom';
 
 const ListDistributors = () => {
+
+    const history = useHistory()
     const [dist, setDist] = useState([]);
     const [error, setError] = useState(null)
 
@@ -23,6 +26,22 @@ const ListDistributors = () => {
                     }
                 })            
         }
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    console.log("sent")
+                    if (!response) {
+                        console.log(response)
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        adminCheck()
         loadDistributors()
         return () => abortController.abort()
     }, [])

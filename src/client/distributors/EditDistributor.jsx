@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { editDistributor, readDistributor } from '../utils/api'
 import { useMediaQuery, TextField, Alert, Grid, Button, Divider, AppBar, Typography} from '@mui/material'
 import { useTheme } from "@mui/material/styles";
+import { isAdmin } from '../utils/api';
 
 const EditDistributor = () => {
     const initialFormState = {
         distributor_name: ""
     };
     
+    const history = useHistory()
     const params = useParams()
     const [formData, setFormData] = useState(initialFormState);
     const [disabled, setDisabled] = useState(true)
@@ -64,6 +66,22 @@ const EditDistributor = () => {
 
                 })
         }
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    console.log("sent")
+                    if (!response) {
+                        console.log(response)
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        adminCheck()
         loadDistributor();
         return () => abortController.abort()
     }, [])

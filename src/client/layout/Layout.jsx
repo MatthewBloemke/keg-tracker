@@ -3,10 +3,11 @@ import Routes from './Routes';
 import SideMenu from './SideMenu';
 import "./Layout.css"; 
 import { useHistory } from 'react-router-dom';
-import { loginCheck, logout } from '../utils/api';
+import { loginCheck, logout, isAdmin } from '../utils/api';
 import {AppBar, Grid, IconButton, Toolbar, Typography, MenuItem, Menu, Drawer} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import { AccountCircle } from '@mui/icons-material';
+import KegOnlyMenu from './KegOnlyMenu'
 
 const Layout = () => {
     const history = useHistory();
@@ -15,6 +16,7 @@ const Layout = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [error, setError] = useState(null)
+    const [admin, setAdmin] = useState(true)
 
     history.listen((location) => {
         setPathName(location.pathname);
@@ -59,8 +61,20 @@ const Layout = () => {
                     };
                 };
             });
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    if (!response) {
+                        setAdmin(false)
+                    } else {
+                        setAdmin(true)
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        adminCheck()
         return () => abortController.abort();
-    }, [pathName]);
+    }, [pathName, admin]);
     
 
     return (
@@ -82,7 +96,7 @@ const Layout = () => {
                             Loon Juice Keg Tracker
                         </Typography>
                         <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-                            <SideMenu closeDrawer={closeDrawer}/>
+                            {admin ? <SideMenu closeDrawer={closeDrawer}/> : <KegOnlyMenu closeDrawer={closeDrawer}/>}
                         </Drawer>
                         <div>
                             <IconButton

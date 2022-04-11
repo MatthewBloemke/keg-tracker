@@ -1,17 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { getEmployees} from '../utils/api';
+import { getEmployees, isAdmin} from '../utils/api';
 import FormatEmployeesList from './FormatEmployeesList'
 import {AppBar, Divider, Grid, Typography, useMediaQuery} from '@mui/material'
 import { useTheme } from "@mui/material/styles";
+import { useHistory } from 'react-router-dom';
 
 
 const ListEmployees = () => {
     const [employees, setEmployees] = useState([]);
     const theme = useTheme();
+    const history = useHistory()
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
     useEffect(() => {
         const abortController = new AbortController();
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    if (!response) {
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        adminCheck()
         getEmployees(abortController.signal)
             .then(setEmployees)
 

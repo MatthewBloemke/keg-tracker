@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom";
-import { editKeg, readKeg } from "../utils/api";
+import { useHistory, useParams } from "react-router-dom";
+import { editKeg, readKeg, isAdmin } from "../utils/api";
 import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel, Divider, AppBar, Typography} from '@mui/material'
 
 const EditKeg = () => {
     const params = useParams()
+    const history = useHistory()
     const user = localStorage.getItem('user')
     const initialFormState ={
         keg_name: "",
@@ -17,6 +18,20 @@ const EditKeg = () => {
 
     useEffect(() => {
         const abortController = new AbortController();
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    if (!response) {
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        
         const loadKeg = async () => {
             await readKeg(params.kegId)
                 .then(response => {
@@ -34,6 +49,8 @@ const EditKeg = () => {
                     }
                 })            
         }
+        
+        adminCheck()
         loadKeg()
         return () => abortController.abort()
     }, [params.kegId, error, alert])

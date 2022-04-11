@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useLocation, useHistory } from 'react-router-dom'
-import { getDistributors, getKegs } from '../utils/api'
+import { getDistributors, getKegs, isAdmin } from '../utils/api'
 import FormatKegs from './FormatKegs'
-import {AppBar, Divider, Grid, Typography, useMediaQuery} from '@mui/material'
+import {AppBar, Divider, Grid, Typography, useMediaQuery, Alert} from '@mui/material'
 import { useTheme } from "@mui/material/styles";
 
 const ListKegs = () => {
@@ -20,6 +20,20 @@ const ListKegs = () => {
         const returnedKegs = []
         const shippedKegs = []
         const abortController = new AbortController();
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    if (!response) {
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        adminCheck()
         getDistributors(abortController.signal)
             .then(response => {
                 if (response.error) {

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import {getKegs, getShippingHistory} from '../utils/api'
+import {getKegs, getShippingHistory, isAdmin} from '../utils/api'
 import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, AppBar, Divider} from "@mui/material";
 import {makeStyles} from "@mui/styles"
 import {useTheme} from '@mui/material/styles'
 import './dashboard.css'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const Dashboard = () => {
-    
+    const history = useHistory();
     const date = new Date(Date.now())
     date.setHours(0,0,0,0)
     const month = date.getUTCMonth()
@@ -95,6 +95,22 @@ const Dashboard = () => {
                     setMonthlyReturned(returnedList)
                 })
         }
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    console.log("sent")
+                    if (!response) {
+                        console.log(response)
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        adminCheck()
         loadDashboard()
         return () => abortController.abort()
     }, [])

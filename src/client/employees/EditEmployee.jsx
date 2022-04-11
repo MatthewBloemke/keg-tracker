@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { deleteEmployee, readEmployee, resetPassword, updateEmployee } from "../utils/api";
+import { deleteEmployee, readEmployee, resetPassword, updateEmployee, isAdmin } from "../utils/api";
 import { Grid, TextField, FormControl, Select, MenuItem, InputLabel, Alert, Button, Divider, AppBar, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
@@ -101,6 +101,19 @@ const EditEmployee = () => {
 
     useEffect(() => {
         const abortController = new AbortController();
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    if (!response) {
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
 
         const loadEmployee = async () => {
             await readEmployee(params.employeeId, abortController.signal)
@@ -121,6 +134,7 @@ const EditEmployee = () => {
                     }
                 })
         }
+        adminCheck()
         
         if (formData.employee_id != params.employeeId) {
            loadEmployee() 

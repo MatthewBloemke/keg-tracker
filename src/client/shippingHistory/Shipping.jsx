@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { getDistributors, getKegs, getShippingHistory } from '../utils/api'
+import { getDistributors, getKegs, getShippingHistory, isAdmin } from '../utils/api'
 import FormatShipping from './FormatShipping'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
 import {LocalizationProvider, DatePicker, } from '@mui/lab'
 import {TextField, Grid, Divider, AppBar, Typography, useMediaQuery, Card, CardContent, CardActions, Button} from '@mui/material'
 import { useTheme } from "@mui/material/styles";
 import {makeStyles} from "@mui/styles"
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 const Shipping = ({monthlyOnly}) => {
+    const history = useHistory()
     const [shipping, setShipping] = useState([])
     const [monthlyShipped, setMonthlyShipped] = useState([])
     const [monthlyReturned, setMonthlyReturned] = useState([])
@@ -90,6 +91,20 @@ const Shipping = ({monthlyOnly}) => {
                     }
                 })
         }
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    if (!response) {
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        adminCheck()
         loadShippingHistory()
         loadKegs()
         loadDistributors()

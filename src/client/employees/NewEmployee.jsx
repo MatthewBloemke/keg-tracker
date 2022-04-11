@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { createEmployee } from "../utils/api";
+import { createEmployee, isAdmin } from "../utils/api";
 import { Grid, TextField, FormControl, Select, useMediaQuery, MenuItem, InputLabel, Alert, Button, Stack, Divider, AppBar, Typography } from "@mui/material";
 import {useTheme} from '@mui/material/styles'
+import { useHistory } from "react-router-dom";
 
 const NewEmployee = () => {
     const initialFormState = {
@@ -12,6 +13,7 @@ const NewEmployee = () => {
         admin: false,
     };
 
+    const history = useHistory()
     const [formData, setFormData] = useState(initialFormState);
     const [disabled, setDisabled] = useState(true);
     const [error, setError] = useState(null);
@@ -60,6 +62,23 @@ const NewEmployee = () => {
     };
 
     useEffect(() => {
+        const abortController = new AbortController()
+
+        const adminCheck = async () => {
+            await isAdmin(abortController.signal)
+                .then(response => {
+                    if (!response) {
+                        history.push('/kegs/track')
+                        return () => {
+                            abortController.abort()
+                        };
+                    } else {
+                        console.log("user is an admin")
+                    }
+                })
+        }
+        adminCheck()
+
         if (formData.employee_name && formData.employee_email && formData.password === formData.passwordMatch && formData.password) {
             setDisabled(false)
         } else {
