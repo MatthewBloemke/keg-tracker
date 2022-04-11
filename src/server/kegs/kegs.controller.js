@@ -152,12 +152,20 @@ async function destroy(req, res) {
     res.sendStatus(200)
 }
 
+function isAdmin(req, res, next) {
+    if (req.cookies.admin != "admin") {
+        return next({status: 401, message: "Administrator privileges are required"})
+    }
+    next()
+}
+
+
 module.exports = {
-    list: asyncErrorBoundary(list),
+    list: [isAdmin, asyncErrorBoundary(list)],
     read: [asyncErrorBoundary(kegExists), read],
     create: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(isUniqueKeg), createKeg],
-    update: [asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), asyncErrorBoundary(isUniqueKeg), update],
-    destroy: [asyncErrorBoundary(kegExists), destroy],
+    update: [isAdmin, asyncErrorBoundary(kegExists), asyncErrorBoundary(hasValidFields), asyncErrorBoundary(isUniqueKeg), update],
+    destroy: [isAdmin, asyncErrorBoundary(kegExists), destroy],
     verifyKeg: [asyncErrorBoundary(kegExistsByName), verifyKeg],
     track: [asyncErrorBoundary(hasValidTrackingFields), track]
 }

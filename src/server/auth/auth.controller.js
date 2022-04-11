@@ -7,8 +7,21 @@ const validFields = [
     "employee_email",
 ]
 
-//take password out of hasValidFields and move the password validation and hashing
-//into it's own function, then hasValidFields can be used in create and update
+function isAdmin(req, res, next) {
+    if (req.cookies.admin != "admin") {
+        return next({status: 401, message: "Administrator privileges are required"})
+    }
+    next()
+}
+
+function adminCheck(req, res, next) {
+    console.log(req.cookies.admin)
+    if (req.cookies.admin != "admin") {
+        return next({status: 401, message: "Administrator privileges are required"})
+    }
+    res.json({data: "working"})
+}
+
 const hasPassword = (req, res, next) => {
     bcrypt.hash(req.body.data.password, 10, (err, hash) => {
         if (err) {
@@ -62,7 +75,7 @@ const hasValidFields = (req, res, next) => {
 
 async function createAccount (req, res) {
     await service.create(res.locals.newAccount)
-    res.json({data: res.locals.newAccount})
+    res.status(201).json({data: res.locals.newAccount})
 }
 const list = async (req, res) => {
     res.json({data: await service.list()})
@@ -144,22 +157,27 @@ const destroy = async (req, res) => {
 const login = async (req, res) => {
     const token = jwt.sign({user: res.locals.employee.employee_name}, process.env.SECRET);
     res.cookie('token', token, { maxAge: 60000 * 60 * 12, httpOnly: true });
+    if (res.locals.employee.admin) {
+        res.cookie('admin', "admin", { maxAge: 60000 * 60 * 12, httpOnly: true })
+    }
     res.json({ "data": "working" });
 }
 
 const logout = async (req, res) => {
     res.clearCookie("token");
+    res.clearCookie("admin")
     res.json({"data": "logged out"});
 }
 
 module.exports = {
-    createAccount: [hasValidFields, hasPassword, asyncErrorBoundary(isUniqueUser), asyncErrorBoundary(createAccount)],
-    list,
+    createAccount: [isAdmin, hasValidFields, hasPassword, asyncErrorBoundary(isUniqueUser), asyncErrorBoundary(createAccount)],
+    list: [isAdmin, list],
     login: [asyncErrorBoundary(userExists), passwordCheck, login],
     userExists,
     logout,
-    read: [asyncErrorBoundary(userExistsById), read],
-    update: [hasValidFields, asyncErrorBoundary(userExistsById), asyncErrorBoundary(isUniqueUser), update],
-    destroy: [asyncErrorBoundary(userExistsById), destroy],
-    resetPassword: [hasPassword, asyncErrorBoundary(userExistsById), update]
+    read: [isAdmin, asyncErrorBoundary(userExistsById), read],
+    update: [isAdmin, hasValidFields, asyncErrorBoundary(userExistsById), asyncErrorBoundary(isUniqueUser), update],
+    destroy: [isAdmin, asyncErrorBoundary(userExistsById), destroy],
+    resetPassword: [isAdmin, hasPassword, asyncErrorBoundary(userExistsById), update],
+    adminCheck
 }

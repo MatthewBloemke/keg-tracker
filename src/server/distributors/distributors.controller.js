@@ -91,12 +91,19 @@ async function destroy(req, res) {
     res.sendStatus(200)
 }
 
+function isAdmin(req, res, next) {
+    if (req.cookies.admin != "admin") {
+        return next({status: 401, message: "Administrator privileges are required"})
+    }
+    next()
+}
+
 module.exports = {
     list: asyncErrorBoundary(list),
     read: [asyncErrorBoundary(distributorExists), read],
-    create: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(isUniqueDistributor), create],
-    update: [asyncErrorBoundary(hasValidFields), asyncErrorBoundary(distributorExists), asyncErrorBoundary(isUniqueDistributor), update],
+    create: [isAdmin, asyncErrorBoundary(hasValidFields), asyncErrorBoundary(isUniqueDistributor), create],
+    update: [isAdmin, asyncErrorBoundary(hasValidFields), asyncErrorBoundary(distributorExists), asyncErrorBoundary(isUniqueDistributor), update],
     updateDaysOut: [hasValidFields, asyncErrorBoundary(distributorExists), hasValidDaysOut, update],
-    destroy: [asyncErrorBoundary(distributorExists), destroy],
+    destroy: [isAdmin, asyncErrorBoundary(distributorExists), destroy],
     distributorExists,
 }
