@@ -27,7 +27,7 @@ describe("shippinghistory Route", () => {
             test("returns 404 for non-existent route", async () => {
                 const response = await request(app)
                     .get("/api/wrongPath")
-                    .set("Cookie", `token=${generateAuthToken()}`)
+                    .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                     .set("Accept", "application/json");
 
                 expect(response.status).toBe(404);
@@ -39,7 +39,7 @@ describe("shippinghistory Route", () => {
         test("returns a shippinghistory list", async () => {
             const response = await request(app)
                 .get("/api/shipping")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json");
 
             expect(response.status).toBe(200);
@@ -49,7 +49,7 @@ describe("shippinghistory Route", () => {
         test("successfully creates new shippinghistory entry", async () => {
             const response = await request(app)
                 .post("/api/shipping")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "2021-05-15",
@@ -64,7 +64,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if data is missing", async () => {
             const response = await request(app)
                 .post("/api/shipping")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({datas : {}})
             
@@ -74,7 +74,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if date_shipped is missing", async () => {
             const response = await request(app)
                 .post("/api/shipping")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_id: "1234",
@@ -88,7 +88,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if date_shipped is not a date", async () => {
             const response = await request(app)
                 .post("/api/shipping")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "21-05-15",
@@ -103,7 +103,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if keg_id is missing", async () => {
             const response = await request(app)
                 .post("/api/shipping")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "2021-05-15",
@@ -117,7 +117,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if distributor_id is missing", async () => {
             const response = await request(app)
                 .post("/api/shipping")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "2021-05-15",
@@ -131,7 +131,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if employee_email is missing", async () => {
             const response = await request(app)
                 .post("/api/shipping")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "2021-05-15",
@@ -145,7 +145,7 @@ describe("shippinghistory Route", () => {
         test("should return 400 if keg_status is missing", async () => {
             const response = await request(app)
             .post("/api/shipping")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "2021-05-15",
@@ -169,7 +169,7 @@ describe("shippinghistory Route", () => {
         test("returns 404 for non-existent shipping_id", async () => {
             const response = await request(app)
                 .put("/api/shipping/5000")
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "2021-05-15",
@@ -186,7 +186,7 @@ describe("shippinghistory Route", () => {
             expect(shippinghistoryOne).not.toBeUndefined()
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "",
@@ -201,7 +201,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if keg_id is missing", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "2021-05-15",
@@ -216,7 +216,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if distributor_id is missing", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "2021-05-15",
@@ -230,7 +230,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if employee_email is missing", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     date_shipped: "2021-05-15",
@@ -244,7 +244,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if keg_id does not exist", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_status: "returned",
@@ -260,7 +260,7 @@ describe("shippinghistory Route", () => {
         test("returns 400 if distributor does not exist", async () => {
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_status: "shipped",
@@ -279,7 +279,7 @@ describe("shippinghistory Route", () => {
 
             const response = await request(app)
                 .put(`/api/shipping/${shippinghistoryOne.shipping_id}`)
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
                 .send({data: {
                     keg_status: "returned",
@@ -306,7 +306,7 @@ describe("shippinghistory Route", () => {
 
             const response = await request(app)
                 .delete(`/api/shipping/99`)
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
         
             expect(response.body.error).toContain("99");
@@ -317,7 +317,7 @@ describe("shippinghistory Route", () => {
 
             const response = await request(app)
                 .delete(`/api/shipping/${shippinghistoryOne.shipping_id}`)
-                .set("Cookie", `token=${generateAuthToken()}`)
+                .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                 .set("Accept", "application/json")
         
             expect(response.body.data).toBeUndefined();

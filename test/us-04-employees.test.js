@@ -40,13 +40,16 @@ describe("employees Route", () => {
             test("Should return 201 for created employee", async () => {
                 const response = await request(app)
                     .post("/api/employees")
-                    .set("Cookie", `token=${generateAuthToken()}`)
+                    .set("Cookie", [`token=${generateAuthToken()}`, "admin=admin"])
                     .set("Accept", "application/json")
                     .send({data: {
                         employee_name: "test",
                         employee_email: "test",
-                        password: "test"
+                        password: "test",
+                        admin: false
                     }})
+
+                expect(response.status).toBe(201)
             })
         })
     })
