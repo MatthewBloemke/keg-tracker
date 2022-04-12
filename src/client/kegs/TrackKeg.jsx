@@ -17,7 +17,7 @@ const TrackKeg = () => {
         employee_email: localStorage.getItem('user'),
         keg_status: "shipped",
     }
-    const facingModeUser = 'front'
+    const facingModeUser = 'user'
     const facingModeEnv = "rear"
     
     const [keg_names, setKeg_names] = useState([]);
@@ -206,7 +206,7 @@ const TrackKeg = () => {
                         {distArr}
                         </Select>                                        
                     </FormControl> <br/>
-                    <Switch onChange={handleSwitch} />
+                    <Button onClick={handleSwitch}>Switch Camera</Button>
                     <p>{facingMode}</p>
                     <div style={{height:'250px', width: "250px"}}>
                         <QrReader
