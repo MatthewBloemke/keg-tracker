@@ -9,7 +9,7 @@ import {LocalizationProvider, DatePicker} from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
 import { useTheme } from "@mui/material/styles";
 import "./TrackKeg.css"
-import { QrReader } from 'react-qr-reader'
+import RenderQrReader from '../utils/RenderQrReader'
 
 const TrackKeg = () => {
     const initialFormState = {
@@ -45,19 +45,6 @@ const TrackKeg = () => {
         )
     }, [])
 
-    const RenderQrReader = (cameraMode) => {
-        return (
-            <QrReader
-                constraints={{facingMode: cameraMode}}
-                onResult={(result, error) => {
-                    if (!!result) {
-                        handleScan(result?.text);
-                    }
-                }}
-
-            />
-        )
-    }
 
     const handleKegChange = async ({target}) => {
         const controller = new AbortController()
@@ -231,7 +218,7 @@ const TrackKeg = () => {
                             }}
   
                         /> */}
-                        {facingMode ? RenderQrReader("user") : RenderQrReader("environment")}
+                        {facingMode ? <RenderQrReader handleScan={handleScan} cameraMode="user"/> : <RenderQrReader handleScan={handleScan} cameraMode="environment"/>}
                     </div>
                     <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
                     <FormControl sx={{width: "10%", minWidth: "250px", marginBottom: "30px"}}>
