@@ -205,7 +205,7 @@ const TrackKeg = () => {
                     <p>{facingMode}</p>
                     <div style={{height:'250px', width: "250px"}}>
                         <QrReader
-                            constraints={{facingMode: facingMode}}
+                            constraints={{facingMode: {exact: facingMode}}}
                             onResult={(result, error) => {
                                 if (!!result) {
                                     handleScan(result?.text);
