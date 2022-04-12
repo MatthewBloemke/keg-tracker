@@ -16,7 +16,6 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
         {field: "employee_email", headerName: "Employee", minWidth: 150, flex: 1}
     ]
     shippingList.forEach(async (entry) => {
-        console.log(entry.date_shipped, "database date")
         const current_distributor = distributors.find(({distributor_id}) => distributor_id === entry.distributor_id)
         const current_keg = kegs.find(({keg_id}) => keg_id === entry.keg_id) 
         const utcDate = standardizeDate(entry.date_shipped)
