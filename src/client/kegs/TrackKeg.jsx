@@ -18,7 +18,7 @@ const TrackKeg = () => {
         keg_status: "shipped",
     }
     const facingModeUser = 'user'
-    const facingModeEnv = "environment"
+    const facingModeEnv = "rear"
     
     const [keg_names, setKeg_names] = useState([]);
     const [distArr, setDistArr] = useState([]);
@@ -210,7 +210,7 @@ const TrackKeg = () => {
                     <p>{facingMode}</p>
                     <div style={{height:'250px', width: "250px"}}>
                         <QrReader
-                            videoConstraints={{
+                            constraints={{
                                 ...videoConstraints,
                                 facingMode
                             }}
