@@ -38,9 +38,9 @@ const TrackKeg = () => {
     const handleSwitch = () => {
         setChecked(!checked)
         if (checked) {
-            setFacingMode("right")
+            setFacingMode("environment")
         } else {
-            setFacingMode("left")
+            setFacingMode("user")
         }
     }
 
