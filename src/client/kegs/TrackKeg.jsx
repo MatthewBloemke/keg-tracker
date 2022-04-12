@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { createHistory, trackKeg, getDistributors, verifyKeg } from '../utils/api';
 import FormatKegIdList from './FormatKegIdList';
 import FormControl from '@mui/material/FormControl'
@@ -40,14 +40,14 @@ const TrackKeg = () => {
 
     const videoConstraints = {facingMode: facingModeUser}
 
-    const handleSwitch = () => {
+    const handleSwitch = useCallback (() => {
         setFacingMode(
             prevState =>
                 prevState === facingModeUser
                     ? facingModeEnv
                     : facingModeUser
         )
-    }
+    }, [])
 
     const handleKegChange = async ({target}) => {
         const controller = new AbortController()
@@ -210,7 +210,7 @@ const TrackKeg = () => {
                     <p>{facingMode}</p>
                     <div style={{height:'250px', width: "250px"}}>
                         <QrReader
-                            constraints={{
+                            videoConstraints={{
                                 ...videoConstraints,
                                 facingMode
                             }}
