@@ -38,10 +38,11 @@ const TrackKeg = () => {
     const handleSwitch = () => {
         setChecked(!checked)
         if (checked) {
-            setFacingMode("environment")
-        } else {
             setFacingMode("user")
+        } else {
+            setFacingMode("environment")
         }
+        console.log(facingMode)
     }
 
     const handleKegChange = async ({target}) => {
