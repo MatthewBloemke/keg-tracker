@@ -9,6 +9,7 @@ import {LocalizationProvider, DatePicker} from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
 import { useTheme } from "@mui/material/styles";
 import "./TrackKeg.css"
+import Tesseract from 'tesseract.js'
 
 const TrackKeg = () => {
     const initialFormState = {
@@ -27,9 +28,31 @@ const TrackKeg = () => {
     const [error, setError] = useState(null)
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+    const [imagePath, setImagePath] = useState("")
+    const [text, setText] = useState("")
 
     const handleDistChange = (event) => {
         setDist(event.target.value)
+    }
+
+    const handleImageChange = (event) => {
+        setImagePath(URL.createObjectURL(event.target.files[0]));
+    }
+
+    const handleClick = () => {
+        Tesseract.recognize(
+            imagePath, 'eng',
+            {
+                logger: m=> console.log(m)
+            }
+        )
+        .catch(err => {
+            console.log(err)
+        })
+        .then(({data: {text}}) => {
+            console.log(text)
+            setText(text)
+        })
     }
 
     const handleKegChange = async ({target}) => {
@@ -159,6 +182,10 @@ const TrackKeg = () => {
                         {distArr}
                         </Select>                                        
                     </FormControl> <br/>
+                    <img src={imagePath} alt="scannedImage"/>
+                    <p>{text}</p>
+                    <input type="file" accept="image/*" capture="environment" onChange={handleImageChange}/>
+                    <button  onClick={handleClick}>Convert to text</button>
                     <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
                     <FormControl sx={{width: "10%", minWidth: "250px", marginBottom: "30px"}}>
                         <LocalizationProvider dateAdapter={DateFnsUtils}>
