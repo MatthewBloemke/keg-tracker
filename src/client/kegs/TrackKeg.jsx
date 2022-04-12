@@ -3,13 +3,12 @@ import { createHistory, trackKeg, getDistributors, verifyKeg } from '../utils/ap
 import FormatKegIdList from './FormatKegIdList';
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
-import {MenuItem, TextField, Alert, Button, Grid, AppBar, Typography, Divider, useMediaQuery, TextareaAutosize} from '@mui/material'
+import {MenuItem, TextField, Alert, Button, Grid, AppBar, Typography, Divider, useMediaQuery, Switch} from '@mui/material'
 import Select from '@mui/material/Select';
 import {LocalizationProvider, DatePicker} from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
 import { useTheme } from "@mui/material/styles";
 import "./TrackKeg.css"
-import Tesseract from 'tesseract.js'
 import { QrReader } from 'react-qr-reader'
 
 const TrackKeg = () => {
@@ -29,45 +28,62 @@ const TrackKeg = () => {
     const [error, setError] = useState(null)
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
-
-    const [data, setData] = useState("No result")
-    const [imagePath, setImagePath] = useState("")
-    const [text, setText] = useState("")
+    const [facingMode, setFacingMode] = useState("environment")
+    const [checked, setChecked] = useState(false)
 
     const handleDistChange = (event) => {
         setDist(event.target.value)
     }
 
-    const handleImageChange = (event) => {
-        setImagePath(URL.createObjectURL(event.target.files[0]));
-    }
-
-    const handleClick = () => {
-        setAlert("clicked")
-        Tesseract.recognize(
-            imagePath, 'eng',
-            {
-                logger: m=> console.log(m)
-            }
-        )
-        .catch(err => {
-            setError(err)
-        })
-        .then(({data: {text}}) => {
-            setAlert(text)
-            setText(text)
-        })
+    const handleSwitch = () => {
+        setChecked(!checked)
+        if (checked) {
+            setFacingMode("environment")
+        } else {
+            setFacingMode("user")
+        }
     }
 
     const handleKegChange = async ({target}) => {
         const controller = new AbortController()
-        setKegName(target.value)
         if (target.value.length===4) {
             if (keg_names.includes(target.value)) {
                 setError(`Keg ${target.value} has already been added`)
-                setKegName("")
             } else {
                 await verifyKeg({keg_name: target.value}, controller.signal)
+                    .then(response => {
+                        let timeA = new Date(response.date_shipped);
+                        let timeB = new Date(date_shipped);
+                        timeA.setHours(0,0,0,0)
+                        timeB.setHours(0,0,0,0)
+                        let timeDifference = timeB.getTime() - timeA.getTime()
+                        if (response.error) {
+                            setError(response.error)
+                        } else if (response.keg_status === "shipped") {
+                            setError(`Keg ${response.keg_name} is already shipped.`)
+                        } else if (timeDifference < 0) {
+                            setError(`Keg cannot be shipped before latest return date of ${timeA}`)
+                        } else {
+                            setKeg_names([...keg_names, response.keg_name])
+                            setFormData({
+                                ...formData,
+                                keg_id: [...formData.keg_id, response.keg_id]
+                            })                            
+                        }
+                        
+
+                    })       
+            }
+        }
+    }
+
+    const handleScan = async (result) => {
+        const controller = new AbortController()
+        if (result.length===4) {
+            if (keg_names.includes(result)) {
+                setError(`Keg ${result} has already been added`)
+            } else {
+                await verifyKeg({keg_name: result}, controller.signal)
                     .then(response => {
                         let timeA = new Date(response.date_shipped);
                         let timeB = new Date(date_shipped);
@@ -92,7 +108,6 @@ const TrackKeg = () => {
                     })
                 setKegName("")                
             }
-            
         }
     }
 
@@ -186,33 +201,19 @@ const TrackKeg = () => {
                         {distArr}
                         </Select>                                        
                     </FormControl> <br/>
-                    <p>{text}</p>
-                    <p>{data}</p>
-                    <input type="file" accept="image/*" capture="environment" onChange={handleImageChange}/>
+                    <Switch onChange={handleSwitch} />
+                    <p>{facingMode}</p>
                     <div style={{height:'250px', width: "250px"}}>
                         <QrReader
-                            height="250px"
-                            width="250px"
+                            constraints={{facingMode: facingMode}}
                             onResult={(result, error) => {
                                 if (!!result) {
-                                setData(result?.text);
-                                }
-                    
-                                if (!!error) {
-                                console.info(error);
+                                    handleScan(result?.text);
                                 }
                             }}
   
                         />
                     </div>
-
-                    <TextareaAutosize 
-                        style={{fontSize:18, width:320, height:100, marginTop:100}}
-                        maxRows={4}
-                        defaultValue={data}
-                        value={data}
-                    />
-                    <button  onClick={handleClick}>Convert to text</button>
                     <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
                     <FormControl sx={{width: "10%", minWidth: "250px", marginBottom: "30px"}}>
                         <LocalizationProvider dateAdapter={DateFnsUtils}>
