@@ -28,7 +28,7 @@ const TrackKeg = () => {
     const [error, setError] = useState(null)
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
-    const [facingMode, setFacingMode] = useState("environment")
+    const [facingMode, setFacingMode] = useState("user")
     const [checked, setChecked] = useState(false)
 
     const handleDistChange = (event) => {
