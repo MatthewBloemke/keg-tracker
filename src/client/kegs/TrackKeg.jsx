@@ -40,7 +40,7 @@ const TrackKeg = () => {
         if (checked) {
             setFacingMode("environment")
         } else {
-            setFacingMode("user")
+            setFacingMode("left")
         }
     }
 
@@ -205,7 +205,7 @@ const TrackKeg = () => {
                     <p>{facingMode}</p>
                     <div style={{height:'250px', width: "250px"}}>
                         <QrReader
-                            constraints={{facingMode: {exact: facingMode}}}
+                            constraints={{facingMode: facingMode}}
                             onResult={(result, error) => {
                                 if (!!result) {
                                     handleScan(result?.text);
