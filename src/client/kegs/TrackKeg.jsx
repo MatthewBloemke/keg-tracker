@@ -40,7 +40,7 @@ const TrackKeg = () => {
         if (checked) {
             setFacingMode("user")
         } else {
-            setFacingMode("environment")
+            setFacingMode("right")
         }
         console.log(facingMode)
     }
