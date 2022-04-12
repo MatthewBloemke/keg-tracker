@@ -10,6 +10,7 @@ import DateFnsUtils from '@mui/lab/AdapterDateFns'
 import { useTheme } from "@mui/material/styles";
 import "./TrackKeg.css"
 import Tesseract from 'tesseract.js'
+import { QrReader } from 'react-qr-reader'
 
 const TrackKeg = () => {
     const initialFormState = {
@@ -28,6 +29,8 @@ const TrackKeg = () => {
     const [error, setError] = useState(null)
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+
+    const [data, setData] = useState("No result")
     const [imagePath, setImagePath] = useState("")
     const [text, setText] = useState("")
 
@@ -185,6 +188,16 @@ const TrackKeg = () => {
                     </FormControl> <br/>
                     <p>{text}</p>
                     <input type="file" accept="image/*" capture="environment" onChange={handleImageChange}/>
+                    <QrReader
+                        onResult={(result, err) => {
+                            if (!!result) {
+                                setData(result?.text);
+                            }
+                            if (!!error) {
+                                console.info(err)
+                            }
+                        }}
+                    />
                     <button  onClick={handleClick}>Convert to text</button>
                     <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
                     <FormControl sx={{width: "10%", minWidth: "250px", marginBottom: "30px"}}>
