@@ -17,7 +17,7 @@ const TrackKeg = () => {
         employee_email: localStorage.getItem('user'),
         keg_status: "shipped",
     }
-    const facingModeUser = 'user'
+    const facingModeUser = 'front'
     const facingModeEnv = "rear"
     
     const [keg_names, setKeg_names] = useState([]);
