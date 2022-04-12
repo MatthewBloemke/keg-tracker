@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import {getKegs, getShippingHistory, isAdmin} from '../utils/api'
-import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, AppBar, Divider} from "@mui/material";
+import {getKegs, getShippingHistory, isAdmin, standardizeDate} from '../utils/api'
+import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, AppBar, Divider, Alert} from "@mui/material";
 import {makeStyles} from "@mui/styles"
 import {useTheme} from '@mui/material/styles'
 import './dashboard.css'
@@ -19,6 +19,7 @@ const Dashboard = () => {
     const [overdueKegs, setOverdueKegs] = useState([])
     const [monthlyShipped, setMonthlyShipped] = useState([])
     const [monthlyReturned, setMonthlyReturned] = useState([])
+    const [error, setError] = useState(null)
 
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
@@ -50,63 +51,78 @@ const Dashboard = () => {
             const overdueKegArr = []
             await getKegs()
                 .then(response => {
-                    const tempKegs = response
-                    for (let i = 0; i < tempKegs.length; i++) {
-                        if (tempKegs[i].keg_status === "returned") {
-                            returnedKegsArr.push(tempKegs[i])
+                    if (response.error) {
+                        if (error) {
+                            setError(error + ", " + response.error)
                         } else {
-                            let timeA = new Date();
-                            let timeB = new Date(tempKegs[i].date_shipped)
-                            timeA.setHours(0,0,0,0)
-                            timeB.setHours(0,0,0,0)
-                            let timeDifference = timeA.getTime() - timeB.getTime()
-                            let daysDifference = timeDifference/1000/3600/24;
-                            if (daysDifference < 60) {
-                                sixtyDayKegArr.push(tempKegs[i])
-                            } else if (daysDifference < 120) {
-                                onetwentyDayKegArr.push(tempKegs[i])
+                            setError(response.error)
+                        }
+                    } else {
+                        const tempKegs = response
+                        for (let i = 0; i < tempKegs.length; i++) {
+                            if (tempKegs[i].keg_status === "returned") {
+                                returnedKegsArr.push(tempKegs[i])
                             } else {
-                                overdueKegArr.push(tempKegs[i])
+                                let timeA = new Date();
+                                let timeB = new Date(tempKegs[i].date_shipped)
+                                timeA.setHours(0,0,0,0)
+                                timeB.setHours(0,0,0,0)
+                                let timeDifference = timeA.getTime() - timeB.getTime()
+                                let daysDifference = timeDifference/1000/3600/24;
+                                if (daysDifference < 60) {
+                                    sixtyDayKegArr.push(tempKegs[i])
+                                } else if (daysDifference < 120) {
+                                    onetwentyDayKegArr.push(tempKegs[i])
+                                } else {
+                                    overdueKegArr.push(tempKegs[i])
+                                }
                             }
                         }
+                        setKegs(response)
+                        setReturnedKegs(returnedKegsArr)
+                        setSixtyDayKegs(sixtyDayKegArr)
+                        setOnetwentyDayKegs(onetwentyDayKegArr)
+                        setOverdueKegs(overdueKegArr)                        
                     }
-                    setKegs(response)
-                    setReturnedKegs(returnedKegsArr)
-                    setSixtyDayKegs(sixtyDayKegArr)
-                    setOnetwentyDayKegs(onetwentyDayKegArr)
-                    setOverdueKegs(overdueKegArr)
                 })
             await getShippingHistory(abortController.signal)
                 .then(response => {
-                    const shippingList = []
-                    const returnedList = []
-                    response.forEach(entry => {
-                        const tempDate = new Date(entry.date_shipped);
-                        tempDate.setHours(0,0,0,0)
-                        if (tempDate.getUTCMonth() === month && tempDate.getYear() === year) {
-                            if (entry.keg_status === "shipped") {
-                                shippingList.push(entry)
-                            } else if (entry.keg_status === "returned") {
-                                returnedList.push(entry)
-                            }
+                    if (response.error) {
+                        if (error) {
+                            setError(error + ", " + response.error)
+                        } else {
+                            setError(response.error)
                         }
-                    })
-                    setMonthlyShipped(shippingList)
-                    setMonthlyReturned(returnedList)
+                    } else {
+                        const shippingList = []
+                        const returnedList = []
+                        response.forEach(entry => {
+                            const utcDate = standardizeDate(entry.date_shipped)
+                            const tempDate = new Date(Date.UTC(utcDate.year, utcDate.month - 1, utcDate.day, 5));
+                            const tempMonth = String(tempDate.getMonth() + 1);
+                            const tempDay = String(tempDate.getDate());
+                            if (tempDate.getMonth() === month && tempDate.getYear() === year) {
+                                if (entry.keg_status === "shipped") {
+                                    shippingList.push(entry)
+                                } else if (entry.keg_status === "returned") {
+                                    returnedList.push(entry)
+                                }
+                            }
+                        })
+                        setMonthlyShipped(shippingList)
+                        setMonthlyReturned(returnedList)                        
+                    }
+
                 })
         }
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
-                    console.log("sent")
                     if (!response) {
-                        console.log(response)
                         history.push('/kegs/track')
                         return () => {
                             abortController.abort()
                         };
-                    } else {
-                        console.log("user is an admin")
                     }
                 })
         }
@@ -126,6 +142,7 @@ const Dashboard = () => {
                 </Typography>
             </AppBar>
             <div className='cardContainer'>
+                {error ? <Alert onClose={() => {setError(null)}} sx={{width: "30%", minWidth: "250px", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                 <Card className={classes.root} variant="outlined">
                     <CardContent>
                         <Typography className={classes.title}>Total Kegs In Sytem</Typography>
