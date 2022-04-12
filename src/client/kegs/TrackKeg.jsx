@@ -17,8 +17,6 @@ const TrackKeg = () => {
         employee_email: localStorage.getItem('user'),
         keg_status: "shipped",
     }
-    const facingModeUser = 'environment'
-    const facingModeEnv = "user"
     
     const [keg_names, setKeg_names] = useState([]);
     const [distArr, setDistArr] = useState([]);
@@ -30,7 +28,7 @@ const TrackKeg = () => {
     const [error, setError] = useState(null)
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
-    const [facingMode, setFacingMode] = useState(facingModeUser)
+    const [facingMode, setFacingMode] = useState(true)
 
 
 
@@ -38,16 +36,28 @@ const TrackKeg = () => {
         setDist(event.target.value)
     }
 
-    const videoConstraints = {facingMode: facingModeUser}
-
     const handleSwitch = useCallback (() => {
         setFacingMode(
             prevState =>
-                prevState === facingModeUser
-                    ? facingModeEnv
-                    : facingModeUser
+                prevState
+                    ? false
+                    : true
         )
     }, [])
+
+    const RenderQrReader = (cameraMode) => {
+        return (
+            <QrReader
+                constraints={{facingMode: cameraMode}}
+                onResult={(result, error) => {
+                    if (!!result) {
+                        handleScan(result?.text);
+                    }
+                }}
+
+            />
+        )
+    }
 
     const handleKegChange = async ({target}) => {
         const controller = new AbortController()
@@ -209,7 +219,7 @@ const TrackKeg = () => {
                     <Button onClick={handleSwitch}>Switch Camera</Button>
                     <p>{facingMode}</p>
                     <div style={{height:'250px', width: "250px"}}>
-                        <QrReader
+                        {/* <QrReader
                             constraints={{
                                 ...videoConstraints,
                                 facingMode
@@ -220,7 +230,8 @@ const TrackKeg = () => {
                                 }
                             }}
   
-                        />
+                        /> */}
+                        {facingMode ? RenderQrReader("user") : RenderQrReader("environment")}
                     </div>
                     <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
                     <FormControl sx={{width: "10%", minWidth: "250px", marginBottom: "30px"}}>
