@@ -17,7 +17,9 @@ const TrackKeg = () => {
         employee_email: localStorage.getItem('user'),
         keg_status: "shipped",
     }
-
+    const facingModeUser = 'user'
+    const facingModeEnv = "environment"
+    
     const [keg_names, setKeg_names] = useState([]);
     const [distArr, setDistArr] = useState([]);
     const [dist, setDist] = useState("")
@@ -28,14 +30,15 @@ const TrackKeg = () => {
     const [error, setError] = useState(null)
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
-    const [facingMode, setFacingMode] = useState("environment")
+    const [facingMode, setFacingMode] = useState(facingModeUser)
 
-    const facingModeUser = 'user'
-    const facingModeEnv = "environment"
+
 
     const handleDistChange = (event) => {
         setDist(event.target.value)
     }
+
+    const videoConstraints = {facingMode: facingModeUser}
 
     const handleSwitch = () => {
         setFacingMode(
@@ -207,7 +210,10 @@ const TrackKeg = () => {
                     <p>{facingMode}</p>
                     <div style={{height:'250px', width: "250px"}}>
                         <QrReader
-                            constraints={{facingMode}}
+                            constraints={{
+                                ...videoConstraints,
+                                facingMode
+                            }}
                             onResult={(result, error) => {
                                 if (!!result) {
                                     handleScan(result?.text);
