@@ -29,20 +29,21 @@ const TrackKeg = () => {
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
     const [facingMode, setFacingMode] = useState("environment")
-    const [checked, setChecked] = useState(false)
+
+    const facingModeUser = 'user'
+    const facingModeEnv = "environment"
 
     const handleDistChange = (event) => {
         setDist(event.target.value)
     }
 
     const handleSwitch = () => {
-        setChecked(!checked)
-        if (checked) {
-            setFacingMode("user")
-        } else {
-            setFacingMode("environment")
-        }
-        console.log(facingMode)
+        setFacingMode(
+            prevState =>
+                prevState === facingModeUser
+                    ? facingModeEnv
+                    : facingModeUser
+        )
     }
 
     const handleKegChange = async ({target}) => {
