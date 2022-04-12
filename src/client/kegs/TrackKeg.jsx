@@ -40,6 +40,7 @@ const TrackKeg = () => {
     }
 
     const handleClick = () => {
+        setAlert("clicked")
         Tesseract.recognize(
             imagePath, 'eng',
             {
@@ -182,7 +183,6 @@ const TrackKeg = () => {
                         {distArr}
                         </Select>                                        
                     </FormControl> <br/>
-                    <img src={imagePath} alt="scannedImage"/>
                     <p>{text}</p>
                     <input type="file" accept="image/*" capture="environment" onChange={handleImageChange}/>
                     <button  onClick={handleClick}>Convert to text</button>
