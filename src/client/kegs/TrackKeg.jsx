@@ -3,7 +3,7 @@ import { createHistory, trackKeg, getDistributors, verifyKeg } from '../utils/ap
 import FormatKegIdList from './FormatKegIdList';
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
-import {MenuItem, TextField, Alert, Button, Grid, AppBar, Typography, Divider, useMediaQuery} from '@mui/material'
+import {MenuItem, TextField, Alert, Button, Grid, AppBar, Typography, Divider, useMediaQuery, TextareaAutosize} from '@mui/material'
 import Select from '@mui/material/Select';
 import {LocalizationProvider, DatePicker} from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
@@ -186,17 +186,31 @@ const TrackKeg = () => {
                         {distArr}
                         </Select>                                        
                     </FormControl> <br/>
+                    <p>{text}</p>
                     <p>{data}</p>
                     <input type="file" accept="image/*" capture="environment" onChange={handleImageChange}/>
-                    <QrReader
-                        onResult={(result, err) => {
-                            if (!!result) {
+                    <div style={{height:'250px', width: "250px"}}>
+                        <QrReader
+                            height="250px"
+                            width="250px"
+                            onResult={(result, error) => {
+                                if (!!result) {
                                 setData(result?.text);
-                            }
-                            if (!!error) {
-                                console.info(err)
-                            }
-                        }}
+                                }
+                    
+                                if (!!error) {
+                                console.info(error);
+                                }
+                            }}
+  
+                        />
+                    </div>
+
+                    <TextareaAutosize 
+                        style={{fontSize:18, width:320, height:100, marginTop:100}}
+                        maxRows={4}
+                        defaultValue={data}
+                        value={data}
                     />
                     <button  onClick={handleClick}>Convert to text</button>
                     <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
