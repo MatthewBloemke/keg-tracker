@@ -186,7 +186,7 @@ const TrackKeg = () => {
                         {distArr}
                         </Select>                                        
                     </FormControl> <br/>
-                    <p>{text}</p>
+                    <p>{data}</p>
                     <input type="file" accept="image/*" capture="environment" onChange={handleImageChange}/>
                     <QrReader
                         onResult={(result, err) => {
