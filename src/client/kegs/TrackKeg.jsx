@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createHistory, trackKeg, getDistributors, verifyKeg } from '../utils/api';
 import FormatKegIdList from './FormatKegIdList';
 import FormControl from '@mui/material/FormControl'
@@ -10,6 +10,7 @@ import DateFnsUtils from '@mui/lab/AdapterDateFns'
 import { useTheme } from "@mui/material/styles";
 import "./TrackKeg.css"
 import RenderQrReader from '../utils/RenderQrReader'
+import {useHistory, useParams} from 'react-router-dom'
 
 const TrackKeg = () => {
     const initialFormState = {
@@ -17,6 +18,9 @@ const TrackKeg = () => {
         employee_email: localStorage.getItem('user'),
         keg_status: "shipped",
     }
+
+    const history = useHistory()
+    const params = useParams()
     
     const [keg_names, setKeg_names] = useState([]);
     const [distArr, setDistArr] = useState([]);
@@ -28,16 +32,20 @@ const TrackKeg = () => {
     const [error, setError] = useState(null)
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
-    const [facingMode, setFacingMode] = useState(true)
 
 
 
     const handleDistChange = (event) => {
         setDist(event.target.value)
     }
-
     const handleSwitch = () => {
-        setFacingMode(!facingMode)
+        if (params.mode === "environment") {
+            history.push('/kegs/track/user')
+            history.go(0)
+        } else {
+            history.push("/kegs/track/environment")
+            history.go(0)
+        }
     }
 
 
@@ -199,7 +207,7 @@ const TrackKeg = () => {
                         </Select>                                        
                     </FormControl> <br/>
                     <Button onClick={handleSwitch}>Switch Camera</Button>
-                    <p>{facingMode}</p>
+                    <p>{params.mode}</p>
                     {/* <div  style={{height:'250px', width: "250px", display: facingMode ? "none": null}}>
                         <RenderQrReader handleScan={handleScan} cameraMode="user"/>
                     </div>
@@ -207,7 +215,7 @@ const TrackKeg = () => {
                         <RenderQrReader handleScan={handleScan} cameraMode="environment"/>
                     </div> */}
                     <div style={{height:'250px', width: "250px"}}>
-                        <RenderQrReader cameraMode={facingMode} handleScan={handleScan}/>
+                        <RenderQrReader cameraMode={params.mode} handleScan={handleScan}/>
                     </div>
                    
                     <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>

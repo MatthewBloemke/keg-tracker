@@ -2,10 +2,10 @@ import { QrReader } from 'react-qr-reader'
 import React from 'react'
 
 const RenderQrReader = ({cameraMode, handleScan}) => {
-    if (cameraMode) {
+    //console.log(cameraMode)
         return (
             <QrReader
-                constraints={{facingMode: "user"}}
+                constraints={{facingMode: cameraMode}}
                 onResult={(result, error) => {
                     if (!!result) {
                         handleScan(result?.text);
@@ -14,19 +14,6 @@ const RenderQrReader = ({cameraMode, handleScan}) => {
     
             />
         )
-    } else {
-        return (
-            <QrReader
-                constraints={{facingMode: 'environment'}}
-                onResult={(result, error) => {
-                    if (!!result) {
-                        handleScan(result?.text);
-                    }
-                }}
-    
-            />
-        )
-    }
 }
 
 export default RenderQrReader;
