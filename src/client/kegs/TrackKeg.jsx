@@ -47,10 +47,10 @@ const TrackKeg = () => {
             }
         )
         .catch(err => {
-            console.log(err)
+            setError(err)
         })
         .then(({data: {text}}) => {
-            console.log(text)
+            setAlert(text)
             setText(text)
         })
     }
