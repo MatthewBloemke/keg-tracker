@@ -200,12 +200,16 @@ const TrackKeg = () => {
                     </FormControl> <br/>
                     <Button onClick={handleSwitch}>Switch Camera</Button>
                     <p>{facingMode}</p>
-                    <div  style={{height:'250px', width: "250px", display: facingMode ? "none": null}}>
+                    {/* <div  style={{height:'250px', width: "250px", display: facingMode ? "none": null}}>
                         <RenderQrReader handleScan={handleScan} cameraMode="user"/>
                     </div>
                     <div style={{height:'250px', width: "250px", display: facingMode ? null: "none"}}>
                         <RenderQrReader handleScan={handleScan} cameraMode="environment"/>
+                    </div> */}
+                    <div style={{height:'250px', width: "250px"}}>
+                        <RenderQrReader cameraMode={facingMode} handleScan={handleScan}/>
                     </div>
+                   
                     <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
                     <FormControl sx={{width: "10%", minWidth: "250px", marginBottom: "30px"}}>
                         <LocalizationProvider dateAdapter={DateFnsUtils}>
