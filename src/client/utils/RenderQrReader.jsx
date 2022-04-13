@@ -5,6 +5,7 @@ const RenderQrReader = ({cameraMode, handleScan}) => {
     //console.log(cameraMode)
         return (
             <QrReader
+                scanDelay={0}
                 constraints={{facingMode: cameraMode}}
                 onResult={(result, error) => {
                     if (!!result) {

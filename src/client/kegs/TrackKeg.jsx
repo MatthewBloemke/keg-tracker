@@ -28,9 +28,11 @@ const TrackKeg = () => {
     const [date_shipped, setDate_shipped] = useState(new Date(Date.now()))
     const [formData, setFormData] = useState(initialFormState);
     const [kegName, setKegName] = useState("");
+    const [scannedKeg, setScannedKeg] = useState("")
     const [alert, setAlert] = useState(null)
     const [error, setError] = useState(null)
     const theme = useTheme();
+    const [scanning, setScanning] = useState(true)
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
 
@@ -85,40 +87,6 @@ const TrackKeg = () => {
         }
     }
 
-    const handleScan = async (result) => {
-        const controller = new AbortController()
-        if (result.length===4) {
-            if (keg_names.includes(result)) {
-                setError(`Keg ${result} has already been added`)
-            } else {
-                await verifyKeg({keg_name: result}, controller.signal)
-                    .then(response => {
-                        let timeA = new Date(response.date_shipped);
-                        let timeB = new Date(date_shipped);
-                        timeA.setHours(0,0,0,0)
-                        timeB.setHours(0,0,0,0)
-                        let timeDifference = timeB.getTime() - timeA.getTime()
-                        if (response.error) {
-                            setError(response.error)
-                        } else if (response.keg_status === "shipped") {
-                            setError(`Keg ${response.keg_name} is already shipped.`)
-                        } else if (timeDifference < 0) {
-                            setError(`Keg cannot be shipped before latest return date of ${timeA}`)
-                        } else {
-                            setKeg_names([...keg_names, response.keg_name])
-                            setFormData({
-                                ...formData,
-                                keg_id: [...formData.keg_id, response.keg_id]
-                            })                            
-                        }
-                        
-
-                    })
-                setKegName("")                
-            }
-        }
-    }
-
     const handleSubmit = (event) => {
         event.preventDefault()
         const abortController = new AbortController()
@@ -133,17 +101,25 @@ const TrackKeg = () => {
             }
             
             await createHistory(data, abortController.signal)
-            await trackKeg(data, keg_id, abortController.signal)
-                .then(response => {
+                .then(async (response) => {
                     if (response.error) {
                         setError(response.error)
                     } else {
-                        setAlert("Kegs successfully shipped!")
+                        await trackKeg(data, keg_id, abortController.signal)
+                            .then(secondResponse => {
+                                if (secondResponse.error) {
+                                    setError(secondResponse.error)
+                                } else {
+                                    setAlert("Kegs successfully shipped and updated!")
+                                }
+                            })                        
                     }
                 })
-            setFormData(initialFormState)
-            setKeg_names([])
-        })
+
+
+        })            
+        setFormData(initialFormState)
+        setKeg_names([])
     }
 
     const onDelete = (e) => {
@@ -182,9 +158,49 @@ const TrackKeg = () => {
 
                 })            
         }
-        loadDistributors()
+        if (distArr.length===0) {
+            loadDistributors()
+        }
+        
+        const handleScan = async () => {
+            setScanning(false)
+            const controller = new AbortController()
+            if (scannedKeg.length===4) {
+                if (keg_names.includes(scannedKeg)) {
+                    setError(`Keg ${scannedKeg} has already been added`)
+                    setScannedKeg("")
+                } else {
+                    await verifyKeg({keg_name: scannedKeg}, controller.signal)
+                        .then(response => {
+                            console.log(response)
+                            let timeA = new Date(response.date_shipped);
+                            let timeB = new Date(date_shipped);
+                            timeA.setHours(0,0,0,0)
+                            timeB.setHours(0,0,0,0)
+                            let timeDifference = timeB.getTime() - timeA.getTime()
+                            if (response.error) {
+                                setError(response.error)
+                            } else if (response.keg_status === "shipped") {
+                                setError(`Keg ${response.keg_name} is already shipped.`)
+                            } else if (timeDifference < 0) {
+                                setError(`Keg cannot be shipped before latest return date of ${timeA}`)
+                            } else {
+                                setKeg_names([...keg_names, response.keg_name])
+                                setFormData({
+                                    ...formData,
+                                    keg_id: [...formData.keg_id, response.keg_id]
+                                })                  
+                            }
+                        })
+                        setScannedKeg("")      
+                }
+    
+            }
+            setTimeout(() => setScanning(true), 2000)   
+        }
+        handleScan()
         return () => abortController.abort()
-    }, [])
+    }, [scannedKeg])
 
     return (
         <Grid container spacing={3}>
@@ -209,19 +225,12 @@ const TrackKeg = () => {
                         {distArr}
                         </Select>                                        
                     </FormControl> <br/>
-                    
-                    {/* <div  style={{height:'250px', width: "250px", display: facingMode ? "none": null}}>
-                        <RenderQrReader handleScan={handleScan} cameraMode="user"/>
-                    </div>
-                    <div style={{height:'250px', width: "250px", display: facingMode ? null: "none"}}>
-                        <RenderQrReader handleScan={handleScan} cameraMode="environment"/>
-                    </div> */}
-                    {smallScreen ? <Button onClick={handleSwitch} variant="contained">Switch Camera</Button> : null }
+                    {smallScreen ? <Button sx={{mb:"15px"}} onClick={handleSwitch} variant="contained">Switch Camera</Button> : null }
                     {smallScreen 
                         ?
                         
                         <div style={{height:'250px', width: "250px"}}>
-                            <RenderQrReader cameraMode={params.mode} handleScan={handleScan}/>
+                            {scanning ? <RenderQrReader cameraMode={params.mode} handleScan={setScannedKeg}/> : null}
                         </div> 
                         : null
                     }
