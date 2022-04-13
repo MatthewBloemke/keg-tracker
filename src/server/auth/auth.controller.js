@@ -175,9 +175,9 @@ module.exports = {
     login: [asyncErrorBoundary(userExists), passwordCheck, login],
     userExists,
     logout,
-    read: [isAdmin, asyncErrorBoundary(userExistsById), read],
-    update: [isAdmin, hasValidFields, asyncErrorBoundary(userExistsById), asyncErrorBoundary(isUniqueUser), update],
+    read: [asyncErrorBoundary(userExistsById), read],
+    update: [hasValidFields, asyncErrorBoundary(userExistsById), asyncErrorBoundary(isUniqueUser), update],
     destroy: [isAdmin, asyncErrorBoundary(userExistsById), destroy],
-    resetPassword: [isAdmin, hasPassword, asyncErrorBoundary(userExistsById), update],
+    resetPassword: [hasPassword, asyncErrorBoundary(userExistsById), update],
     adminCheck
 }
