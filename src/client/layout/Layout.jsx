@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Routes from './Routes';
 import SideMenu from './SideMenu';
-import "./Layout.css"; 
+import "./Layout.css";
+import {useTheme} from '@mui/material/styles'
 import { useHistory } from 'react-router-dom';
 import { loginCheck, logout, isAdmin } from '../utils/api';
-import {AppBar, Grid, IconButton, Toolbar, Typography, MenuItem, Menu, Drawer} from '@mui/material'
+import {AppBar, Grid, IconButton, Toolbar, Typography, MenuItem, Menu, Drawer, useMediaQuery} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import { AccountCircle } from '@mui/icons-material';
 import KegOnlyMenu from './KegOnlyMenu'
@@ -17,6 +18,8 @@ const Layout = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [error, setError] = useState(null)
     const [admin, setAdmin] = useState(true)
+    const theme = useTheme()
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
     history.listen((location) => {
         setPathName(location.pathname);
@@ -103,9 +106,10 @@ const Layout = () => {
                             {admin ? <SideMenu closeDrawer={closeDrawer}/> : <KegOnlyMenu closeDrawer={closeDrawer}/>}
                         </Drawer>
                         <div style={{display: "flex"}}>
+                            {!smallScreen ? 
                             <Typography variant='h6' component="div" sx={{mt: "8px"}}>
                                 {localStorage.getItem("name")}
-                            </Typography>
+                            </Typography> : null }
                             <IconButton
                                 size="large"
                                 aria-label="account of current user"
