@@ -68,7 +68,6 @@ const Layout = () => {
                         setAdmin(false)
                     } else {
                         setAdmin(true)
-                        console.log("user is an admin")
                     }
                 })
         }

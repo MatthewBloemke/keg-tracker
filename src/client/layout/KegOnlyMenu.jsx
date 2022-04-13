@@ -3,7 +3,6 @@ import NonAdminSubMenu from '../kegs/NonAdminSubMenu';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
 import {ExpandLess, ExpandMore} from '@mui/icons-material'
 import { Collapse } from '@mui/material' 
 

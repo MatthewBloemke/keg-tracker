@@ -21,7 +21,7 @@ const ReturnKeg = () => {
     const [scanning, setScanning] = useState(true)
     const [date_shipped, setDate_shipped] = useState(new Date(Date.now()))
     const theme = useTheme();
-    const [scannedKeg, setScannedKeg] = useState(null)
+    const [scannedKeg, setScannedKeg] = useState("")
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
 
@@ -195,9 +195,9 @@ const ReturnKeg = () => {
                         <div style={{height:'250px', width: "250px"}}>
                             {scanning ? <RenderQrReader cameraMode={params.mode} handleScan={setScannedKeg}/> : null}
                         </div> 
-                        : null
+                         : null
                     }
-                   
+                    
                     <FormControl sx={{ minWidth: "250px", width: "10%"}}>
                         <TextField  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} sx={{ minWidth: "250px", width: "10%", mb: "20px"}}/>
                         <LocalizationProvider  dateAdapter={DateFnsUtils}>
