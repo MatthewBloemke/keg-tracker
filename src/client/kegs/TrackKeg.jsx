@@ -206,17 +206,22 @@ const TrackKeg = () => {
                         {distArr}
                         </Select>                                        
                     </FormControl> <br/>
-                    <Button onClick={handleSwitch}>Switch Camera</Button>
-                    <p>{params.mode}</p>
+                    
                     {/* <div  style={{height:'250px', width: "250px", display: facingMode ? "none": null}}>
                         <RenderQrReader handleScan={handleScan} cameraMode="user"/>
                     </div>
                     <div style={{height:'250px', width: "250px", display: facingMode ? null: "none"}}>
                         <RenderQrReader handleScan={handleScan} cameraMode="environment"/>
                     </div> */}
-                    <div style={{height:'250px', width: "250px"}}>
-                        <RenderQrReader cameraMode={params.mode} handleScan={handleScan}/>
-                    </div>
+                    {smallScreen ? <Button onClick={handleSwitch} variant="contained">Switch Camera</Button> : null }
+                    {smallScreen 
+                        ?
+                        
+                        <div style={{height:'250px', width: "250px"}}>
+                            <RenderQrReader cameraMode={params.mode} handleScan={handleScan}/>
+                        </div> 
+                        : null
+                    }
                    
                     <TextField sx={{marginBottom: '15px', width: "10%", minWidth: "250px"}}  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} disabled={dist ? false : true}/> <br/>
                     <FormControl sx={{width: "10%", minWidth: "250px", marginBottom: "30px"}}>
