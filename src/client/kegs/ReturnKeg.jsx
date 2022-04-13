@@ -124,6 +124,7 @@ const ReturnKeg = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         date_shipped.setHours(0,0,0,0)
+        const daysOutUpdate = {};
         const abortController = new AbortController()
         for (let i = 0; i < keg_data.length; i++) {
             const data = {
@@ -133,9 +134,15 @@ const ReturnKeg = () => {
                 employee_email: user,
                 keg_status: "returned"
             }
+            let daysOutData= [];
+            if (daysOutUpdate[keg_data[i][2].distributor_name]) {
+                daysOutData = [...daysOutUpdate[keg_data[i][2].distributor_name], keg_data[i][3]];
+            } else {
+                daysOutData = keg_data[i][2].days_out_arr ? [...keg_data[i][2].days_out_arr, keg_data[i][3]]: [keg_data[i][3]]
+            }
             const distData = {
                 distributor_name: keg_data[i][2].distributor_name,
-                days_out_arr: keg_data[i][2].days_out_arr ? [...keg_data[i][2].days_out_arr, keg_data[i][3]]: [keg_data[i][3]]
+                days_out_arr: daysOutData
             }
             await createHistory(data, abortController.signal)
                 .then(async (response) => {
@@ -147,6 +154,8 @@ const ReturnKeg = () => {
                                 if (secondResponse.error) {
                                     setError(`History Created, but ${secondResponse.error}`)
                                 } else {
+                                    daysOutUpdate[keg_data[i][2].distributor_name] = distData.days_out_arr;
+                                    
                                     await trackKeg(data, keg_data[i][1], abortController.signal)                
                                         .then(thirdResponse => {
                                             if (thirdResponse.error) {
