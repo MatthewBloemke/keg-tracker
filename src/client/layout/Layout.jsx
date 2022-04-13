@@ -37,12 +37,17 @@ const Layout = () => {
                 if (response.error) {
                     setError(response.error)
                 } else {
+                    localStorage.removeItem("user")
+                    localStorage.removeItem("name")
+                    localStorage.removeItem("id")
                     history.push("/login")
+                    history.go(0)
                 }
             })
     }
 
     const editAccount = () => {
+        history.push(`/employees/edit/${localStorage.getItem("id")}`)
         setAnchorEl(null)
     }
 
@@ -97,7 +102,10 @@ const Layout = () => {
                         <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
                             {admin ? <SideMenu closeDrawer={closeDrawer}/> : <KegOnlyMenu closeDrawer={closeDrawer}/>}
                         </Drawer>
-                        <div>
+                        <div style={{display: "flex"}}>
+                            <Typography variant='h6' component="div" sx={{mt: "8px"}}>
+                                {localStorage.getItem("name")}
+                            </Typography>
                             <IconButton
                                 size="large"
                                 aria-label="account of current user"

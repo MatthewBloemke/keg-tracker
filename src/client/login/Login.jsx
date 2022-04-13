@@ -24,11 +24,13 @@ const Login = () => {
     const abortController = new AbortController();
     await login(formData, abortController.signal)
       .then(response => {
-        if (response === "working") {
-          localStorage.setItem("user", formData.employee_email)
-          history.push("/")
-        } else {
+        if (response.error) {
           setErrorMessage({message: "Incorrect username or password"})
+        } else {
+          localStorage.setItem("user", formData.employee_email)
+          localStorage.setItem("name", response.employee_name)
+          localStorage.setItem("id", response.employee_id)
+          history.push("/")          
         }
       })
   }

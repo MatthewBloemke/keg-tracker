@@ -160,7 +160,7 @@ const login = async (req, res) => {
     if (res.locals.employee.admin) {
         res.cookie('admin', "admin", { maxAge: 60000 * 60 * 12, httpOnly: true })
     }
-    res.json({ "data": "working" });
+    res.json({ "data": {employee_id: res.locals.employee.employee_id, employee_name: res.locals.employee.employee_name}});
 }
 
 const logout = async (req, res) => {
