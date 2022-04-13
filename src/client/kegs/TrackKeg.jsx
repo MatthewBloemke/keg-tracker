@@ -51,9 +51,11 @@ const TrackKeg = () => {
 
     const handleKegChange = async ({target}) => {
         const controller = new AbortController()
+        setKegName(target.value)
         if (target.value.length===4) {
             if (keg_names.includes(target.value)) {
                 setError(`Keg ${target.value} has already been added`)
+                setKegName("")
             } else {
                 await verifyKeg({keg_name: target.value}, controller.signal)
                     .then(response => {
@@ -77,7 +79,8 @@ const TrackKeg = () => {
                         }
                         
 
-                    })       
+                    })
+                setKegName("") 
             }
         }
     }
