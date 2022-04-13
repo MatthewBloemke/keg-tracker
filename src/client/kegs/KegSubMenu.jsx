@@ -24,7 +24,7 @@ const KegSubMenu = ({closeDrawer}) => {
                 <ListItemText primary="Ship Kegs"/>
             </ListItemButton>
             <Divider/>
-            <ListItemButton onClick={closeDrawer} component={Link} to="/kegs/return">
+            <ListItemButton onClick={closeDrawer} component={Link} to="/kegs/return/environment">
                 <ListItemText primary="Return Kegs"/>
             </ListItemButton>
             <Divider/>

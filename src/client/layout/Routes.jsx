@@ -36,7 +36,7 @@ const Routes = () => {
             <Route path="/kegs/track/:mode">
                 <TrackKeg/>
             </Route>
-            <Route path="/kegs/return">
+            <Route path="/kegs/return/:mode">
                 <ReturnKeg/>
             </Route>
             <Route path="/kegs/edit/:kegId">
