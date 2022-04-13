@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createEmployee, isAdmin } from "../utils/api";
-import { Grid, TextField, FormControl, Select, useMediaQuery, MenuItem, InputLabel, Alert, Button, Stack, Divider, AppBar, Typography } from "@mui/material";
+import { Grid, TextField, FormControl, Select, useMediaQuery, MenuItem, InputLabel, Alert, Button, Divider, AppBar, Typography } from "@mui/material";
 import {useTheme} from '@mui/material/styles'
 import { useHistory } from "react-router-dom";
 
@@ -54,7 +54,7 @@ const NewEmployee = () => {
                     if (response.error) {
                         setError(response.error)
                     } else {
-                        setAlert("Employee Successfully created")
+                        setAlert(`Employee ${response.employee_name} successfully created`)
                     }
                 });
             setFormData(initialFormState)
@@ -63,7 +63,6 @@ const NewEmployee = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
-
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
@@ -72,8 +71,6 @@ const NewEmployee = () => {
                         return () => {
                             abortController.abort()
                         };
-                    } else {
-                        console.log("user is an admin")
                     }
                 })
         }

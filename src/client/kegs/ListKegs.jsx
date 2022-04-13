@@ -28,8 +28,6 @@ const ListKegs = () => {
                         return () => {
                             abortController.abort()
                         };
-                    } else {
-                        console.log("user is an admin")
                     }
                 })
         }

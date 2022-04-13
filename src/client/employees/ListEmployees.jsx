@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { getEmployees, isAdmin} from '../utils/api';
 import FormatEmployeesList from './FormatEmployeesList'
-import {AppBar, Divider, Grid, Typography, useMediaQuery} from '@mui/material'
+import {AppBar, Divider, Grid, Typography, useMediaQuery, Alert} from '@mui/material'
 import { useTheme } from "@mui/material/styles";
 import { useHistory } from 'react-router-dom';
 
 
 const ListEmployees = () => {
     const [employees, setEmployees] = useState([]);
+    const [error, setError] = useState(null)
     const theme = useTheme();
     const history = useHistory()
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
@@ -22,14 +23,18 @@ const ListEmployees = () => {
                         return () => {
                             abortController.abort()
                         };
-                    } else {
-                        console.log("user is an admin")
                     }
                 })
         }
         adminCheck()
         getEmployees(abortController.signal)
-            .then(setEmployees)
+            .then(response => {
+                if (response.error) {
+                    setError(response.error)
+                } else {
+                    setEmployees(response)
+                }
+            })
 
         return () => abortController.abort();
     }, []);
@@ -42,6 +47,7 @@ const ListEmployees = () => {
                         Employees
                     </Typography>
                 </AppBar>
+                {error ? <Alert onClose={() => {setError(null)}} sx={{width: "30%", minWidth: "250px", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
             </Grid>
             <Grid item xs={12}>
                 <FormatEmployeesList employees={employees}/>

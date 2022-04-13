@@ -69,15 +69,11 @@ const EditDistributor = () => {
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
-                    console.log("sent")
                     if (!response) {
-                        console.log(response)
                         history.push('/kegs/track')
                         return () => {
                             abortController.abort()
                         };
-                    } else {
-                        console.log("user is an admin")
                     }
                 })
         }

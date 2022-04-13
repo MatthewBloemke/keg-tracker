@@ -57,14 +57,11 @@ const NewDistributor = () => {
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
-                    console.log(response)
                     if (!response) {
                         history.push('/kegs/track')
                         return () => {
                             abortController.abort()
                         };
-                    } else {
-                        console.log("user is an admin")
                     }
                 })
         }
