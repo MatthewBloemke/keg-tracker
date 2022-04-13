@@ -70,7 +70,7 @@ const EditDistributor = () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        history.push('/kegs/track')
+                        history.push('/kegs/track/environment')
                         return () => {
                             abortController.abort()
                         };

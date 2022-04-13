@@ -105,7 +105,7 @@ const EditEmployee = () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        history.push('/kegs/track')
+                        history.push('/kegs/track/environment')
                         return () => {
                             abortController.abort()
                         };
@@ -132,7 +132,10 @@ const EditEmployee = () => {
                     }
                 })
         }
-        adminCheck()
+        if (params.employeeId != localStorage.getItem("id")) {
+            adminCheck()            
+        }
+        
         
         if (formData.employee_id != params.employeeId) {
            loadEmployee() 
