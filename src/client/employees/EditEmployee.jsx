@@ -56,6 +56,8 @@ const EditEmployee = () => {
                     if (response.error) {
                         setError(response.error)
                     } else {
+                        localStorage.setItem("name", response.employee_name)
+                        history.go(0)
                         setAlert("Employee Succesfully updated")
                     }
                 });
@@ -164,8 +166,8 @@ const EditEmployee = () => {
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <Grid container textAlign='center' spacing={3}>
                         <Grid item xs={12}>
-                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} id="outlined-basic" label="Name" name="employee_name" onChange={handleChange} value={formData.employee_name} /> <br/>
-                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} id="outlined-basic" label="Username" name="employee_email" onChange={handleChange} value={formData.employee_email} /> <br/>
+                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} className="outlined-basic" label="Name" name="employee_name" onChange={handleChange} value={formData.employee_name} /> <br/>
+                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} className="outlined-basic" label="Username" name="employee_email" onChange={handleChange} value={formData.employee_email} /> <br/>
                             <FormControl sx={{width: '10%', minWidth:'250px'}}>
                                 <InputLabel>Admin</InputLabel>
                                 <Select
@@ -182,7 +184,7 @@ const EditEmployee = () => {
                         <Grid item xs={12}>
                             <Grid container justifyContent="space-evenly">
                                 <Button disabled={disabled} onClick={onDelete} variant="contained" color="error">Delete User</Button>
-                                <Button onClick={handleSubmit} variant="contained" color="success">Submit</Button>
+                                <Button onClick={handleSubmit} variant="contained" >Submit</Button>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -192,12 +194,12 @@ const EditEmployee = () => {
                     {smallScreen ? <Divider sx = {{mb: "15px"}}/> : null}
                     <Grid container textAlign='center' spacing={3}>
                         <Grid item xs={12}>
-                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} id="outlined-basic" type="password" label="Password" name="password" onChange={handleChange} value={formData.password} /> <br/>
-                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} id="outlined-basic" helperText={passwordError ? "Password do not match": null} error = {passwordError} type="password" label="Retype Password" name="passwordMatch" onChange={handleChange} value={formData.passwordMatch} /> <br/>
+                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} className="outlined-basic" type="password" label="Password" name="password" onChange={handleChange} value={formData.password} /> <br/>
+                            <TextField sx={{width: "10%", marginBottom: '15px', minWidth:'250px'}} className="outlined-basic" helperText={passwordError ? "Password do not match": null} error = {passwordError} type="password" label="Retype Password" name="passwordMatch" onChange={handleChange} value={formData.passwordMatch} /> <br/>
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container justifyContent="center">
-                                <Button onClick={submitPassword} variant="contained" color="success" disabled={passwordDisabled}>Reset Password</Button>
+                                <Button onClick={submitPassword} variant="contained" disabled={passwordDisabled}>Reset Password</Button>
                             </Grid>
                         </Grid>
                     </Grid>
