@@ -17,6 +17,8 @@ import EditEmployee from '../employees/EditEmployee';
 import NewFlavor from '../flavors/NewFlavor';
 import ListFlavors from '../flavors/ListFlavors';
 import EditFlavor from '../flavors/EditFlavor';
+import FillKeg from '../kegs/FillKeg';
+import Filling from '../fillingHistory/Filling'
 
 const Routes = () => {
     return (
@@ -41,6 +43,9 @@ const Routes = () => {
             </Route>
             <Route path="/kegs/return/:mode">
                 <ReturnKeg/>
+            </Route>
+            <Route path="/kegs/fill/:mode" >
+                <FillKeg/>
             </Route>
             <Route path="/kegs/edit/:kegId">
                 <EditKeg/>
@@ -77,6 +82,12 @@ const Routes = () => {
             </Route>
             <Route path="/flavors/edit/:flavorId">
                 <EditFlavor/>
+            </Route>
+            <Route path='/filling' exact={true}>
+                <Filling monthlyOnly={false}/>
+            </Route>
+            <Route path='/filling/monthly' exact={true}>
+                <Filling monthlyOnly={true}/>
             </Route>
         </Switch>
     )

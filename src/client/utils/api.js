@@ -238,3 +238,19 @@ export async function editFlavor(data, flavor_id, signal) {
 export async function readFlavor(flavor_id, signal) {
     return await fetchJson(`/api/flavors/${flavor_id}`, {headers, signal}, [])
 }
+
+//Filling API
+
+export async function getFillingHistory(signal) {
+    return await fetchJson(`/api/filling`, {headers, signal}, [])
+}
+
+export async function createFillingHistory(data, signal) {
+    const options = {
+        method: 'POST',
+        headers,
+        signal,
+        body: JSON.stringify({data})
+    }
+    return await fetchJson(`/api/filling`, options)
+}
