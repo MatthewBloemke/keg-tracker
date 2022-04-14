@@ -40,7 +40,7 @@ const NewKeg = () => {
                         })
                         tempDist.forEach(item => {
                             distOptions.push(
-                                <MenuItem sx={{ color: "#004a9f"}} key={item.distributor_id} value={item.distributor_id}>{item.distributor_name}</MenuItem>
+                                <MenuItem key={item.distributor_id} value={item.distributor_id}>{item.distributor_name}</MenuItem>
                             )      
                         })
                         setDistArr(distOptions)                        
