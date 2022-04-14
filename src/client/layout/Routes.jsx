@@ -14,6 +14,9 @@ import EditDistributor from '../distributors/EditDistributor';
 import ListEmployees from '../employees/ListEmployees';
 import NewEmployee from '../employees/NewEmployee'
 import EditEmployee from '../employees/EditEmployee';
+import NewFlavor from '../flavors/NewFlavor';
+import ListFlavors from '../flavors/ListFlavors';
+import EditFlavor from '../flavors/EditFlavor';
 
 const Routes = () => {
     return (
@@ -65,6 +68,15 @@ const Routes = () => {
             </Route>
             <Route path='/employees/edit/:employeeId'>
                 <EditEmployee/>
+            </Route>
+            <Route path="/flavors" exact={true}>
+                <ListFlavors/>
+            </Route>
+            <Route path="/flavors/new">
+                <NewFlavor/>
+            </Route>
+            <Route path="/flavors/edit/:flavorId">
+                <EditFlavor/>
             </Route>
         </Switch>
     )

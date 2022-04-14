@@ -7,6 +7,7 @@ const distributorsRouter = require("./distributors/distributors.router");
 const authRouter = require("./auth/auth.router");
 const loginRouter = require("./login/login.router");
 const shippingRouter = require("./shippingHistory/shippingHistory.router")
+const flavorsRouter = require("./flavors/flavors.router")
 const jwt = require("express-jwt");
 
 
@@ -22,5 +23,6 @@ apiRouter.use("/employees", authRouter);
 apiRouter.use("/kegs", kegsRouter);
 apiRouter.use("/distributors", distributorsRouter);
 apiRouter.use("/shipping", shippingRouter)
+apiRouter.use("/flavors", flavorsRouter)
 
 module.exports = apiRouter;

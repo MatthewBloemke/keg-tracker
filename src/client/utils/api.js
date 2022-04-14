@@ -207,3 +207,34 @@ export function standardizeDate(date) {
 export async function isAdmin(signal) {
     return await fetchJson("/api/employees/admin", {headers, signal})
 }
+
+//Flavors API
+
+export async function getFlavors(signal) {
+    return await fetchJson(`/api/flavors`, {headers, signal}, [])
+}
+
+export async function createFlavor(data, signal) {
+    console.log(data)
+    const options = {
+        method: "POST",
+        headers,
+        signal,
+        body: JSON.stringify({data})
+    }
+    return await fetchJson(`/api/flavors`, options)
+}
+
+export async function editFlavor(data, flavor_id, signal) {
+    const options = {
+        method: "PUT",
+        headers, 
+        signal,
+        body: JSON.stringify({data})
+    }
+    return await fetchJson(`/api/flavors/${flavor_id}`, options)
+}
+
+export async function readFlavor(flavor_id, signal) {
+    return await fetchJson(`/api/flavors/${flavor_id}`, {headers, signal}, [])
+}

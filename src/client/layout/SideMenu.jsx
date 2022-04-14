@@ -4,6 +4,7 @@ import DistSubMenu from '../distributors/DistSubMenu'
 import EmployeeSubMenu from '../employees/EmployeesSubMenu'
 import KegSubMenu from '../kegs/KegSubMenu'
 import ShippingSubMenu from '../shippingHistory/ShippingSubMenu';
+import FlavorsSubMenu from '../flavors/FlavorsSubMenu'
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -16,6 +17,7 @@ const SideMenu = ({closeDrawer}) => {
     const [distOpen, setDistOpen] = useState(false);
     const [employeesOpen, setEmployeesOpen] = useState(false);
     const [shippingOpen, setShippingOpen] = useState(false);
+    const [flavorsOpen, setFlavorsOpen] = useState(false)
 
     const handleKegClick = () => {
         setKegsOpen(!kegsOpen);
@@ -28,6 +30,9 @@ const SideMenu = ({closeDrawer}) => {
     }
     const handleShippingClick = () => {
         setShippingOpen(!shippingOpen);
+    }
+    const handleFlavorsClick = () => {
+        setFlavorsOpen(!flavorsOpen)
     }
 
     
@@ -66,13 +71,22 @@ const SideMenu = ({closeDrawer}) => {
                         <EmployeeSubMenu closeDrawer={closeDrawer}/>
                     </Collapse>
                     <Divider/>
-                    <ListItemButton onClick={handleShippingClick}>
+                    <ListItemButton divider onClick={handleShippingClick}>
                         <ListItemText primary="Shipping"/>
                         {shippingOpen ? <ExpandLess/> : <ExpandMore/>}
                     </ListItemButton>
                     <Collapse in={shippingOpen} timeout="auto" unmountOnExit>
                         <ShippingSubMenu closeDrawer={closeDrawer}/>
                     </Collapse>
+                    <Divider/>
+                    <ListItemButton divider onClick={handleFlavorsClick}>
+                        <ListItemText primary="Flavors"/>
+                        {flavorsOpen ? <ExpandLess/> : <ExpandMore/>}
+                    </ListItemButton>
+                    <Collapse in={flavorsOpen} timeout="auto" unmountOnExit>
+                        <FlavorsSubMenu closeDrawer={closeDrawer}/>
+                    </Collapse>
+                    <Divider/>
                 </List>
     )
 
