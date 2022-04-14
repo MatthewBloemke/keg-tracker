@@ -15,7 +15,6 @@ function isAdmin(req, res, next) {
 }
 
 function adminCheck(req, res, next) {
-    console.log(req.cookies.admin)
     if (req.cookies.admin != "admin") {
         return next({status: 401, message: "Administrator privileges are required"})
     }

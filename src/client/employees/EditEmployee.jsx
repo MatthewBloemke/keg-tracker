@@ -25,6 +25,7 @@ const EditEmployee = () => {
     const [disabled, setDisabled] = useState(false);
     const [passwordDisabled, setPasswordDisabled] = useState(true)
     const [passwordError, setPasswordError] = useState(false)
+    const [admin, setAdmin] = useState(false)
 
     const handleChange = ({target}) => {
         setFormData({
@@ -65,6 +66,7 @@ const EditEmployee = () => {
         }
 
     };
+
 
     const submitPassword = async (event) => {
         event.preventDefault();
@@ -107,10 +109,16 @@ const EditEmployee = () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        history.push('/kegs/track/environment')
-                        return () => {
-                            abortController.abort()
-                        };
+                        setAdmin(false)
+                        if (params.employeeId != localStorage.getItem("id")) {
+                            history.push('/kegs/track/environment')
+                            return () => {
+                                abortController.abort()
+                            };                        
+                        }
+
+                    } else {
+                        setAdmin(true)
                     }
                 })
         }
@@ -134,13 +142,11 @@ const EditEmployee = () => {
                     }
                 })
         }
-        if (params.employeeId != localStorage.getItem("id")) {
-            adminCheck()            
-        }
-        
+    
+        adminCheck()
         
         if (formData.employee_id != params.employeeId) {
-           loadEmployee() 
+            loadEmployee()
         }
         if (formData.password === formData.passwordMatch) {
             setPasswordDisabled(false)
@@ -175,6 +181,7 @@ const EditEmployee = () => {
                                     label="Admin"
                                     name="admin"
                                     onChange={handleChange}
+                                    disabled={!admin}
                                 >
                                     <MenuItem value={true}>True</MenuItem>
                                     <MenuItem value={false}>False</MenuItem>
