@@ -33,7 +33,7 @@ describe("employees Route", () => {
                         password: "admin"
                     }})
 
-                expect(response.body.data).toContain("working")
+                expect(response.body.data).toEqual({"employee_name": "Admin","employee_id": 1})
             })
         })
         describe("POST /api/employees", () => {
