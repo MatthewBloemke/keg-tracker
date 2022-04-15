@@ -27,10 +27,12 @@ const Dashboard = () => {
     const useStyles = makeStyles({
         root: {
             minWidth: '250px',
-            width: '30%',
+            width: '20%',
             maxWidth: "25%",
             marginLeft: "10px",
-            marginTop: "5px"
+            marginTop: "5px",
+            marginBottom: "10px",
+            minHeight: "150px"
         },
         title: {
           fontSize: 14,
@@ -97,8 +99,6 @@ const Dashboard = () => {
                         response.forEach(entry => {
                             const utcDate = standardizeDate(entry.date_shipped)
                             const tempDate = new Date(Date.UTC(utcDate.year, utcDate.month - 1, utcDate.day, 5));
-                            const tempMonth = String(tempDate.getMonth() + 1);
-                            const tempDay = String(tempDate.getDate());
                             if (tempDate.getMonth() === month && tempDate.getYear() === year) {
                                 if (entry.keg_status === "shipped") {
                                     shippingList.push(entry)
@@ -133,15 +133,9 @@ const Dashboard = () => {
 
     return (
         <div id="dashboard">
-            <Divider/>
-            <AppBar position="static">
-                <Typography variant='h5' textAlign={smallScreen ? "center": null} component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                    Dashboard
-                </Typography>
-            </AppBar>
             <div className='cardContainer'>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "30%", minWidth: "250px", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
-                <Card className={classes.root} variant="outlined">
+                <Card elevation={3} className={classes.root}>
                     <CardContent>
                         <Typography className={classes.title}>Total Kegs In Sytem</Typography>
                         <Typography className={classes.pos}>{kegs ? kegs.length + " kegs in system" : null}</Typography>
@@ -150,7 +144,7 @@ const Dashboard = () => {
                         <Button component={Link} to="/kegs/list/shipped" size='medium' >View Kegs</Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.root} variant="outlined">
+                <Card className={classes.root} elevation={3}>
                     <CardContent>
                         <Typography className={classes.title}>Total Kegs Returned</Typography>
                         <Typography className={classes.pos}>{returnedKegs ? returnedKegs.length + " kegs at the warehouse" : null}</Typography>
@@ -159,7 +153,7 @@ const Dashboard = () => {
                         <Button component={Link} to="/kegs/list/returned" size='medium'>View Returned Kegs</Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.root} variant="outlined">
+                <Card className={classes.root} elevation={3}>
                     <CardContent>
                         <Typography className={classes.title}>Total Shipped Kegs</Typography>
                         <Typography className={classes.pos}>{kegs.length - returnedKegs.length + " kegs are shipped"}</Typography>
@@ -168,7 +162,7 @@ const Dashboard = () => {
                         <Button component={Link} to="/kegs/list/shipped" size='medium' >View Shipped Kegs</Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.root} variant="outlined">
+                <Card className={classes.root} elevation={3}>
                     <CardContent>
                         <Typography className={classes.title}>Number of Kegs out for less than 60 Days</Typography>
                         <Typography className={classes.pos}>{sixtyDayKegs ? sixtyDayKegs.length + " kegs in system" : null}</Typography>
@@ -177,7 +171,7 @@ const Dashboard = () => {
                         <Button component={Link} to={{pathname: "/kegs/list/shipped", state: sixtyDayKegs}} size='medium'>{'View Kegs out for <60 Days'}</Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.root} variant="outlined">
+                <Card className={classes.root} elevation={3}>
                     <CardContent>
                         <Typography className={classes.title}>Number of Kegs out for more than 60 days and less than 120 days</Typography>
                         <Typography className={classes.pos}>{onetwentyDayKegs ? onetwentyDayKegs.length + " kegs out for over 60 days" : null}</Typography>
@@ -186,7 +180,7 @@ const Dashboard = () => {
                         <Button size='medium' component={Link} to={{pathname: "/kegs/list/shipped", state: onetwentyDayKegs}} >{'View Kegs out for >60 days'}</Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.root} variant="outlined">
+                <Card className={classes.root} elevation={3}>
                     <CardContent>
                         <Typography className={classes.title}>Number of Kegs out for over 120 days</Typography>
                         <Typography className={classes.pos}>{overdueKegs ? overdueKegs.length + " kegs out for over 120 days" : null}</Typography>
@@ -195,7 +189,7 @@ const Dashboard = () => {
                         <Button size='medium' component={Link} to={{pathname: "/kegs/list/shipped", state: overdueKegs}} >{'View Kegs out for >120 days'}</Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.root} variant="outlined">
+                <Card className={classes.root} elevation={3}>
                     <CardContent>
                         <Typography className={classes.title}>Number of Kegs Shipped this month</Typography>
                         <Typography className={classes.pos}>{monthlyShipped.length} kegs have been shipped this month</Typography>
@@ -204,7 +198,7 @@ const Dashboard = () => {
                         <Button size="medium" component={Link} to="/shipping/monthly" >View shipping history</Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.root} variant="outlined">
+                <Card className={classes.root} elevation={3}>
                     <CardContent>
                         <Typography className={classes.title}>Number of Kegs Returned this month</Typography>
                         <Typography className={classes.pos}>{monthlyReturned.length} kegs have been returned this month</Typography>

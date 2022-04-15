@@ -76,14 +76,6 @@ const NewFlavor = () => {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
-                <Divider/>
-                <AppBar position='static'>
-                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        New Flavor
-                    </Typography>
-                </AppBar>
-            </Grid>
-            <Grid item xs={12}>
                 <Grid container alignItems="center" direction="column">
                     <TextField sx={{width: "10%", minWidth: "250px", mb: "20px"}} id="outlined-basic" label="Flavor Name" name='flavor_name' onChange={handleChange} value={formData.flavor_name} />
                     <Button onClick={handleSubmit} size="large" variant="contained" disabled={disabled}>Submit</Button> <br/>

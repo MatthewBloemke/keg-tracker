@@ -178,14 +178,6 @@ const FillKeg = () => {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
-                <Divider/>
-                <AppBar position='static'>
-                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        Fill Kegs
-                    </Typography>
-                </AppBar>
-            </Grid>
-            <Grid item xs={12}>
                 <Grid container alignItems="center" direction="column">
                     <FormControl sx={{ minWidth: "250px", width: "10%"}}>
                         <InputLabel>Flavors</InputLabel>

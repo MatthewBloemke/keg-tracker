@@ -161,14 +161,6 @@ const EditEmployee = () => {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <Divider/>
-                <AppBar position="static">
-                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        Edit Employee
-                    </Typography>
-                </AppBar>    
-            </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <Grid container textAlign='center' spacing={3}>
                         <Grid item xs={12}>

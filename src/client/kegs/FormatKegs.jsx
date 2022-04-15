@@ -47,14 +47,13 @@ const FormatKegs = ({kegs, distributors, status}) => {
     });
 
     return (
-        <div id="data" style={{height: '100vh'}}>
-            <DataGrid
-                rows={kegTableRows}
-                columns={columns}
-                pageSize={50}
-                rowsPerPageOptions={[50]}z
-            />
-        </div>
+        <DataGrid
+            sx={{border: "none", height: "100vh", marginLeft: "15px"}}
+            rows={kegTableRows}
+            columns={columns}
+            pageSize={50}
+            rowsPerPageOptions={[50]}z
+        />
 
     )
 }

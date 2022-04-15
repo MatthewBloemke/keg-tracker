@@ -69,16 +69,7 @@ const ListKegs = () => {
     }, [params.status]);
 
     return (
-        <Grid container>
-            <Grid item xs={12}>
-                <Divider/>
-                <AppBar position='static'>
-                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        {params.status === "shipped" ? "Shipped Kegs" : "Returned Kegs"}
-                    </Typography>
-                </AppBar>
-            </Grid>
-
+        <Grid container alignItems="center">
             <Grid item xs={12}>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                 <FormatKegs kegs={kegs} distributors={distributors} status={params.status}/> 

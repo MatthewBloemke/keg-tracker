@@ -37,6 +37,7 @@ const FormatFlavors = ({flavors}) => {
                 columns={columns}
                 pageSize={25}
                 rowsPerPageOptions={[25]}
+                sx={{border: "none", marginLeft: "15px"}}
             />            
         </div>
 

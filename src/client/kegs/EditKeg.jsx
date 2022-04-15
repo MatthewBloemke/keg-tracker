@@ -90,14 +90,6 @@ const EditKeg = () => {
     }
     return (
         <Grid container spacing={3} textAlign="center">
-            <Grid item xs={12} >
-                <Divider/>
-                <AppBar position="static">
-                    <Typography variant="h5" component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        Edit Keg
-                    </Typography>
-                </AppBar>
-            </Grid>
             <Grid item xs={12} sx={{ paddingTop: "12px"}}>
                 <TextField sx={{width: "10%", minWidth:"250px"}} id ="outlined-basic" label="Keg Number" name="keg_name" margin="normal" onChange={handleChange} value={formData.keg_name} />
             </Grid>

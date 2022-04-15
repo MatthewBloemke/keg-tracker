@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import {useHistory} from 'react-router-dom';
 import { login } from "../utils/api";
-import {TextField, Button, Grid, AppBar, Typography} from "@mui/material";
+import {TextField, Button, Grid, AppBar, Typography, useMediaQuery} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import LoginIcon from '@mui/icons-material/Login';
 import Alert from '@mui/material/Alert';
-
+import {useTheme} from '@mui/material/styles'
 
 
 
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '&.MuiAppBar-root': {
       backgroundColor: theme.palette.primary.dark,
-      height: '10px'
+      height: '12px'
     }    
   }
 
@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
 
+  const theme = useTheme();
+  const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
   const history = useHistory()
   const initialFormData = {
     employee_email: "",
@@ -59,8 +61,8 @@ const Login = () => {
         <Grid item xs={12}>
           <AppBar className={classes.root} position="static"></AppBar>
           <AppBar position="static">
-            <Typography variant="h4" component='div' sx={{flexGrow: 1, textAlign: 'center', pb: '20px', pt: '20px'}}>
-              Welcome To Loon Juice Keg Tracker
+            <Typography variant={smallScreen ? "h5" : "h4"} component='div' sx={{flexGrow: 1, textAlign: 'center', pb: '15px', pt: '15px'}}>
+              {smallScreen ? "Welcome to Keg Tracker" : "Welcome to Loon Juice Keg Tracker"}
             </Typography>
           </AppBar>          
         </Grid>

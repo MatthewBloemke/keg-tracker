@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import { useParams, useHistory } from 'react-router-dom';
 import { editDistributor, readDistributor } from '../utils/api'
-import { useMediaQuery, TextField, Alert, Grid, Button, Divider, AppBar, Typography} from '@mui/material'
-import { useTheme } from "@mui/material/styles";
+import {TextField, Alert, Grid, Button} from '@mui/material'
+
 import { isAdmin } from '../utils/api';
 
 const EditDistributor = () => {
@@ -16,9 +16,6 @@ const EditDistributor = () => {
     const [disabled, setDisabled] = useState(true)
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
-
-    const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
     const handleChange = ({target}) => {
         if (target.value.length > 0) {
@@ -84,14 +81,6 @@ const EditDistributor = () => {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <Divider/>
-                <AppBar position='static'>
-                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        Edit Distributor
-                    </Typography>
-                </AppBar>
-            </Grid>
             <Grid item xs={12}>
                 <Grid container alignItems="center" direction="column">
                     <TextField sx={{width: "10%", minWidth: "250px", mb: '20px'}} id="outlined-basic" label="Distributor name" name='distributor_name' onChange={handleChange} value={formData.distributor_name} />

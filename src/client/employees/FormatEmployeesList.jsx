@@ -32,6 +32,7 @@ const FormatEmployeesList = ({employees}) => {
     return (
         <div style={{height: '100vh'}}>
             <DataGrid
+                sx={{border: "none", marginLeft: "15px"}}
                 rows={employeeRows}
                 columns={columns}
                 pageSize={10}

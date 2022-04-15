@@ -91,8 +91,6 @@ const Shipping = ({monthlyOnly}) => {
                         return () => {
                             abortController.abort()
                         };
-                    } else {
-                        console.log("user is an admin")
                     }
                 })
         }
@@ -105,17 +103,8 @@ const Shipping = ({monthlyOnly}) => {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <Divider/>
-                <AppBar position='static'>
-                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center": null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        {monthlyOnly ? "Monthly Filling History": "Daily Filling History"}
-                    </Typography>
-                </AppBar>
-                
-            </Grid>
-            <Grid container sx={{display: 'flex', flexDirection:"row", flexWrap: "wrap", justifyContent: "space-evenly"}}>
-                <Card className={classes.root} variant="outlined">
+            <Grid container sx={{display: 'flex', flexDirection:"row", flexWrap: "wrap", justifyContent: "space-evenly", marginTop: "10px"}}>
+                <Card className={classes.root} >
                     <CardContent>
                         <Typography className={classes.title}>Number of Kegs Filled this month</Typography>
                         <Typography className={classes.pos}>{monthlyFilled.length} kegs have been filled this month</Typography>

@@ -113,26 +113,17 @@ const Shipping = ({monthlyOnly}) => {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <Divider/>
-                <AppBar position='static'>
-                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center": null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        {monthlyOnly ? "Monthly": "Daily"}
-                    </Typography>
-                </AppBar>
-                
-            </Grid>
-            <Grid container sx={{display: 'flex', flexDirection:"row", flexWrap: "wrap", justifyContent: "space-evenly"}}>
-                <Card className={classes.root} variant="outlined">
+            <Grid container sx={{display: 'flex', flexDirection:"row", flexWrap: "wrap", justifyContent: "space-evenly", marginTop: "10px"}}>
+                <Card className={classes.root} elevation={3}>
                     <CardContent>
                         <Typography className={classes.title}>Number of Kegs Shipped this month</Typography>
-                        <Typography className={classes.pos}>{monthlyShipped.length} kegs have been shipped this month</Typography>
+                        <Typography className={classes.pos}>{monthlyShipped.length} kegs have been returned this month</Typography>
                     </CardContent>
                     <CardActions>
                         <Button size="medium" component={Link} to="/shipping/monthly" >View shipping history</Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.root} variant="outlined">
+                <Card className={classes.root} elevation={3}>
                     <CardContent>
                         <Typography className={classes.title}>Number of Kegs Returned this month</Typography>
                         <Typography className={classes.pos}>{monthlyReturned.length} kegs have been returned this month</Typography>

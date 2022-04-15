@@ -54,7 +54,7 @@ const FormatFilling = ({date, monthlyOnly, fillingList, kegs, flavors}) => {
             columns={columns}
             pageSize={50}
             rowsPerPageOptions={[50]}
-            sx={{height: '100vh'}}
+            sx={{height: '100vh', border: "none", marginLeft: "15px"}}
         />
     )
 }

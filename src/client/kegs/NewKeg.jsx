@@ -121,14 +121,6 @@ const NewKeg = () => {
     };
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12} >
-                <Divider/>
-                <AppBar position="static">
-                    <Typography variant="h5" textAlign={smallScreen? "center": null} component="div" sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        Create Keg
-                    </Typography>
-                </AppBar>
-            </Grid>
             <Grid item xs={12}>
                 <Grid container alignItems="center" direction="column">
                     <TextField sx={{width: "10%", minWidth:"250px", mb: "18px"}} id ="outlined-basic" label="Keg Number" name="keg_name" margin="normal" onChange={handleChange} value={formData.keg_name} />

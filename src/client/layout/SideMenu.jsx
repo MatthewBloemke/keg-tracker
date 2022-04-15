@@ -10,7 +10,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import {ExpandLess, ExpandMore} from '@mui/icons-material'
-import { Collapse } from '@mui/material' 
+import { Collapse, ImageListItem, ListItem } from '@mui/material' 
 import FillingSubMenu from '../fillingHistory/FillingSubMenu'
 
 const SideMenu = ({closeDrawer}) => {
@@ -41,13 +41,18 @@ const SideMenu = ({closeDrawer}) => {
         setFillingOpen(!fillingOpen);
     }
     const style = {
-        width: "250px",
+        width: "220px",
         paddingTop: "0"
     }
 
 
     return (
         <List sx={style} component="nav">
+            <ImageListItem divider>
+                <img style={{borderRadius: "5px", marginLeft: "55px", marginTop: "10px", marginBottom: "5px",  width: "50%"}} src='https://res.cloudinary.com/ratebeer/image/upload/w_400,c_limit/brew_20712.jpg' alt="loon juice"/>
+            </ImageListItem>
+            <Divider/>
+            <Divider/>
             <ListItemButton divider onClick={closeDrawer} component={Link} to="/dashboard">
                 <ListItemText primary="Home"/>
             </ListItemButton>

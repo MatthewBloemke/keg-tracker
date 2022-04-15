@@ -90,14 +90,6 @@ const NewEmployee = () => {
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
-                <Divider/>
-                <AppBar position='static'>
-                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        Create Employee
-                    </Typography>
-                </AppBar>
-            </Grid>
-            <Grid item xs={12}>
                 <Grid container textAlign="center">
                     <Grid item xs={12}>
                         <TextField sx={{width: "10%", minWidth: "250px", marginBottom: '15px', mb: "25px"}} id="outlined-basic" label="Name" name="employee_name" onChange={handleChange} value={formData.employee_name} /> <br/>

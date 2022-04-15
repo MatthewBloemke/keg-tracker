@@ -187,14 +187,6 @@ const ReturnKeg = () => {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <Divider/>
-                <AppBar position="static">
-                    <Typography variant="h5" component="div" textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        Return Kegs
-                    </Typography>
-                </AppBar>
-            </Grid>
             <Grid item xs={12} >
                 <Grid container alignItems='center' direction="column">
                     {smallScreen ? <Button sx={{mb:"15px"}} onClick={handleSwitch} variant="contained">Switch Camera</Button> : null }

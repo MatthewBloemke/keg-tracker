@@ -72,14 +72,6 @@ const NewDistributor = () => {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
-                <Divider/>
-                <AppBar position='static'>
-                    <Typography variant='h5' component='div' textAlign={smallScreen ? "center" : null} sx={{flexGrow: 1, pl: '10px', pb: '10px', pt: '10px'}}>
-                        New Distributor
-                    </Typography>
-                </AppBar>
-            </Grid>
-            <Grid item xs={12}>
                 <Grid container alignItems="center" direction="column">
                     <TextField sx={{width: "10%", minWidth: "250px", mb: "20px"}} id="outlined-basic" label="Distributor Name" name='distributor_name' onChange={handleChange} value={formData.distributor_name} />
                     <Button onClick={handleSubmit} size="large" variant="contained" disabled={disabled}>Submit</Button> <br/>
