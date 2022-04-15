@@ -33,12 +33,10 @@ const Dashboard = () => {
             marginTop: "5px"
         },
         title: {
-          backgroundColor: 'white',
           fontSize: 14,
         },
         pos: {
           marginBottom: 12,
-          backgroundColor: 'white',
         },
       });
 
