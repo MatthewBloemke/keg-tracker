@@ -182,7 +182,7 @@ const Layout = () => {
                                 onClick={handleAccountMenu}
                                 color="inherit"
                             >
-                                <Avatar className={classes.root}>{localStorage.getItem("name")[0]}</Avatar>
+                                <Avatar className={classes.root}>{localStorage.getItem("name")? localStorage.getItem("name")[0]: null}</Avatar>
                             </IconButton>
                             <Menu
                             sx={{marginLeft: "-9px", marginTop: "-10px"}}
