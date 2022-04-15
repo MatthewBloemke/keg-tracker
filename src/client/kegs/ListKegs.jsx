@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { getDistributors, getKegs, isAdmin } from '../utils/api'
-import FormatKegs from './FormatKegs'
+import FormatShippedKegs from './FormatShippedKegs'
 import {AppBar, Divider, Grid, Typography, useMediaQuery, Alert} from '@mui/material'
 import { useTheme } from "@mui/material/styles";
+import FormatReturnedKegs from './FormatReturnedKegs'
 
 const ListKegs = () => {
     const location = useLocation()
@@ -72,7 +73,7 @@ const ListKegs = () => {
         <Grid container alignItems="center">
             <Grid item xs={12}>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
-                <FormatKegs kegs={kegs} distributors={distributors} status={params.status}/> 
+                {params.status === "shipped" ? <FormatShippedKegs kegs={kegs} distributors={distributors} status={params.status}/> : <FormatReturnedKegs kegs={kegs}/> }
             </Grid>
         </Grid>
         
