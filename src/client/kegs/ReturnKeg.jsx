@@ -213,7 +213,7 @@ const ReturnKeg = () => {
                             />
                         </LocalizationProvider>                    
                         <Typography textAlign='center' variant='h6' component='div' sx={{marginBottom: "10px", mt: "20px"}}>
-                            Kegs Shipped: {keg_names.length}
+                            Kegs Returned: {keg_names.length}
                         </Typography>
                         <Button sx={{width:"50%", margin:"auto", marginTop: "15px"}} type="submit" variant='contained' onClick={handleSubmit}>Submit</Button>
                     </FormControl>                        
