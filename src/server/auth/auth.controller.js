@@ -155,9 +155,9 @@ const destroy = async (req, res) => {
 
 const login = async (req, res) => {
     const token = jwt.sign({user: res.locals.employee.employee_name}, process.env.SECRET);
-    res.cookie('token', token, { maxAge: 60000 * 60 * 12, httpOnly: true });
+    res.cookie('token', token, { maxAge: 60000 * 60 * 6, httpOnly: true });
     if (res.locals.employee.admin) {
-        res.cookie('admin', "admin", { maxAge: 60000 * 60 * 12, httpOnly: true })
+        res.cookie('admin', "admin", { maxAge: 60000 * 60 * 6, httpOnly: true })
     }
     res.json({ "data": {employee_id: res.locals.employee.employee_id, employee_name: res.locals.employee.employee_name}});
 }
