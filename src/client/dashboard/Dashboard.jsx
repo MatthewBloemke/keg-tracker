@@ -23,9 +23,19 @@ const Dashboard = () => {
 
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+    const largeScreen = (!useMediaQuery(theme.breakpoints.up('lg')))
 
     const useStyles = makeStyles({
         root: {
+            minWidth: '250px',
+            width: '20%',
+            maxWidth: "25%",
+            marginLeft: "10px",
+            marginTop: "5px",
+            marginBottom: "10px",
+            height: "175px"
+        },
+        image: {
             minWidth: '250px',
             width: '20%',
             maxWidth: "25%",
@@ -150,7 +160,7 @@ const Dashboard = () => {
                         <Typography className={classes.title}>Total Kegs In Sytem</Typography>
                         <Typography className={classes.pos}>{kegs ? kegs.length + " kegs in system" : null}</Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions sx={{marginTop: "44px"}}>
                         <Button component={Link} to="/kegs/list/shipped" size='medium' >View Kegs</Button>
                     </CardActions>
                 </Card>
@@ -159,7 +169,7 @@ const Dashboard = () => {
                         <Typography className={classes.title}>Total Kegs Returned</Typography>
                         <Typography className={classes.pos}>{returnedKegs ? returnedKegs.length + " kegs at the warehouse" : null}</Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions sx={{marginTop: "44px"}}>
                         <Button component={Link} to="/kegs/list/returned" size='medium'>View Returned Kegs</Button>
                     </CardActions>
                 </Card>
@@ -168,57 +178,52 @@ const Dashboard = () => {
                         <Typography className={classes.title}>Total Shipped Kegs</Typography>
                         <Typography className={classes.pos}>{kegs.length - returnedKegs.length + " kegs are shipped"}</Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions sx={{marginTop: "44px"}}>
                         <Button component={Link} to="/kegs/list/shipped" size='medium' >View Shipped Kegs</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} elevation={3}>
                     <CardContent>
-                        <Typography className={classes.title}>Number of Kegs out for less than 60 Days</Typography>
-                        <Typography className={classes.pos}>{sixtyDayKegs ? sixtyDayKegs.length + " kegs in system" : null}</Typography>
+                        <Typography className={classes.title}>{`There are ${sixtyDayKegs ? sixtyDayKegs.length : 0} kegs that have been out for less than 60 days`}</Typography>
                     </CardContent>
-                    <CardActions>
-                        <Button component={Link} to={{pathname: "/kegs/list/shipped", state: sixtyDayKegs}} size='medium'>{'View Kegs out for <60 Days'}</Button>
+                    <CardActions sx={{marginTop: largeScreen ? "20px" : "44px"}}>
+                        <Button component={Link} to={{pathname: "/kegs/list/shipped", state: sixtyDayKegs}} size='medium'>{'View Kegs'}</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} elevation={3}>
                     <CardContent>
-                        <Typography className={classes.title}>Number of Kegs out for more than 60 days and less than 120 days</Typography>
-                        <Typography className={classes.pos}>{onetwentyDayKegs ? onetwentyDayKegs.length + " kegs out for over 60 days" : null}</Typography>
+                        <Typography className={classes.title}>{`There are ${onetwentyDayKegs ? onetwentyDayKegs.length : 0} kegs that have been out for more than 60 days`}</Typography>
                     </CardContent>
-                    <CardActions>
-                        <Button size='medium' component={Link} to={{pathname: "/kegs/list/shipped", state: onetwentyDayKegs}} >{'View Kegs out for >60 days'}</Button>
+                    <CardActions sx={{marginTop: largeScreen ? "20px" : "44px"}}>
+                        <Button size='medium' component={Link} to={{pathname: "/kegs/list/shipped", state: onetwentyDayKegs}} >{'View Kegs'}</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} elevation={3}>
                     <CardContent>
-                        <Typography className={classes.title}>Number of Kegs out for over 120 days</Typography>
-                        <Typography className={classes.pos}>{overdueKegs ? overdueKegs.length + " kegs out for over 120 days" : null}</Typography>
+                        <Typography className={classes.title}>{`There are ${overdueKegs ? overdueKegs.length : 0} kegs that have been out for more than 120 days`}</Typography>
                     </CardContent>
-                    <CardActions>
-                        <Button size='medium' component={Link} to={{pathname: "/kegs/list/shipped", state: overdueKegs}} >{'View Kegs out for >120 days'}</Button>
+                    <CardActions sx={{marginTop: largeScreen ? "20px" : "44px"}}>
+                        <Button size='medium' component={Link} to={{pathname: "/kegs/list/shipped", state: overdueKegs}} >{'View Kegs'}</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} elevation={3}>
                     <CardContent>
-                        <Typography className={classes.title}>Number of Kegs Shipped this month</Typography>
-                        <Typography className={classes.pos}>{monthlyShipped.length} kegs have been shipped this month</Typography>
+                        <Typography className={classes.title}>There are a total of {monthlyShipped.length} kegs that have been shipped this month</Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions sx={{marginTop: largeScreen ? "20px" : "44px"}}>
                         <Button size="medium" component={Link} to="/shipping/monthly" >View shipping history</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.root} elevation={3}>
                     <CardContent>
-                        <Typography className={classes.title}>Number of Kegs Returned this month</Typography>
-                        <Typography className={classes.pos}>{monthlyReturned.length} kegs have been returned this month</Typography>
+                        <Typography className={classes.title}>There are a total of {monthlyReturned.length} kegs that have been returned this month</Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions sx={{marginTop: largeScreen ? "20px" : "44px"}}>
                         <Button size="medium" component={Link} to="/shipping/monthly" >View shipping history</Button>
                     </CardActions>
                 </Card>
                 {!smallScreen ? 
-                    <Card className={classes.root} elevation={3}>
+                    <Card className={classes.image} elevation={3}>
                         <CardMedia
                             component='img'
                             width="20%"
