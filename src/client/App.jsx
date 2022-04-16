@@ -2,7 +2,6 @@ import React from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Layout from './layout/Layout'
 import Login from './login/Login'
-import {deepOrange, lightBlue} from '@mui/material/colors'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 
