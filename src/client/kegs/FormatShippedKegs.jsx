@@ -46,7 +46,13 @@ const FormatShippedKegs = ({kegs, distributors, status}) => {
 
     return (
         <DataGrid
-            sx={{border: "none", height: "100vh", marginLeft: "15px"}}
+            sx={{
+                border: "none", 
+                height: "100vh", 
+                paddingLeft: "15px",
+                paddingRight: "15px",
+                backgroundColor: '#f5f5f5'
+            }}
             rows={kegTableRows}
             columns={columns}
             pageSize={50}

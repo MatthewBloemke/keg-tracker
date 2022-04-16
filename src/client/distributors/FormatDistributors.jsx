@@ -33,16 +33,19 @@ const FormatDistributors = ({distributors}) => {
         )
     })
     return (
-        <div id="data" style={{height: '100vh'}}>
-            <DataGrid
-                sx={{border: "none", marginLeft: "15px"}}
-                rows={distTable}
-                columns={columns}
-                pageSize={25}
-                rowsPerPageOptions={[25]}
-            />            
-        </div>
-
+        <DataGrid
+            sx={{
+                border: "none",
+                height: '100vh',
+                paddingLeft: "15px",
+                paddingRight: "15px",
+                backgroundColor: '#f5f5f5'
+            }}
+            rows={distTable}
+            columns={columns}
+            pageSize={25}
+            rowsPerPageOptions={[25]}
+        />
     )
 }
 

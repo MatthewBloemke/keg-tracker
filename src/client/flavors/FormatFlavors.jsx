@@ -31,16 +31,19 @@ const FormatFlavors = ({flavors}) => {
         )
     })
     return (
-        <div id="data" style={{height: '100vh'}}>
-            <DataGrid
-                rows={flavorTable}
-                columns={columns}
-                pageSize={25}
-                rowsPerPageOptions={[25]}
-                sx={{border: "none", marginLeft: "15px"}}
-            />            
-        </div>
-
+        <DataGrid
+            rows={flavorTable}
+            columns={columns}
+            pageSize={25}
+            rowsPerPageOptions={[25]}
+            sx={{
+                border: "none",
+                height: '100vh',
+                paddingLeft: "15px",
+                paddingRight: "15px",
+                backgroundColor: '#f5f5f5'
+            }}
+        />
     )
 }
 

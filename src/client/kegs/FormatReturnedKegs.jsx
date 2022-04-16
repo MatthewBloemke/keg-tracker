@@ -33,13 +33,20 @@ const FormatReturnedKegs = ({kegs}) => {
                 keg_name: keg.keg_name,
                 keg_size: keg.keg_size,
                 date_shipped: `${("0"+month).slice(-2)}-${("0"+day).slice(-2)}-${date_shipped.getFullYear()}`,
+                borderColor: 'black'
             }
         );
     });
 
     return (
         <DataGrid
-            sx={{border: "none", height: "100vh", marginLeft: "15px"}}
+            sx={{
+                border: "none", 
+                height: "100vh",
+                paddingLeft: "15px",
+                paddingRight: "15px",
+                backgroundColor: '#f5f5f5'
+            }}
             rows={kegTableRows}
             columns={columns}
             pageSize={50}
