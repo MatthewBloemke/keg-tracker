@@ -55,7 +55,13 @@ const FormatShipping = ({date, monthlyOnly, shippingList, kegs, distributors}) =
             columns={columns}
             pageSize={50}
             rowsPerPageOptions={[50]}
-            sx={{height: '100vh', border: "none", marginLeft: "15px"}}
+            sx={{
+                border: "none",
+                height: '100vh',
+                paddingLeft: "15px",
+                paddingRight: "15px",
+                backgroundColor: '#f5f5f5'
+            }}
         />
     )
 }
