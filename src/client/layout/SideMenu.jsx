@@ -48,7 +48,7 @@ const SideMenu = ({closeDrawer}) => {
 
     return (
         <List sx={style} component="nav">
-            <ImageListItem divider>
+            <ImageListItem>
                 <img style={{borderRadius: "5px", marginLeft: "55px", marginTop: "10px", marginBottom: "5px",  width: "50%"}} src='https://res.cloudinary.com/ratebeer/image/upload/w_400,c_limit/brew_20712.jpg' alt="loon juice"/>
             </ImageListItem>
             <Divider/>
