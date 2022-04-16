@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {getKegs, getShippingHistory, isAdmin, standardizeDate} from '../utils/api'
-import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, AppBar, Divider, Alert} from "@mui/material";
+import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, AppBar, Divider, Alert, CardMedia} from "@mui/material";
 import {makeStyles} from "@mui/styles"
 import {useTheme} from '@mui/material/styles'
 import './dashboard.css'
@@ -135,6 +135,16 @@ const Dashboard = () => {
         <div id="dashboard">
             <div className='cardContainer'>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "30%", minWidth: "250px", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
+                {smallScreen ? 
+                    <Card className={classes.root} elevation={3}>
+                        <CardMedia
+                            component='img'
+                            width="20%"
+                            image="https://res.cloudinary.com/ratebeer/image/upload/w_400,c_limit/brew_20712.jpg"
+                            alt="logo"
+                        />
+                    </Card> : null 
+                }
                 <Card elevation={3} className={classes.root}>
                     <CardContent>
                         <Typography className={classes.title}>Total Kegs In Sytem</Typography>
@@ -207,6 +217,16 @@ const Dashboard = () => {
                         <Button size="medium" component={Link} to="/shipping/monthly" >View shipping history</Button>
                     </CardActions>
                 </Card>
+                {!smallScreen ? 
+                    <Card className={classes.root} elevation={3}>
+                        <CardMedia
+                            component='img'
+                            width="20%"
+                            image="https://res.cloudinary.com/ratebeer/image/upload/w_400,c_limit/brew_20712.jpg"
+                            alt="logo"
+                        />
+                    </Card> : null 
+                }
             </div>
         </div>
     )
