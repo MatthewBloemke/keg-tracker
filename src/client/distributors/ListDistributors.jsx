@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react'
-import { getDistributors, isAdmin } from '../utils/api'
+import { getDistributors, isAdmin, getKegs } from '../utils/api'
 import FormatDistributors from './FormatDistributors';
-import {AppBar, Divider, Grid, Typography, Alert, useMediaQuery} from '@mui/material'
-import { useTheme } from "@mui/material/styles";
+import { Grid, Alert, useMediaQuery} from '@mui/material'
 import { useHistory } from 'react-router-dom';
 
 const ListDistributors = () => {
@@ -10,9 +9,8 @@ const ListDistributors = () => {
     const history = useHistory()
     const [dist, setDist] = useState([]);
     const [error, setError] = useState(null)
+    const [kegs, setKegs] = useState([])
 
-    const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -25,6 +23,22 @@ const ListDistributors = () => {
                         setDist(response)
                     }
                 })            
+        }
+        const loadKegs = async () => {
+            await getKegs(abortController.signal)
+                .then(response => {
+                    const tempKegs = [];
+                    if (response.error) {
+                        setError(response.error)
+                    } else {
+                        response.forEach(keg => {
+                            if (keg.keg_status === "shipped") {
+                                tempKegs.push(keg)
+                            }
+                        })
+                        setKegs(tempKegs);
+                    }
+                })
         }
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
@@ -39,16 +53,16 @@ const ListDistributors = () => {
         }
         adminCheck()
         loadDistributors()
+        loadKegs()
         return () => abortController.abort()
     }, [])
-
     return (
         <Grid container>
             <Grid item xs={12}>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "30%", minWidth: "250px", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
             </Grid>
             <Grid item xs={12}>
-                <FormatDistributors distributors={dist}/>
+                <FormatDistributors distributors={dist} kegs={kegs}/>
             </Grid>
         </Grid>
         
