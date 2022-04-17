@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useHistory} from 'react-router-dom';
 import { login } from "../utils/api";
-import {TextField, Button, Grid, AppBar, Typography, useMediaQuery} from "@mui/material";
+import {TextField, Button, Grid, AppBar, Typography, useMediaQuery, Card, CardMedia} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import LoginIcon from '@mui/icons-material/Login';
 import Alert from '@mui/material/Alert';
@@ -66,8 +66,19 @@ const Login = () => {
             </Typography>
           </AppBar>          
         </Grid>
-        <Grid item xs={12} textAlign="center">
-          <img style={{borderRadius: "5px", marginTop: "15px", maxWidth: "400px", width: "30%", minWidth: "250px"}} src='https://res.cloudinary.com/ratebeer/image/upload/w_400,c_limit/brew_20712.jpg' alt="loon juice"/>
+        <Grid container justifyContent="center" sx={{marginTop: '15px'}}>
+          <Card elevation={3} sx={{
+                  width:"30%",
+                  maxWidth: "400px", 
+                  minWidth: "250px"            
+          }}>
+              <CardMedia
+                  component='img'
+
+                  image="https://res.cloudinary.com/ratebeer/image/upload/w_400,c_limit/brew_20712.jpg"
+                  alt="logo"
+              />
+          </Card>
         </Grid>
         <Grid item xs={12}>
           <div className="form" style={{textAlign: "center"}}>
