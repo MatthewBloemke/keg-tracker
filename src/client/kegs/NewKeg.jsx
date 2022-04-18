@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { createHistory, createKeg, getDistributors } from "../utils/api";
-import { useMediaQuery, FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel, Divider, AppBar, Typography} from '@mui/material'
+import { FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel } from '@mui/material'
 import {LocalizationProvider, DatePicker, } from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
-import { useTheme } from "@mui/material/styles";
 
 const NewKeg = () => {
     const user = localStorage.getItem('user')
@@ -21,9 +20,6 @@ const NewKeg = () => {
     const [distArr, setDistArr] = useState([]);
     const [error, setError] = useState(null)
     const [alert, setAlert] = useState(null)
-
-    const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -116,7 +112,12 @@ const NewKeg = () => {
                         setAlert("Keg successfully created")
                     };
                 });
-            setFormData(initialFormState);
+            setFormData({
+                ...formData,
+                keg_name: "",
+                distributor_id: "",
+                keg_status: "returned"
+            });
         };
     };
     return (
