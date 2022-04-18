@@ -115,8 +115,6 @@ const NewKeg = () => {
             setFormData({
                 ...formData,
                 keg_name: "",
-                distributor_id: "",
-                keg_status: "returned"
             });
         };
     };
