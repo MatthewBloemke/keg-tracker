@@ -46,7 +46,7 @@ const EditKeg = () => {
                             date_shipped: (response.date_shipped ? response.date_shipped : null)
                         });
                     };
-                });     
+                });
         };
         
         adminCheck();
