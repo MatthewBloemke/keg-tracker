@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react'
-import { createDistributor, isAdmin } from "../utils/api"
-import {TextField, Alert, Grid, Button, Divider, AppBar, Typography, useMediaQuery} from "@mui/material"
-import { useTheme } from "@mui/material/styles";
+import React, {useEffect, useState} from 'react';
+import { createDistributor, isAdmin } from "../utils/api";
+import {TextField, Alert, Grid, Button} from "@mui/material";
 import { useHistory } from 'react-router-dom';
 
 const NewDistributor = () => {
@@ -9,27 +8,24 @@ const NewDistributor = () => {
         distributor_name: ""
     };
 
-    const history = useHistory()
+    const history = useHistory();
 
     const [formData, setFormData] = useState(initialFormState);
     const [disabled, setDisabled] = useState(true);
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
 
-    const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
-
     const handleChange = ({target}) => {
         if (target.value.length > 0) {
-            setDisabled(false)
+            setDisabled(false);
         } else {
-            setDisabled(true)
-        }
+            setDisabled(true);
+        };
         setFormData({
             ...formData,
             [target.name]: target.value
-        })
-    }
+        });
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -37,37 +33,38 @@ const NewDistributor = () => {
         const controller = new AbortController();
 
         if (formData.distributor_name.length === 0) {
-            setError("Please enter a name")
+            setError("Please enter a name");
         } else {
             await createDistributor(formData, controller.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
-                        setFormData(initialFormState)
-                        setAlert(`Distributor ${formData.distributor_name} successfully created`)                        
-                    }
+                        setFormData(initialFormState);
+                        setAlert(`Distributor ${formData.distributor_name} successfully created`);                      
+                    };
                 });
-
-        }
-    }
+        };
+    };
 
     useEffect(() => {
-        const abortController = new AbortController()
+        const abortController = new AbortController();
+
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        history.push('/kegs/track/environment')
+                        history.push('/kegs/track/environment');
                         return () => {
-                            abortController.abort()
+                            abortController.abort();
                         };
-                    }
-                })
-        }
-        adminCheck()
+                    };
+                });
+        };
+        adminCheck();
+
         return () => abortController.abort();
-    }, [])
+    }, []);
 
     return (
         <Grid container spacing={3}>
@@ -84,7 +81,7 @@ const NewDistributor = () => {
                 </Grid>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
-export default NewDistributor
+export default NewDistributor;

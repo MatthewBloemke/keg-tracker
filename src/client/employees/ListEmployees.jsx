@@ -1,43 +1,43 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { getEmployees, isAdmin} from '../utils/api';
-import FormatEmployeesList from './FormatEmployeesList'
-import {AppBar, Divider, Grid, Typography, useMediaQuery, Alert} from '@mui/material'
-import { useTheme } from "@mui/material/styles";
+import FormatEmployeesList from './FormatEmployeesList';
+import {Grid, Alert} from '@mui/material';
 import { useHistory } from 'react-router-dom';
 
 
 const ListEmployees = () => {
     const [employees, setEmployees] = useState([]);
-    const [error, setError] = useState(null)
-    const theme = useTheme();
-    const history = useHistory()
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+    const [error, setError] = useState(null);
+
+    const history = useHistory();
 
     useEffect(() => {
         const abortController = new AbortController();
+
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        history.push('/kegs/track/environment')
+                        history.push('/kegs/track/environment');
                         return () => {
-                            abortController.abort()
+                            abortController.abort();
                         };
-                    }
-                })
-        }
-        adminCheck()
+                    };
+                });
+        };
+        adminCheck();
         getEmployees(abortController.signal)
             .then(response => {
                 if (response.error) {
-                    setError(response.error)
+                    setError(response.error);
                 } else {
-                    setEmployees(response)
-                }
-            })
+                    setEmployees(response);
+                };
+            });
 
         return () => abortController.abort();
     }, []);
+
     return (
         <Grid>
             <Grid item xs={12}>
@@ -47,8 +47,7 @@ const ListEmployees = () => {
                 <FormatEmployeesList employees={employees}/>
             </Grid>
         </Grid>
-        
-    )
-}
+    );
+};
 
 export default ListEmployees;

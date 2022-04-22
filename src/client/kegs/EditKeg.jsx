@@ -1,40 +1,41 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { editKeg, readKeg, isAdmin } from "../utils/api";
-import {FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel, Divider, AppBar, Typography} from '@mui/material'
+import { FormControl, TextField, Alert, Grid, Button, Select, MenuItem, InputLabel } from '@mui/material';
 
 const EditKeg = () => {
     const params = useParams()
     const history = useHistory()
     const user = localStorage.getItem('user')
-    const initialFormState ={
+    const initialFormState = {
         keg_name: "",
         keg_size: "1/2 BBL",
         keg_status: "returned",
         employee_email: user,
         distributor_id: null,
         date_shipped: null
-    }
+    };
 
     useEffect(() => {
         const abortController = new AbortController();
+
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        history.push('/kegs/track/environment')
+                        history.push('/kegs/track/environment');
                         return () => {
                             abortController.abort()
                         };
-                    }
-                })
-        }
+                    };
+                });
+        };
         
         const loadKeg = async () => {
             await readKeg(params.kegId)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
                         setFormData({
                             ...formData,
@@ -43,51 +44,55 @@ const EditKeg = () => {
                             keg_status: response.keg_status,
                             distributor_id: (response.shipped_to ? response.shipped_to : null),
                             date_shipped: (response.date_shipped ? response.date_shipped : null)
-                        })           
-                    }
-                })            
-        }
+                        });
+                    };
+                });     
+        };
         
-        adminCheck()
-        loadKeg()
+        adminCheck();
+        loadKeg();
+
         return () => abortController.abort()
-    }, [params.kegId, error, alert])
+    }, [params.kegId, error, alert]);
 
     const [formData, setFormData] = useState(initialFormState);
-    const [error, setError] = useState(null)
-    const [alert, setAlert] = useState(null)
+    const [error, setError] = useState(null);
+    const [alert, setAlert] = useState(null);
 
     const handleChange = ({target}) => {
         setFormData({
             ...formData, 
             [target.name]: target.value
-        })
-    }
+        });
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const abortController = new AbortController();
+
         const invalidFields = [];
+
         if (!Number(formData.keg_name) || formData.keg_name.length != 4) {
-            invalidFields.push("keg_name")
-        }
+            invalidFields.push("keg_name");
+        };
         if (invalidFields.length) {
             if (invalidFields.length === 1) {
-                setError(`${invalidFields[0]} is invalid`)
+                setError(`${invalidFields[0]} is invalid`);
             } else {
-                setError(`${invalidFields.join(", ")} are invalid`)
-            }
+                setError(`${invalidFields.join(", ")} are invalid`);
+            };
         } else {
             await editKeg(formData, params.kegId, abortController.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
-                        setAlert("Keg successfully updated")
-                    }
-                })
-        }
-    }
+                        setAlert("Keg successfully updated");
+                    };
+                });
+        };
+    };
+
     return (
         <Grid container spacing={3} textAlign="center">
             <Grid item xs={12} sx={{ paddingTop: "12px"}}>
@@ -119,7 +124,7 @@ const EditKeg = () => {
                 </Grid>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default EditKeg;

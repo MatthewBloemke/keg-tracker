@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { editFlavor, readFlavor } from '../utils/api'
-import { useMediaQuery, TextField, Alert, Grid, Button, Divider, AppBar, Typography} from '@mui/material'
-import { useTheme } from "@mui/material/styles";
+import { editFlavor, readFlavor } from '../utils/api';
+import { TextField, Alert, Grid, Button } from '@mui/material';
 import { isAdmin } from '../utils/api';
 
 const EditFlavor = () => {
@@ -10,83 +9,80 @@ const EditFlavor = () => {
         flavor_name: ""
     };
     
-    const history = useHistory()
-    const params = useParams()
+    const history = useHistory();
+    const params = useParams();
+
     const [formData, setFormData] = useState(initialFormState);
-    const [disabled, setDisabled] = useState(true)
+    const [disabled, setDisabled] = useState(true);
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
 
-    const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
-
     const handleChange = ({target}) => {
         if (target.value.length > 0) {
-            setDisabled(false)
+            setDisabled(false);
         } else {
-            setDisabled(true)
-        }
+            setDisabled(true);
+        };
         setFormData({
             ...formData,
             [target.name]: target.value
-        })
-    }
+        });
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
         const abortController = new AbortController();
 
         if (formData.flavor_name.length === 0) {
-            setError("Name cannot be empty")
+            setError("Name cannot be empty");
         } else {
             await editFlavor(formData, params.flavorId, abortController.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
-                        setAlert("Flavor successfully updated")
-                        setFormData(initialFormState)
-                    }
-                })
-        }
-    }
+                        setAlert("Flavor successfully updated");
+                        setFormData(initialFormState);
+                    };
+                });
+        };
+    };
 
     useEffect(() => {
         const abortController = new AbortController();
+
         const loadFlavor = async () => {
             await readFlavor(params.flavorId, abortController.signal)
                 .then((response) => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
                         setFormData({
                             ...formData,
                             flavor_name: response.flavor_name,
                             kegs_filled: response.kegs_filled
-                        })                        
-                    }
-
-                })
-        }
+                        });                      
+                    };
+                });
+        };
+        
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
-                    console.log("sent")
                     if (!response) {
-                        console.log(response)
-                        history.push('/kegs/track')
+                        history.push('/kegs/track');
                         return () => {
-                            abortController.abort()
+                            abortController.abort();
                         };
-                    } else {
-                        console.log("user is an admin")
-                    }
-                })
-        }
-        adminCheck()
+                    };
+                });
+        };
+
+        adminCheck();
         loadFlavor();
+
         return () => abortController.abort()
     }, [])
-
+;
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -103,7 +99,7 @@ const EditFlavor = () => {
                 </Grid>
             </Grid>
         </Grid>
-    )  
-}
+    );
+};
 
 export default EditFlavor;

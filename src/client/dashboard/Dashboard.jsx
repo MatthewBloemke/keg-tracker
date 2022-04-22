@@ -1,29 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import {getKegs, getShippingHistory, isAdmin, standardizeDate} from '../utils/api'
-import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, AppBar, Divider, Alert, CardMedia} from "@mui/material";
-import {makeStyles} from "@mui/styles"
-import {useTheme} from '@mui/material/styles'
-import './dashboard.css'
+import React, { useEffect, useState } from 'react';
+import {getKegs, getShippingHistory, isAdmin, standardizeDate} from '../utils/api';
+import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, Alert, CardMedia} from "@mui/material";
+import {makeStyles} from "@mui/styles";
+import {useTheme} from '@mui/material/styles';
+import './dashboard.css';
 import { Link, useHistory } from 'react-router-dom';
 
 const Dashboard = () => {
     const history = useHistory();
-    const date = new Date(Date.now())
-    date.setHours(0,0,0,0)
-    const month = date.getUTCMonth()
-    const year = date.getYear()
-    const [kegs, setKegs] = useState([]) 
-    const [returnedKegs, setReturnedKegs] = useState([])
-    const [sixtyDayKegs, setSixtyDayKegs] = useState([])
-    const [onetwentyDayKegs, setOnetwentyDayKegs] = useState([])
-    const [overdueKegs, setOverdueKegs] = useState([])
-    const [monthlyShipped, setMonthlyShipped] = useState([])
-    const [monthlyReturned, setMonthlyReturned] = useState([])
-    const [error, setError] = useState(null)
+
+    const date = new Date(Date.now());
+    date.setHours(0,0,0,0);
+    const month = date.getUTCMonth();
+    const year = date.getYear();
+
+    const [kegs, setKegs] = useState([]);
+    const [returnedKegs, setReturnedKegs] = useState([]);
+    const [sixtyDayKegs, setSixtyDayKegs] = useState([]);
+    const [onetwentyDayKegs, setOnetwentyDayKegs] = useState([]);
+    const [overdueKegs, setOverdueKegs] = useState([]);
+    const [monthlyShipped, setMonthlyShipped] = useState([]);
+    const [monthlyReturned, setMonthlyReturned] = useState([]);
+    const [error, setError] = useState(null);
 
     const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
-    const largeScreen = (!useMediaQuery(theme.breakpoints.up('lg')))
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')));
+    const largeScreen = (!useMediaQuery(theme.breakpoints.up('lg')));
 
     const useStyles = makeStyles({
         root: {
@@ -53,91 +55,97 @@ const Dashboard = () => {
       });
 
     useEffect(() => {
-        const abortController = new AbortController()
+        const abortController = new AbortController();
+
         const loadDashboard = async () => {
-            const returnedKegsArr = []
-            const sixtyDayKegArr = []
-            const onetwentyDayKegArr = []
-            const overdueKegArr = []
+            const returnedKegsArr = [];
+            const sixtyDayKegArr = [];
+            const onetwentyDayKegArr = [];
+            const overdueKegArr = [];
+
             await getKegs()
                 .then(response => {
                     if (response.error) {
                         if (error) {
-                            setError(error + ", " + response.error)
+                            setError(error + ", " + response.error);
                         } else {
-                            setError(response.error)
-                        }
+                            setError(response.error);
+                        };
                     } else {
-                        const tempKegs = response
+                        const tempKegs = response;
                         for (let i = 0; i < tempKegs.length; i++) {
                             if (tempKegs[i].keg_status === "returned") {
-                                returnedKegsArr.push(tempKegs[i])
+                                returnedKegsArr.push(tempKegs[i]);
                             } else {
                                 let timeA = new Date();
-                                let timeB = new Date(tempKegs[i].date_shipped)
-                                timeA.setHours(0,0,0,0)
-                                timeB.setHours(0,0,0,0)
-                                let timeDifference = timeA.getTime() - timeB.getTime()
+                                let timeB = new Date(tempKegs[i].date_shipped);
+                                timeA.setHours(0,0,0,0);
+                                timeB.setHours(0,0,0,0);
+                                let timeDifference = timeA.getTime() - timeB.getTime();
                                 let daysDifference = timeDifference/1000/3600/24;
                                 if (daysDifference < 60) {
-                                    sixtyDayKegArr.push(tempKegs[i])
+                                    sixtyDayKegArr.push(tempKegs[i]);
                                 } else if (daysDifference < 120) {
-                                    onetwentyDayKegArr.push(tempKegs[i])
+                                    onetwentyDayKegArr.push(tempKegs[i]);
                                 } else {
-                                    overdueKegArr.push(tempKegs[i])
-                                }
-                            }
-                        }
-                        setKegs(response)
-                        setReturnedKegs(returnedKegsArr)
-                        setSixtyDayKegs(sixtyDayKegArr)
-                        setOnetwentyDayKegs(onetwentyDayKegArr)
-                        setOverdueKegs(overdueKegArr)                        
-                    }
-                })
+                                    overdueKegArr.push(tempKegs[i]);
+                                };
+                            };
+                        };
+                        setKegs(response);
+                        setReturnedKegs(returnedKegsArr);
+                        setSixtyDayKegs(sixtyDayKegArr);
+                        setOnetwentyDayKegs(onetwentyDayKegArr);
+                        setOverdueKegs(overdueKegArr);                    
+                    };
+                });
             await getShippingHistory(abortController.signal)
                 .then(response => {
                     if (response.error) {
                         if (error) {
-                            setError(error + ", " + response.error)
+                            setError(error + ", " + response.error);
                         } else {
-                            setError(response.error)
-                        }
+                            setError(response.error);
+                        };
                     } else {
-                        const shippingList = []
-                        const returnedList = []
+                        const shippingList = [];
+                        const returnedList = [];
+
                         response.forEach(entry => {
-                            const utcDate = standardizeDate(entry.date_shipped)
+                            const utcDate = standardizeDate(entry.date_shipped);
                             const tempDate = new Date(Date.UTC(utcDate.year, utcDate.month - 1, utcDate.day, 5));
                             if (tempDate.getMonth() === month && tempDate.getYear() === year) {
                                 if (entry.keg_status === "shipped") {
-                                    shippingList.push(entry)
+                                    shippingList.push(entry);
                                 } else if (entry.keg_status === "returned") {
-                                    returnedList.push(entry)
-                                }
-                            }
-                        })
-                        setMonthlyShipped(shippingList)
-                        setMonthlyReturned(returnedList)                        
-                    }
+                                    returnedList.push(entry);
+                                };
+                            };
+                        });
 
-                })
-        }
+                        setMonthlyShipped(shippingList);
+                        setMonthlyReturned(returnedList);                     
+                    };
+                });
+        };
+
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        history.push('/kegs/track/environment')
+                        history.push('/kegs/track/environment');
                         return () => {
-                            abortController.abort()
+                            abortController.abort();
                         };
-                    }
-                })
-        }
-        adminCheck()
-        loadDashboard()
-        return () => abortController.abort()
-    }, [])
+                    };
+                });
+        };
+
+        adminCheck();
+        loadDashboard();
+
+        return () => abortController.abort();
+    }, []);
 
     const classes = useStyles();
 
@@ -234,7 +242,7 @@ const Dashboard = () => {
                 }
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Dashboard;

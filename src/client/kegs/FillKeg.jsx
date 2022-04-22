@@ -5,33 +5,36 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
 import {MenuItem, TextField, Alert, Button, Grid, AppBar, Typography, Divider, useMediaQuery, Switch} from '@mui/material'
 import Select from '@mui/material/Select';
-import {LocalizationProvider, DatePicker} from '@mui/lab'
-import DateFnsUtils from '@mui/lab/AdapterDateFns'
+import {LocalizationProvider, DatePicker} from '@mui/lab';
+import DateFnsUtils from '@mui/lab/AdapterDateFns';
 import { useTheme } from "@mui/material/styles";
-import "./TrackKeg.css"
-import RenderQrReader from '../utils/RenderQrReader'
-import {useHistory, useParams} from 'react-router-dom'
+import "./TrackKeg.css";
+import RenderQrReader from '../utils/RenderQrReader';
+import {useHistory, useParams} from 'react-router-dom';
 
 const FillKeg = () => {
     const initialFormState = {
         keg_id: [],
         employee_email: localStorage.getItem('user'),
-    }
+    };
 
-    const history = useHistory()
-    const params = useParams()
+    const history = useHistory();
+    const params = useParams();
     
     const [keg_names, setKeg_names] = useState([]);
     const [flavorArr, setFlavorsArr] = useState([]);
-    const [flavor, setFlavor] = useState("")
-    const [date_filled, setDate_filled] = useState(new Date(Date.now()))
+    const [flavor, setFlavor] = useState("");
+    const [date_filled, setDate_filled] = useState(new Date(Date.now()));
     const [formData, setFormData] = useState(initialFormState);
     const [kegName, setKegName] = useState("");
-    const [scannedKeg, setScannedKeg] = useState("")
-    const [alert, setAlert] = useState(null)
-    const [error, setError] = useState(null)
+    const [scannedKeg, setScannedKeg] = useState("");
+    const [alert, setAlert] = useState(null);
+    const [error, setError] = useState(null);
+    const [scanError, setScanError] = useState(null);
+    const [scanAlert, setScanAlert] = useState(null);
+    const [scanning, setScanning] = useState(true);
+    
     const theme = useTheme();
-    const [scanning, setScanning] = useState(true)
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
 
@@ -204,7 +207,7 @@ const FillKeg = () => {
                     <FormControl sx={{width: "10%", minWidth: "250px", marginBottom: "30px"}}>
                         <LocalizationProvider dateAdapter={DateFnsUtils}>
                             <DatePicker
-                                label="Date Shipped"
+                                label="Date Filled"
                                 value={date_filled}
                                 name="date_filled"
                                 onChange={(newDate) => {
@@ -236,7 +239,7 @@ const FillKeg = () => {
                 </Grid>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default FillKeg;

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createEmployee, isAdmin } from "../utils/api";
-import { Grid, TextField, FormControl, Select, useMediaQuery, MenuItem, InputLabel, Alert, Button, Divider, AppBar, Typography } from "@mui/material";
-import {useTheme} from '@mui/material/styles'
+import { Grid, TextField, FormControl, Select, MenuItem, InputLabel, Alert, Button } from "@mui/material";
 import { useHistory } from "react-router-dom";
 
 const NewEmployee = () => {
@@ -13,35 +12,36 @@ const NewEmployee = () => {
         admin: false,
     };
 
-    const history = useHistory()
+    const history = useHistory();
+
     const [formData, setFormData] = useState(initialFormState);
     const [disabled, setDisabled] = useState(true);
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
-    const [passwordError, setPasswordError] = useState(false)
+    const [passwordError, setPasswordError] = useState(false);
 
-    const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+
 
 
     const handleChange = ({target}) => {
         setFormData({
             ...formData, 
             [target.name]: target.value
-        })
-    }
+        });
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const abortController = new AbortController();
 
         const invalidFields = [];
+
         if (!formData.employee_email) invalidFields.push("Email");
         if (!formData.employee_name) invalidFields.push("Name");
         if (formData.password != formData.passwordMatch) invalidFields.push("Password");
-        if (typeof formData.admin != "boolean") invalidFields.push("Admin")
+        if (typeof formData.admin != "boolean") invalidFields.push("Admin");
         if (invalidFields.length) {
-            setError(invalidFields.join(", ") + "are invalid")
+            setError(invalidFields.join(", ") + "are invalid");
         } else {
             const data = {
                 employee_email: formData.employee_email,
@@ -52,50 +52,52 @@ const NewEmployee = () => {
             await createEmployee(data, abortController.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
-                        setAlert(`Employee ${response.employee_name} successfully created`)
-                    }
+                        setAlert(`Employee ${response.employee_name} successfully created`);
+                    };
                 });
-            setFormData(initialFormState)
-        }
+            setFormData(initialFormState);
+        };
     };
 
     useEffect(() => {
-        const abortController = new AbortController()
+        const abortController = new AbortController();
+
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        history.push('/kegs/track/environment')
+                        history.push('/kegs/track/environment');
                         return () => {
-                            abortController.abort()
+                            abortController.abort();
                         };
-                    }
-                })
-        }
-        adminCheck()
+                    };
+                });
+        };
+        adminCheck();
 
         if (formData.employee_name && formData.employee_email && formData.password === formData.passwordMatch && formData.password) {
-            setDisabled(false)
+            setDisabled(false);
         } else {
-            setDisabled(true)
-        }
+            setDisabled(true);
+        };
         if (formData.passwordMatch != formData.password) {
-            setPasswordError(true)
+            setPasswordError(true);
         } else {
-            setPasswordError(false)
-        }
-    }, [formData.employee_email, formData.employee_name, formData.password, formData.passwordMatch])
+            setPasswordError(false);
+        };
+    }, [formData.employee_email, formData.employee_name, formData.password, formData.passwordMatch]);
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Grid container textAlign="center">
                     <Grid item xs={12}>
-                        <TextField sx={{width: "10%", minWidth: "250px", marginBottom: '15px', mb: "25px"}} id="outlined-basic" label="Name" name="employee_name" onChange={handleChange} value={formData.employee_name} /> <br/>
-                        <TextField sx={{width: "10%", minWidth: "250px", marginBottom: '15px', mb: "25px"}} id="outlined-basic" label="Username" name="employee_email" onChange={handleChange} value={formData.employee_email} /> <br/>
-                        <TextField sx={{width: "10%", minWidth: "250px", marginBottom: '15px', mb: "25px"}} id="outlined-basic" type="password" label="Password" name="password" onChange={handleChange} value={formData.password} /> <br/>
-                        <TextField sx={{width: "10%", minWidth: "250px", marginBottom: '15px', mb: "25px"}} id="outlined-basic" helperText={passwordError ? "Password do not match": null} error = {passwordError} type="password" label="Retype Password" name="passwordMatch" onChange={handleChange} value={formData.passwordMatch} /> <br/>
+                        <TextField sx={{width: "10%", minWidth: "250px", marginBottom: '15px', mb: "25px"}} className="outlined-basic" label="Name" name="employee_name" onChange={handleChange} value={formData.employee_name} /> <br/>
+                        <TextField sx={{width: "10%", minWidth: "250px", marginBottom: '15px', mb: "25px"}} className="outlined-basic" label="Username" name="employee_email" onChange={handleChange} value={formData.employee_email} /> <br/>
+                        <TextField sx={{width: "10%", minWidth: "250px", marginBottom: '15px', mb: "25px"}} className="outlined-basic" type="password" label="Password" name="password" onChange={handleChange} value={formData.password} /> <br/>
+                        <TextField sx={{width: "10%", minWidth: "250px", marginBottom: '15px', mb: "25px"}} className="outlined-basic" helperText={passwordError ? "Password do not match": null} error = {passwordError} type="password" label="Retype Password" name="passwordMatch" onChange={handleChange} value={formData.passwordMatch} /> <br/>
                         <FormControl sx={{width: "10%", minWidth: "250px",}}>
                             <InputLabel>Admin</InputLabel>
                             <Select
@@ -125,7 +127,7 @@ const NewEmployee = () => {
                 </Grid>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default NewEmployee;

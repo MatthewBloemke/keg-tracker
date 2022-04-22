@@ -1,26 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { getFlavors, getKegs, getFillingHistory, isAdmin } from '../utils/api'
-import FormatFilling from './FormatFilling'
-import DateFnsUtils from '@mui/lab/AdapterDateFns'
-import {LocalizationProvider, DatePicker, } from '@mui/lab'
-import {TextField, Grid, Divider, AppBar, Typography, useMediaQuery, Card, CardContent, CardActions, Button} from '@mui/material'
-import { useTheme } from "@mui/material/styles";
-import {makeStyles} from "@mui/styles"
-import { Link, useHistory } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { getFlavors, getKegs, getFillingHistory, isAdmin } from '../utils/api';
+import FormatFilling from './FormatFilling';
+import DateFnsUtils from '@mui/lab/AdapterDateFns';
+import { LocalizationProvider, DatePicker, } from '@mui/lab';
+import { TextField, Grid, Typography, Card, CardContent, CardActions, Button } from '@mui/material';
+import { makeStyles } from "@mui/styles";
+import { Link, useHistory } from 'react-router-dom';
 
 const Shipping = ({monthlyOnly}) => {
-    const history = useHistory()
-    const [filling, setFilling] = useState([])
-    const [monthlyFilled, setMonthlyFilled] = useState([])
-    const [date, setDate] = useState(new Date(Date.now()))
+    const history = useHistory();
+    const [filling, setFilling] = useState([]);
+    const [monthlyFilled, setMonthlyFilled] = useState([]);
+    const [date, setDate] = useState(new Date(Date.now()));
     const [kegs, setKegs] = useState([]);
     const [flavors, setFlavors] = useState([]);    
-    const [error, setError] = useState(null)
-    const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
-    date.setHours(0,0,0,0)
-    const month = date.getUTCMonth()
-    const year = date.getYear()
+    const [error, setError] = useState(null);
+
+    date.setHours(0,0,0,0);
+    const month = date.getUTCMonth();
+    const year = date.getYear();
 
     const useStyles = makeStyles({
         root: {
@@ -43,63 +41,70 @@ const Shipping = ({monthlyOnly}) => {
     const classes = useStyles();
 
     useEffect(() => {
-        const abortController = new AbortController()
+        const abortController = new AbortController();
+
         const loadFillingHistory = async () => {
             await getFillingHistory(abortController.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
-                        const fillingList = []
+                        const fillingList = [];
+
                         response.forEach(entry => {
                             const tempDate = new Date(entry.date_filled);
-                            tempDate.setHours(0,0,0,0)
+                            tempDate.setHours(0,0,0,0);
                             if (tempDate.getUTCMonth() === month && tempDate.getYear() === year) {
-                                fillingList.push(entry)
-                            }
-                        })
-                        setMonthlyFilled(fillingList)
-                        setFilling(response)
-                    }
-                })
-        }
+                                fillingList.push(entry);
+                            };
+                        });
+
+                        setMonthlyFilled(fillingList);
+                        setFilling(response);
+                    };
+                });
+        };
         const loadKegs = async () => {
             await getKegs(abortController.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
-                        setKegs(response)
-                    }
-                })
-        }
+                        setKegs(response);
+                    };
+                });
+        };
+
         const loadFlavors = async () => {
             await getFlavors(abortController.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
-                        setFlavors(response)
-                    }
-                })
-        }
+                        setFlavors(response);
+                    };
+                });
+        };
+
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        history.push('/kegs/track/environment')
+                        history.push('/kegs/track/environment');
                         return () => {
-                            abortController.abort()
+                            abortController.abort();
                         };
-                    }
-                })
-        }
-        adminCheck()
-        loadFillingHistory()
-        loadKegs()
-        loadFlavors()
-        return () => abortController.abort()
-    }, [])
+                    };
+                });
+        };
+
+        adminCheck();
+        loadFillingHistory();
+        loadKegs();
+        loadFlavors();
+
+        return () => abortController.abort();
+    }, []);
 
     return (
         <Grid container spacing={3}>
@@ -158,7 +163,7 @@ const Shipping = ({monthlyOnly}) => {
                 <FormatFilling fillingList={filling} date={date} monthlyOnly={monthlyOnly} kegs={kegs} flavors={flavors}/>            
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default Shipping;

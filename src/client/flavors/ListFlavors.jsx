@@ -1,50 +1,47 @@
-import React, {useEffect, useState} from 'react'
-import { getFlavors, isAdmin } from '../utils/api'
+import React, {useEffect, useState} from 'react';
+import { getFlavors, isAdmin } from '../utils/api';
 import FormatFlavors from './FormatFlavors';
-import {AppBar, Divider, Grid, Typography, Alert, useMediaQuery} from '@mui/material'
-import { useTheme } from "@mui/material/styles";
+import { Grid, Alert } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 
 const ListFlavors = () => {
 
-    const history = useHistory()
-    const [flavors, setFlavors] = useState([]);
-    const [error, setError] = useState(null)
+    const history = useHistory();
 
-    const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+    const [flavors, setFlavors] = useState([]);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const abortController = new AbortController()
+        const abortController = new AbortController();
+
         const loadFlavors = async () => {
             await getFlavors(abortController.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
-                        setFlavors(response)
-                    }
-                })            
-        }
+                        setFlavors(response);
+                    };
+                });       
+        };
+
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
-                    console.log("sent")
                     if (!response) {
-                        console.log(response)
-                        history.push('/kegs/track')
+                        history.push('/kegs/track');
                         return () => {
-                            abortController.abort()
+                            abortController.abort();
                         };
-                    } else {
-                        console.log("user is an admin")
-                    }
-                })
-        }
-        adminCheck()
-        loadFlavors()
-        return () => abortController.abort()
-    }, [])
+                    };
+                });
+        };
+
+        adminCheck();
+        loadFlavors();
+
+        return () => abortController.abort();
+    }, []);
 
     return (
         <Grid container>
@@ -55,8 +52,7 @@ const ListFlavors = () => {
                 <FormatFlavors flavors={flavors}/>
             </Grid>
         </Grid>
-        
-    )
-}
+    );
+};
 
 export default ListFlavors;

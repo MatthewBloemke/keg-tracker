@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { deleteEmployee, readEmployee, resetPassword, updateEmployee, isAdmin } from "../utils/api";
-import { Grid, TextField, FormControl, Select, MenuItem, InputLabel, Alert, Button, Divider, AppBar, Typography, useMediaQuery } from "@mui/material";
+import { Grid, TextField, FormControl, Select, MenuItem, InputLabel, Alert, Button, Divider, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 
@@ -23,29 +23,32 @@ const EditEmployee = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const [disabled, setDisabled] = useState(false);
-    const [passwordDisabled, setPasswordDisabled] = useState(true)
-    const [passwordError, setPasswordError] = useState(false)
-    const [admin, setAdmin] = useState(false)
+    const [passwordDisabled, setPasswordDisabled] = useState(true);
+    const [passwordError, setPasswordError] = useState(false);
+    const [admin, setAdmin] = useState(false);
 
     const handleChange = ({target}) => {
         setFormData({
             ...formData, 
             [target.name]: target.value
-        })
-    }
+        });
+    };
 
     const theme = useTheme();
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')));
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const abortController = new AbortController()
+
+        const abortController = new AbortController();
+
         const invalidFields = [];
+
         if (!formData.employee_email) invalidFields.push("Email");
         if (!formData.employee_name) invalidFields.push("Name");
-        if (typeof formData.admin != "boolean") invalidFields.push("Admin")
+        if (typeof formData.admin != "boolean") invalidFields.push("Admin");
         if (invalidFields.length) {
-            setError(invalidFields.join(", ") + "are invalid")
+            setError(invalidFields.join(", ") + "are invalid");
         } else {
             const data = {
                 employee_email: formData.employee_email,
@@ -55,82 +58,84 @@ const EditEmployee = () => {
             await updateEmployee(data, params.employeeId, abortController.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
-                        localStorage.setItem("name", response.employee_name)
-                        history.go(0)
-                        setAlert("Employee Succesfully updated")
-                    }
+                        localStorage.setItem("name", response.employee_name);
+                        history.go(0);
+                        setAlert("Employee Succesfully updated");
+                    };
                 });
-            setFormData(initialFormState)
-        }
-
+            setFormData(initialFormState);
+        };
     };
 
 
     const submitPassword = async (event) => {
         event.preventDefault();
+
         const data = {
             employee_email: formData.employee_email,
             employee_name: formData.employee_name,
             admin: formData.admin,
             password: formData.password
-        }
+        };
+
         await resetPassword(data, params.employeeId)
             .then(response => {
                 if (response.error) {
-                    setError(response.error)
+                    setError(response.error);
                 } else {
-                    setAlert("Password successfully updated")
-                }
-            })
-        setFormData(initialFormState)
-    }
+                    setAlert("Password successfully updated");
+                };
+            });
+        setFormData(initialFormState);
+    };
 
     const onDelete = async () => {
-        const confirm = window.prompt("Are you sure? Please type 'delete' to confirm")
+        const confirm = window.prompt("Are you sure? Please type 'delete' to confirm");
+
         if (confirm === 'delete') {
             deleteEmployee(params.employeeId)
             .then(response => {
                 if (response.status===200) {
-                    window.alert("User successfully deleted")
-                    history.push("/employees")
+                    window.alert("User successfully deleted");
+                    history.push("/employees");
                 } else {
-                    window.alert("Action failed")
-                }
-            })
-        }
-        
-    }
+                    window.alert("Action failed");
+                };
+            });
+        };
+    };
 
     useEffect(() => {
         const abortController = new AbortController();
+
         const adminCheck = async () => {
             await isAdmin(abortController.signal)
                 .then(response => {
                     if (!response) {
-                        setAdmin(false)
+                        setAdmin(false);
                         if (params.employeeId != localStorage.getItem("id")) {
-                            history.push('/kegs/track/environment')
+                            history.push('/kegs/track/environment');
                             return () => {
-                                abortController.abort()
+                                abortController.abort();
                             };                        
-                        }
+                        };
 
                     } else {
-                        setAdmin(true)
-                    }
-                })
-        }
+                        setAdmin(true);
+                    };
+                });
+        };
 
         const loadEmployee = async () => {
             await readEmployee(params.employeeId, abortController.signal)
                 .then(response => {
                     if (response.error) {
-                        setError(response.error)
+                        setError(response.error);
                     } else {
                         if (user === response.employee_email) {
-                            setDisabled(true)
+                            setDisabled(true);
                         };
                         setFormData({
                             ...formData,
@@ -138,26 +143,26 @@ const EditEmployee = () => {
                             employee_email: response.employee_email,
                             admin: response.admin,
                             employee_id: params.employeeId
-                        })                        
-                    }
-                })
-        }
+                        });                       
+                    };
+                });
+        };
     
-        adminCheck()
+        adminCheck();
         
         if (formData.employee_id != params.employeeId) {
-            loadEmployee()
-        }
+            loadEmployee();
+        };
         if (formData.password === formData.passwordMatch) {
-            setPasswordDisabled(false)
-            setPasswordError(false)
+            setPasswordDisabled(false);
+            setPasswordError(false);
         } else {
-            setPasswordError(true)
-            setPasswordDisabled(true)
-        }
+            setPasswordError(true);
+            setPasswordDisabled(true);
+        };
 
-        return () => abortController.abort()
-    }, [params.employeeId, formData.password, formData.passwordMatch])
+        return () => abortController.abort();
+    }, [params.employeeId, formData.password, formData.passwordMatch]);
 
     return (
         <Grid container spacing={3}>
@@ -208,7 +213,7 @@ const EditEmployee = () => {
                 {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default EditEmployee;
