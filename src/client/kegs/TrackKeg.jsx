@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material/styles";
 import "./TrackKeg.css"
 import RenderQrReader from '../utils/RenderQrReader'
 import {useHistory, useParams} from 'react-router-dom'
+import { isMobile } from 'react-device-detect';
 
 const TrackKeg = () => {
     const initialFormState = {
@@ -217,10 +218,9 @@ const TrackKeg = () => {
                         {distArr}
                         </Select>                                        
                     </FormControl> <br/>
-                    {smallScreen ? <Button sx={{mb:"15px"}} onClick={handleSwitch} variant="contained">Switch Camera</Button> : null }
-                    {smallScreen 
+                    {isMobile ? <Button sx={{mb:"15px"}} onClick={handleSwitch} variant="contained">Switch Camera</Button> : null }
+                    {isMobile
                         ?
-                        
                         <div style={{height:'250px', width: "250px"}}>
                             {scanning ? <RenderQrReader cameraMode={params.mode} handleScan={setScannedKeg}/> : null}
                         </div> 
