@@ -32,9 +32,9 @@ const TrackKeg = () => {
     const [scannedKeg, setScannedKeg] = useState("")
     const [alert, setAlert] = useState(null)
     const [error, setError] = useState(null)
-    const theme = useTheme();
-    const [scanning, setScanning] = useState(true)
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
+    const [scanError, setScanError] = useState(null);
+    const [scanAlert, setScanAlert] = useState(null);
+    const [scanning, setScanning] = useState(true);
 
 
 
@@ -168,7 +168,7 @@ const TrackKeg = () => {
             const controller = new AbortController()
             if (scannedKeg.length===4) {
                 if (keg_names.includes(scannedKeg)) {
-                    setError(`Keg ${scannedKeg} has already been added`)
+                    setScanError(`Keg ${scannedKeg} has already been added`)
                     setScannedKeg("")
                 } else {
                     await verifyKeg({keg_name: scannedKeg}, controller.signal)
@@ -180,12 +180,13 @@ const TrackKeg = () => {
                             timeB.setHours(0,0,0,0)
                             let timeDifference = timeB.getTime() - timeA.getTime()
                             if (response.error) {
-                                setError(response.error)
+                                setScanError(response.error)
                             } else if (response.keg_status === "shipped") {
-                                setError(`Keg ${response.keg_name} is already shipped.`)
+                                setScanError(`Keg ${response.keg_name} is already shipped.`)
                             } else if (timeDifference < 0) {
-                                setError(`Keg cannot be shipped before latest return date of ${timeA}`)
+                                setScanError(`Keg cannot be shipped before latest return date of ${timeA}`)
                             } else {
+                                setScanAlert(`Keg ${response.keg_name} added`)
                                 setKeg_names([...keg_names, response.keg_name])
                                 setFormData({
                                     ...formData,
@@ -196,6 +197,10 @@ const TrackKeg = () => {
                         setScannedKeg("")      
                 }
     
+            } else {
+                if (scannedKeg) {
+                    setScanError(`${scannedKeg} is not four digits`)
+                }
             }
             setTimeout(() => setScanning(true), 2000)   
         }
@@ -205,6 +210,10 @@ const TrackKeg = () => {
 
     return (
         <Grid container spacing={3}>
+                <Grid container justifyContent="center" spacing={1}>
+                    {scanError ? <Alert onClose={() => {setScanError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{scanError}</Alert>: null}
+                    {scanAlert ? <Alert onClose={() => {setScanAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{scanAlert}</Alert>: null}
+                </Grid>
             <Grid item xs={12}>
                 <Grid container alignItems="center" direction="column">
                     <FormControl sx={{ minWidth: "250px", width: "10%"}}>

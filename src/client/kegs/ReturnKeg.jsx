@@ -7,6 +7,7 @@ import DateFnsUtils from '@mui/lab/AdapterDateFns'
 import { useTheme } from "@mui/material/styles";
 import RenderQrReader from '../utils/RenderQrReader'
 import {useHistory, useParams} from 'react-router-dom'
+import { isMobile } from 'react-device-detect';
 
 
 const ReturnKeg = () => {
@@ -19,6 +20,8 @@ const ReturnKeg = () => {
     const [alert, setAlert] = useState(null)
     const [error, setError] = useState(null)
     const [scanning, setScanning] = useState(true)
+    const [scanAlert, setScanAlert] = useState(null)
+    const [scanError,setScanError] = useState(null)
     const [date_shipped, setDate_shipped] = useState(new Date(Date.now()))
     const theme = useTheme();
     const [scannedKeg, setScannedKeg] = useState("")
@@ -83,7 +86,7 @@ const ReturnKeg = () => {
             const controller = new AbortController()
             if (scannedKeg.length===4) {
                 if (keg_names.includes(scannedKeg)) {
-                    setError(`Keg ${scannedKeg} has already been added`)
+                    setScanError(`Keg ${scannedKeg} has already been added`)
                     setScannedKeg("")
                 } else {
                     await verifyKeg({keg_name: scannedKeg}, controller.signal)
@@ -94,17 +97,18 @@ const ReturnKeg = () => {
                             timeB.setHours(0,0,0,0)
                             let timeDifference = timeB.getTime() - timeA.getTime()
                             if (response.error) {
-                                setError(response.error)
+                                setScanError(response.error)
                             } else if (response.keg_status === "returned") {
-                                setError(`Keg ${response.keg_name} has already been returned`)
+                                setScanError(`Keg ${response.keg_name} has already been returned`)
                             } else if (timeDifference < 0) {
-                                setError(`Returned date cannot be before the Keg's shipped date of ${timeA}`)
+                                setScanError(`Returned date cannot be before the Keg's shipped date of ${timeA}`)
                             } else {
                                 await readDistributor(response.shipped_to, controller.signal)
                                     .then((dist_response) => {
                                         if (dist_response.error) {
-                                            setError(dist_response.error)
+                                            setScanError(dist_response.error)
                                         } else {
+                                            setScanAlert(`${response.keg_name} added`)
                                             setKeg_data([...keg_data, [response.keg_name, response.keg_id, dist_response, Math.round(timeDifference/1000/3600/24)]])
                                             setKeg_names([...keg_names, response.keg_name])
                                         }
@@ -115,6 +119,11 @@ const ReturnKeg = () => {
                         setScannedKeg("")      
                 }
     
+            } else {
+                if (scannedKeg) {
+                    setScanError(`${scannedKeg} is not four digits`)
+                }
+                
             }
             setTimeout(() => setScanning(true), 2000)   
         }
@@ -187,10 +196,14 @@ const ReturnKeg = () => {
 
     return (
         <Grid container spacing={3}>
+            <Grid item xs={12}>
+                {scanError ? <Alert onClose={() => {setScanError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{scanError}</Alert>: null}
+                {scanAlert ? <Alert onClose={() => {setScanAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{scanAlert}</Alert>: null}
+            </Grid>
             <Grid item xs={12} >
                 <Grid container alignItems='center' direction="column">
-                    {smallScreen ? <Button sx={{mb:"15px"}} onClick={handleSwitch} variant="contained">Switch Camera</Button> : null }
-                    {smallScreen 
+                    {isMobile ? <Button sx={{mb:"15px"}} onClick={handleSwitch} variant="contained">Switch Camera</Button> : null }
+                    {isMobile
                         ?
                         
                         <div style={{height:'250px', width: "250px"}}>
@@ -198,7 +211,6 @@ const ReturnKeg = () => {
                         </div> 
                          : null
                     }
-                    
                     <FormControl sx={{ minWidth: "250px", width: "10%"}}>
                         <TextField  id ="outlined-basic" label="Keg Id" name="keg_name" margin="normal" onChange={handleKegChange} value={kegName} sx={{ minWidth: "250px", width: "10%", mb: "20px"}}/>
                         <LocalizationProvider  dateAdapter={DateFnsUtils}>
@@ -228,7 +240,7 @@ const ReturnKeg = () => {
             <Grid item xs={12}>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                 {alert ? <Alert onClose={() => {setAlert(null)}} sx={{width: "40%", margin: "auto", marginTop: "20px"}} variant="filled" severity="success">{alert}</Alert>: null}
-            </Grid>       
+            </Grid>
         </Grid>
     )
 }
