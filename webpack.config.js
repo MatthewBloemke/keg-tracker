@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require('webpack')
+const SRC = path.resolve(__dirname, 'node_modules')
 
 module.exports = {
     entry: "./src/client/index.jsx",
@@ -17,6 +18,14 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ["style-loader", "css-loader"]
+            },
+            {
+                test: /\.mp3$/,
+                use: [
+                    {
+                        loader: 'file-loader'
+                    }
+                ]
             },
             {
                 test: /\.(png|jp(e*)g|svg|gif)$/,
