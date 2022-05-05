@@ -12,8 +12,6 @@ import mp3File from '../../success.mp3'
 
 const Dashboard = () => {
     const history = useHistory();
-    let sound = new Audio('../../success.mp3')
-    const playSound = () => {sound.play()}
     const date = new Date(Date.now());
     date.setHours(0,0,0,0);
     const month = date.getUTCMonth();
@@ -156,8 +154,7 @@ const Dashboard = () => {
 
     return (
         <div id="dashboard">
-            <button onClick={playSound}>Test</button>
-            <div className='cardContainer'>
+             <div className='cardContainer'>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "30%", minWidth: "250px", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                 {smallScreen ? 
                     <Card className={classes.root} elevation={3}>
