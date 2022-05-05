@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {getKegs, getShippingHistory, isAdmin, standardizeDate} from '../utils/api';
+import {deleteKeg, getKegs, getShippingHistory, isAdmin, standardizeDate} from '../utils/api';
 import {Card, useMediaQuery, CardContent, CardActions, Button, Typography, Alert, CardMedia} from "@mui/material";
 import {makeStyles} from "@mui/styles";
 import {useTheme} from '@mui/material/styles';
 import './dashboard.css';
 import { Link, useHistory } from 'react-router-dom';
-import UIfx from 'uifx'
-import mp3File from '../../success.mp3'
 
 
 
@@ -29,6 +27,22 @@ const Dashboard = () => {
     const theme = useTheme();
     const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')));
     const largeScreen = (!useMediaQuery(theme.breakpoints.up('lg')));
+
+    const deleteKegs = async () => {
+        const kegsToDelete = []
+        for (let i = 0; i < 1000; i++) {
+            let kegName = i.toLocaleString('en-US', {minimumIntegerDigits: 4, useGrouping:false})
+            let keg = kegs.find((singleKeg) => singleKeg.keg_name === kegName)
+            if (keg) {
+                kegsToDelete.push(keg)
+            }
+            
+        }
+        for (let i = 0; i < 1000; i++) {
+            await deleteKeg(kegsToDelete[i].keg_id)
+            setTimeout(() => {}, 500)
+        }
+    }
 
     const useStyles = makeStyles({
         root: {
@@ -154,6 +168,7 @@ const Dashboard = () => {
 
     return (
         <div id="dashboard">
+            <button onClick={deleteKegs}>Delete</button>
              <div className='cardContainer'>
                 {error ? <Alert onClose={() => {setError(null)}} sx={{width: "30%", minWidth: "250px", margin: "auto", marginTop: "20px"}} variant="filled" severity="error">{error}</Alert>: null}
                 {smallScreen ? 
