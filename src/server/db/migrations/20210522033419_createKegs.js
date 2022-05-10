@@ -11,7 +11,7 @@ exports.up = function(knex) {
         .references("distributor_id")
         .inTable("distributors")
         .onUpdate("CASCADE")
-        .onDelete("SET NULL")
+        .onDelete("CASCADE")
       table.string("date_shipped").defaultTo(null)
       table.timestamps(true, true)
   })
