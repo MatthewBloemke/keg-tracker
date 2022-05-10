@@ -149,7 +149,7 @@ async function track (req, res) {
 
 async function destroy(req, res) {
     await service.destroy(res.locals.keg.keg_id)
-    res.sendStatus(200)
+    res.status(200).json("deleted")
 }
 
 function isAdmin(req, res, next) {

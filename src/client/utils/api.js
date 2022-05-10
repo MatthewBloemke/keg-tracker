@@ -76,6 +76,14 @@ export async function verifyKeg(data, signal) {
     return await fetchJson(`/api/kegs/verify`, options)
 }
 
+export async function deleteKeg(kegId) {
+    const options = {
+        method: 'DELETE',
+        headers
+    }
+    return await fetchJson(`/api/kegs/${kegId}`, options)
+}
+
 export async function editKeg(data, keg_id, signal) {
     const options = {
         method: 'PUT',
