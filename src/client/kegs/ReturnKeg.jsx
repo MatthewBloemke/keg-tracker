@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { createHistory, readDistributor, trackKeg, updateDaysOut, verifyKeg } from '../utils/api';
 import FormatKegIdList from './FormatKegIdList';
-import {FormControl, TextField, Alert, Grid, Button, Divider, AppBar, Typography, useMediaQuery} from '@mui/material'
+import {FormControl, TextField, Alert, Grid, Button, Typography } from '@mui/material'
 import {LocalizationProvider, DatePicker, } from '@mui/lab'
 import DateFnsUtils from '@mui/lab/AdapterDateFns'
-import { useTheme } from "@mui/material/styles";
 import RenderQrReader from '../utils/RenderQrReader'
 import {useHistory, useParams} from 'react-router-dom'
 import { isMobile } from 'react-device-detect';
+import UIfx from 'uifx'
+import mp3File from '../../success.mp3'
+
 
 
 const ReturnKeg = () => {
@@ -23,9 +25,7 @@ const ReturnKeg = () => {
     const [scanAlert, setScanAlert] = useState(null)
     const [scanError,setScanError] = useState(null)
     const [date_shipped, setDate_shipped] = useState(new Date(Date.now()))
-    const theme = useTheme();
     const [scannedKeg, setScannedKeg] = useState("")
-    const smallScreen = (!useMediaQuery(theme.breakpoints.up('sm')))
 
 
     const handleKegChange = async ({target}) => {
@@ -177,8 +177,6 @@ const ReturnKeg = () => {
                             })
                     }
                 })
-            
-
         }
         setKeg_data([])
         setKeg_names([])
