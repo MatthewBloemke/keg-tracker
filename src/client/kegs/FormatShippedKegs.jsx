@@ -56,7 +56,7 @@ const FormatShippedKegs = ({kegs, distributors, status}) => {
             rows={kegTableRows}
             columns={columns}
             pageSize={50}
-            rowsPerPageOptions={[50]}z
+            rowsPerPageOptions={[50]}
         />
 
     )
